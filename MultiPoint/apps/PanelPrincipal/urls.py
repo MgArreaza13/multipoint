@@ -14,7 +14,7 @@ from apps.PanelPrincipal.views import loockscreen
 
 from apps.PanelPrincipal.views import ingresosegresos
 
-from apps.PanelPrincipal.views import registro
+
 
 
 
@@ -45,6 +45,6 @@ urlpatterns = [
 
 
 	url(r'^bloqueado/$', loockscreen ,  name='bloqueado' ),
-	url(r'^registro/$', registro ),
+
   
 ]

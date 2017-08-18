@@ -94,6 +94,21 @@ WSGI_APPLICATION = 'MultiPoint.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME':"multipoint$as_multipoint",
+        "USER":"multipoint",
+        "PASSWORD":'miguel22702517',
+        "PORT":'',
+        'HOST':"multipoint.mysql.pythonanywhere-services.com",
+        },
+    }
+
+"""
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -150,7 +165,7 @@ MEDIA_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static', 
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
-#STATIC_ROOT = "/home/EstiloOnline/as_style/EstiloOnline/static"
+STATIC_ROOT = "/home/multipoint/multipoint/MultiPoint/static"
 
 
 AUTHENTICATION_BACKENDS = (
