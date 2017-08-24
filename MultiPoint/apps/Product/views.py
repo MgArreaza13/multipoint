@@ -47,8 +47,9 @@ def NuevoProducto(request):
 	perfil = result[0]
 	Form = ProductForm
 	if request.method == 'POST':
-		Form = ProductForm(request.POST or None)
+		Form = ProductForm(request.POST, request.FILES or None)
 		if Form.is_valid():
+			print(request.POST)
 			producto = Form.save(commit=False)
 			producto.user = request.user
 			producto.save()
@@ -67,7 +68,7 @@ def EditarProducto(request, id_producto):
 	if request.method == 'GET':
 		Form= ProductForm(instance = productoEditar)
 	else:
-		Form = ProductForm(request.POST, instance = productoEditar)
+		Form = ProductForm(request.POST , request.FILES  ,  instance = productoEditar)
 		if Form.is_valid():
 			producto = Form.save(commit=False)
 			producto.user = request.user

@@ -15,7 +15,7 @@ class ServiceForm(forms.ModelForm):
 		'nameService',
 		'descriptionService',
 		'tipoServicio',
-		'codService',
+		'image',
 		'priceList',
 		
 		]
@@ -24,7 +24,7 @@ class ServiceForm(forms.ModelForm):
 		labels = {
 		'nameService':'Nombre del Servicio a prestar', 
 		'descriptionService':'Descripcion del Servicio a prestar', 
-		'codService':'codigo del servicio',
+		'image':'codigo del servicio',
 		'priceList': 'Precio para vender el servicio',
 		
 		}

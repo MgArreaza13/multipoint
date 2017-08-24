@@ -110,7 +110,6 @@
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th>ID</th>
                   <th>COD</th>
                   <th>NOMBRE</th>
                   <th>FOTO</th>
@@ -130,13 +129,12 @@
                {% for producto in productos  %}
                     <tr>
                       <td><a href="">{{producto.id}}</a></td>
-                      <td><a href="">{{producto.codProduct}}</a></td>
                       <td>
                             <a href="javascript:void(0)" class="product-title">{{producto.nameProduct}} </a>
                       </td>
                       <td>
                         <div class="product-img">
-                          <img style="width:80px; height:70px;" src="{{producto.urlPhoto}}" alt="Product Image">
+                          <img style="width:80px; height:70px;" src="http://multipoint.pythonanywhere.com/media/{{producto.image}}" alt="Product Image">
                         </div>
                       </td>
                       <td>
@@ -156,7 +154,7 @@
                             <span class="label label-warning">${{producto.priceCost}} </span>
                       </td>
                       <td>
-                            <span class="label label-warning">${{producto.alertMinStock}} </span>
+                            <span class="label label-warning">{{producto.alertMinStock}} </span>
                       </td>
                       <td>{{producto.dateCreate}}</td>
                       <td>
@@ -179,7 +177,6 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                  <th>ID</th>
                   <th>COD</th>
                   <th>NOMBRE</th>
                   <th>FOTO</th>

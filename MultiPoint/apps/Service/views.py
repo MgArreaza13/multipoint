@@ -19,7 +19,7 @@ def NuevoService(request):
 	perfil = result[0]
 	Form = ServiceForm
 	if request.method == 'POST':
-		Form = ServiceForm(request.POST or None)
+		Form = ServiceForm(request.POST, request.FILES or None)
 		if Form.is_valid():
 			servicio = Form.save(commit=False)
 			servicio.user = request.user
@@ -40,7 +40,7 @@ def EditService(request, id_service):
 	if request.method == 'GET':
 		Form= ServiceForm(instance = ServiceEditar)
 	else:
-		Form = ServiceForm(request.POST, instance = ServiceEditar)
+		Form = ServiceForm(request.POST, request.FILES , instance = ServiceEditar)
 		if Form.is_valid():
 			servicio = Form.save(commit=False)
 			servicio.user = request.user

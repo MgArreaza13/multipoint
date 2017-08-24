@@ -28,7 +28,7 @@ SECRET_KEY = '6(jfopljqepu@w)y!zew)hd5smycvptk^6$#95mg2%b_3ng*pd'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'estiloonline.pythonanywhere.com',
+    'multipoint.pythonanywhere.com',
     'localhost'
     ]
 
