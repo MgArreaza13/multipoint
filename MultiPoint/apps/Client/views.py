@@ -28,6 +28,7 @@ def NuevoClient(request):
 	Form	= UsuarioForm()
 	Form2	= ProfileForm()
 	Form3   = ClientForm()
+	fallido = None
 	if request.method == 'POST':
 		Form	= UsuarioForm(request.POST , request.FILES  or None)
 		Form2	= ProfileForm(request.POST, request.FILES  or None)
@@ -54,17 +55,21 @@ def NuevoClient(request):
 				cliente.addressClient = request.POST['addressClient']
 				cliente.addressClientTwo = request.POST['addressClientTwo']
 				cliente.save()
-				return redirect ('Clientes:ClientesHome')
-	else:
+				mensaje = "Se ha Cargado su nuevo cliente"
+				return render(request, 'Client/NuevoCliente.html' , {'perfil':perfil, 'Form':Form, 'Form2':Form2, 'Form3':Form3, 'mensaje':mensaje})
 		Form	= UsuarioForm
 		Form2	= ProfileForm
 		Form3   = ClientForm
-	return render(request, 'Client/NuevoCliente.html' , {'perfil':perfil, 'Form':Form, 'Form2':Form2, 'Form3':Form3})
+		fallido = "Se ha producido un error a cargar los datos, reviselos y cargue de nuevo"
+	return render(request, 'Client/NuevoCliente.html' , {'perfil':perfil, 'Form':Form, 'Form2':Form2, 'Form3':Form3, 'fallido':fallido})
+
+
 @login_required(login_url = 'Demo:login' )
 def NuevoClientProfile(request):
 	result = validatePerfil(tb_profile.objects.filter(user__id=request.user.id))
 	perfil = result[0]
 	Form3   = ClientForm()
+	fallido = None
 	if request.method == 'POST':
 		Form3   = ClientForm(request.POST , request.FILES  or None)
 		if 	Form3.is_valid:
@@ -79,11 +84,13 @@ def NuevoClientProfile(request):
 			cliente.addressClient = request.POST['addressClient']
 			cliente.addressClientTwo = request.POST['addressClientTwo']
 			cliente.save()
-			return redirect ('Clientes:ClientesHome')
+			mensaje = "se ha cargado satisfactoriamente el cliente"
+			return render(request, 'Client/NuevoClientProfile.html' , {'perfil':perfil,'Form3':Form3, 'mensaje':mensaje})
 	else:
 		Form2	= ProfileForm
 		Form3   = ClientForm
-	return render(request, 'Client/NuevoClientProfile.html' , {'perfil':perfil,'Form3':Form3})
+		fallido = "Se ha producido un error a cargar los datos, reviselos y cargue de nuevo"
+	return render(request, 'Client/NuevoClientProfile.html' , {'perfil':perfil,'Form3':Form3, 'fallido':fallido})
 
 #editar cliente 
 @login_required(login_url = 'Demo:login' )
@@ -92,9 +99,11 @@ def EditClient(request, id_Client):
 	perfil = result[0]
 	ClientEditar = tb_client.objects.get(id=id_Client)
 	perfilEditar = tb_profile.objects.get(nameUser = ClientEditar.user)
+	fallido = None
 	if request.method == 'GET':
 		Form2	= ProfileForm(instance = perfilEditar)
 		Form3 = ClientForm(instance = ClientEditar)
+		fallido = "no se pudo cargar el registro."
 	else:
 		Form2 = ProfileForm(request.POST, request.FILES , instance = perfilEditar)
 		Form3 = ClientForm(request.POST, request.FILES, instance = ClientEditar)
@@ -106,8 +115,9 @@ def EditClient(request, id_Client):
 			perfilEditar.birthdayDate = request.POST['birthdayDate']
 			perfilEditar.save()
 			Form3.save()
-			return redirect ('Clientes:list')
-	return render (request, 'Client/NuevoCliente.html' , {'Form3':Form3 , 'Form2':Form2 , 'perfil':perfil})
+			mensaje = "se ha cargado satisfactoriamente el cliente"
+			return render (request, 'Client/NuevoCliente.html' , {'Form3':Form3 , 'Form2':Form2 , 'perfil':perfil, 'mensaje':mensaje})
+	return render (request, 'Client/NuevoCliente.html' , {'Form3':Form3 , 'Form2':Form2 , 'perfil':perfil, 'fallido':fallido})
 
 #listado de los clientes en la parte principal
 @login_required(login_url = 'Demo:login' )
@@ -391,7 +401,10 @@ def DeleteClient(request , id_Client):
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	perfil = result[0]
 	ClientBorrar= tb_client.objects.get(id=id_Client)
+	fallido = None 
 	if request.method == 'POST':
 		ClientBorrar.delete()
-		return redirect ('Clientes:list')
-	return render (request, 'Client/DeleteCliente.html', {'ClientBorrar':ClientBorrar, 'perfil':perfil})
+		mensaje = "se elimino perfectamente su registro"
+		return render (request, 'Client/DeleteCliente.html', {'ClientBorrar':ClientBorrar, 'perfil':perfil, 'mensaje':mensaje})
+	fallido = "hubo un error al borrar sus datos"
+	return render (request, 'Client/DeleteCliente.html', {'ClientBorrar':ClientBorrar, 'perfil':perfil, 'fallido':fallido})

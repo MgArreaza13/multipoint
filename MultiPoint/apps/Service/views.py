@@ -17,18 +17,21 @@ from apps.scripts.validatePerfil import validatePerfil
 def NuevoService(request):
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	perfil = result[0]
-	Form = ServiceForm
+	Form = ServiceForm 
+	fallido = None
 	if request.method == 'POST':
 		Form = ServiceForm(request.POST, request.FILES or None)
 		if Form.is_valid():
 			servicio = Form.save(commit=False)
 			servicio.user = request.user
 			servicio.save()
-			return redirect('Servicios:listService')
+			mensaje = "Registro Satisfactorio"
+			return render(request, 'Service/NuevoServicio.html' , {'perfil':perfil,'mensaje':mensaje,})
 		else:
+			fallido = "Hubo Un Problema con su registro, Verifica tus datos y vuelve a intentarlo"
 			Form = ServiceForm()
 	
-	return render(request, 'Service/NuevoServicio.html' , {'Form':Form, 'perfil':perfil})
+	return render(request, 'Service/NuevoServicio.html' , {'Form':Form, 'perfil':perfil, 'fallido':fallido})
 
 
 
@@ -37,6 +40,7 @@ def EditService(request, id_service):
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	perfil = result[0]
 	ServiceEditar= tb_service.objects.get(id=id_service)
+	fallido = None
 	if request.method == 'GET':
 		Form= ServiceForm(instance = ServiceEditar)
 	else:
@@ -45,8 +49,10 @@ def EditService(request, id_service):
 			servicio = Form.save(commit=False)
 			servicio.user = request.user
 			servicio.save()
-			return redirect ('Servicios:listService')
-	return render (request, 'Service/NuevoServicio.html' , {'Form':Form, 'perfil':perfil})
+			mensaje = "Registro Satisfactorio"
+			return render(request, 'Service/NuevoServicio.html' , {'mensaje':mensaje})
+		fallido = "Hubo Un Problema con su registro, Verifica tus datos y vuelve a intentarlo"
+	return render (request, 'Service/NuevoServicio.html' , {'Form':Form, 'perfil':perfil, 'fallido':fallido})
 
 
 
@@ -57,7 +63,8 @@ def DeleteService(request, id_service):
 	serviceBorrar= tb_service.objects.get(id=id_service)
 	if request.method == 'POST':
 		serviceBorrar.delete()
-		return redirect ('Servicios:listService')
+		mensaje = "Borrado satisfactoriamente "
+		return render(request, 'Service/DeleteService.html' , {'mensaje':mensaje})
 	return render (request, 'Service/DeleteService.html', {'serviceBorrar':serviceBorrar, 'perfil':perfil})
 
 
