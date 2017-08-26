@@ -16,6 +16,9 @@ from apps.UserProfile.forms import UsuarioForm
 from apps.UserProfile.forms import ProfileForm
 #script de validacion de perfil
 from apps.scripts.validatePerfil import validatePerfil
+# enviar correos
+from django.core.mail import send_mail
+from django.core.mail import send_mass_mail
 
 
 # Create your views here.
@@ -53,14 +56,27 @@ def NuevoClient(request):
 				cliente.phoneNumberClient = request.POST['phoneNumberClient']
 				cliente.phoneNumberClientTwo = request.POST['phoneNumberClientTwo']
 				cliente.addressClient = request.POST['addressClient']
-				cliente.addressClientTwo = request.POST['addressClientTwo']
 				cliente.save()
-				mensaje = "Se ha Cargado su nuevo cliente"
+				#mandar mensaje de nuevo usuario
+				#Enviaremos los correos a el colaborador y al cliente 
+				#cliente
+				usuario = perfil.mailUser #trato de traer el colaborador del formulario
+				email_subject_usuario = 'Estilo Online Nuevo Cliente'
+				email_body_usuario = "Hola %s, gracias por crearte un nuevo perfil de cliente, ya puedes crear nuevos turnos y muchas cosas mas para mas informacion ingrese aqui http://estiloonline.pythonanywhere.com" %(perfil.nameUser)
+				message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+				#mensaje para apreciasoft
+				email_subject_Soporte = 'Nuevo cliente Registrado'
+				email_body_Soporte = "se ha registrado un nuevo perfil de cliente con nombre %s para verificar ingrese aqui http://estiloonline.pythonanywhere.com" %(perfil.nameUser)
+				message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com'])
+				#enviamos el correo
+				send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+				mensaje = "Gracias, hemos registrado de manera exitosa todos los datos, su nuevo cliente se regristro de manera exitosa"
 				return render(request, 'Client/NuevoCliente.html' , {'perfil':perfil, 'Form':Form, 'Form2':Form2, 'Form3':Form3, 'mensaje':mensaje})
+	else:
 		Form	= UsuarioForm
 		Form2	= ProfileForm
 		Form3   = ClientForm
-		fallido = "Se ha producido un error a cargar los datos, reviselos y cargue de nuevo"
+		fallido = "Ha introducido un dato erroneo, verifique cuidadosamente, e intentelo nuevamente"
 	return render(request, 'Client/NuevoCliente.html' , {'perfil':perfil, 'Form':Form, 'Form2':Form2, 'Form3':Form3, 'fallido':fallido})
 
 
@@ -69,7 +85,7 @@ def NuevoClientProfile(request):
 	result = validatePerfil(tb_profile.objects.filter(user__id=request.user.id))
 	perfil = result[0]
 	Form3   = ClientForm()
-	fallido = None
+	fallido = None 
 	if request.method == 'POST':
 		Form3   = ClientForm(request.POST , request.FILES  or None)
 		if 	Form3.is_valid:
@@ -82,14 +98,26 @@ def NuevoClientProfile(request):
 			cliente.phoneNumberClient = request.POST['phoneNumberClient']
 			cliente.phoneNumberClientTwo = request.POST['phoneNumberClientTwo']
 			cliente.addressClient = request.POST['addressClient']
-			cliente.addressClientTwo = request.POST['addressClientTwo']
 			cliente.save()
-			mensaje = "se ha cargado satisfactoriamente el cliente"
+			#mandar mensaje de nuevo usuario
+			#Enviaremos los correos a el colaborador y al cliente 
+			#cliente
+			usuario = perfil.mailUser #trato de traer el colaborador del formulario
+			email_subject_usuario = 'Estilo Online Nuevo Cliente'
+			email_body_usuario = "Hola %s, gracias por crearte un nuevo perfil de cliente, ya puedes crear nuevos turnos y muchas cosas mas para mas informacion ingrese aqui http://estiloonline.pythonanywhere.com" %(perfil.nameUser)
+			message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+			#mensaje para apreciasoft
+			email_subject_Soporte = 'Nuevo cliente Registrado'
+			email_body_Soporte = "se ha registrado un nuevo perfil de cliente con nombre %s para verificar ingrese aqui http://estiloonline.pythonanywhere.com" %(perfil.nameUser)
+			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com'])
+			#enviamos el correo
+			send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+			mensaje = "Gracias, hemos creado su nuevo perfil de manera exitosa"
 			return render(request, 'Client/NuevoClientProfile.html' , {'perfil':perfil,'Form3':Form3, 'mensaje':mensaje})
 	else:
 		Form2	= ProfileForm
 		Form3   = ClientForm
-		fallido = "Se ha producido un error a cargar los datos, reviselos y cargue de nuevo"
+		fallido = "hemos tenido un problema al procesar sus datos introducidos, verifiquelos e intentelo de nuevo"
 	return render(request, 'Client/NuevoClientProfile.html' , {'perfil':perfil,'Form3':Form3, 'fallido':fallido})
 
 #editar cliente 
@@ -103,7 +131,6 @@ def EditClient(request, id_Client):
 	if request.method == 'GET':
 		Form2	= ProfileForm(instance = perfilEditar)
 		Form3 = ClientForm(instance = ClientEditar)
-		fallido = "no se pudo cargar el registro."
 	else:
 		Form2 = ProfileForm(request.POST, request.FILES , instance = perfilEditar)
 		Form3 = ClientForm(request.POST, request.FILES, instance = ClientEditar)
@@ -115,7 +142,7 @@ def EditClient(request, id_Client):
 			perfilEditar.birthdayDate = request.POST['birthdayDate']
 			perfilEditar.save()
 			Form3.save()
-			mensaje = "se ha cargado satisfactoriamente el cliente"
+			mensaje = "Hemos Modificado sus datos de manera exitosa"
 			return render (request, 'Client/NuevoCliente.html' , {'Form3':Form3 , 'Form2':Form2 , 'perfil':perfil, 'mensaje':mensaje})
 	return render (request, 'Client/NuevoCliente.html' , {'Form3':Form3 , 'Form2':Form2 , 'perfil':perfil, 'fallido':fallido})
 
@@ -393,18 +420,14 @@ def list(request):
 
 
 
-
-
-
 @login_required(login_url = 'Demo:login' )
 def DeleteClient(request , id_Client):
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	perfil = result[0]
 	ClientBorrar= tb_client.objects.get(id=id_Client)
-	fallido = None 
+	fallido = None
 	if request.method == 'POST':
 		ClientBorrar.delete()
-		mensaje = "se elimino perfectamente su registro"
-		return render (request, 'Client/DeleteCliente.html', {'ClientBorrar':ClientBorrar, 'perfil':perfil, 'mensaje':mensaje})
-	fallido = "hubo un error al borrar sus datos"
-	return render (request, 'Client/DeleteCliente.html', {'ClientBorrar':ClientBorrar, 'perfil':perfil, 'fallido':fallido})
+		mensaje = "Hemos Borrado Correctamente su registro"
+		return render (request, 'Client/DeleteCliente.html', {'ClientBorrar':ClientBorrar, 'perfil':perfil, "mensaje":mensaje})
+	return render (request, 'Client/DeleteCliente.html', {'ClientBorrar':ClientBorrar, 'perfil':perfil})

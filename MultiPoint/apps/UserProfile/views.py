@@ -14,6 +14,9 @@ from apps.Caja.models import tb_ingreso
 from apps.Caja.models import tb_egreso
 #script de validar el perfil
 from apps.scripts.validatePerfil import validatePerfil
+# enviar correos
+from django.core.mail import send_mail
+from django.core.mail import send_mass_mail
 
 # Create your views here.
 
@@ -43,7 +46,7 @@ def EditUserProfile(request , id_UserProfile):
 	UserProfile = tb_profile.objects.get(id = id_UserProfile)
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	perfil = result[0]
-	
+	fallido = None
 	if request.method == 'GET':
 		Form2= ProfileForm(instance=UserProfile)
 	else:
@@ -54,8 +57,9 @@ def EditUserProfile(request , id_UserProfile):
 			UserProfile.image = request.FILES['image'] 
 			UserProfile.birthdayDate = request.POST['birthdayDate']
 			UserProfile.save()
-			return redirect ('Usuarios:List')
-	return render (request, 'UserProfile/NuevoUsuario.html', {'Form2':Form2, 'perfil':perfil})
+			mensaje ="Hemos guardado de manera exitosa todos sus datos" 
+			return render (request, 'UserProfile/NuevoUsuario.html', {'Form2':Form2, 'perfil':perfil, 'mensaje':mensaje})
+	return render (request, 'UserProfile/NuevoUsuario.html', {'Form2':Form2, 'perfil':perfil, 'fallido':fallido})
 
 #Funcion para borrar usuarios
 @login_required(login_url = 'Demo:login' )
@@ -65,8 +69,9 @@ def DeleteUserProfile(request , id_UserProfile):
 	perfil = result[0]
 	if request.method == 'POST':
 		UserProfile.delete()
-		return redirect ('Usuarios:List')
-	return render (request, 'UserProfile/UserProfileDelete.html', {'UserProfile':UserProfile, 'perfil':perfil})
+		mensaje = "hemos borrado su registro de manera exitosa"
+		return render (request, 'UserProfile/UserProfileDelete.html', {'UserProfile':UserProfile, 'perfil':perfil, 'mensaje':mensaje})
+	return render (request, 'UserProfile/UserProfileDelete.html', {'UserProfile':UserProfile, 'perfil':perfil,})
 
 
 #funcion para completar el perfil de los usuarios administradores
@@ -75,6 +80,7 @@ def NuevoPerfil(request):
 	Form2 = ProfileForm()
 	result = validatePerfil(tb_profile.objects.filter(user__id=request.user.id))
 	perfil = result[0]
+	fallido = None
 	if request.method == 'POST':
 		Form2  = ProfileForm(request.POST, request.FILES  or None)
 		if Form2.is_valid():
@@ -83,18 +89,34 @@ def NuevoPerfil(request):
 			perfil.tipoUser = "Administrador"
 			perfil.birthdayDate = request.POST['birthdayDate']
 			perfil.save()
-			return redirect ('Panel:inicio')
+			#mandar mensaje de nuevo usuario
+			#Enviaremos los correos a el colaborador y al cliente 
+			#colaborador
+			usuario = perfil.mailUser #trato de traer el colaborador del formulario
+			email_subject_usuario = 'Estilo Online Nuevo Cliente'
+			email_body_usuario = "Hola %s, gracias por crearte un nuevo perfil de cliente, ya puedes crear nuevos turnos y muchas cosas mas para mas informacion ingrese aqui http://estiloonline.pythonanywhere.com" %(perfil.nameUser)
+			message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+			#mensaje para apreciasoft
+			email_subject_Soporte = 'Nuevo perfil de clientes Registrado'
+			email_body_Soporte = "se ha registrado un nuevo perfil de cliente con nombre %s para verificar ingrese aqui http://estiloonline.pythonanywhere.com" %(perfil.nameUser)
+			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com'])
+			#enviamos el correo
+			send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+			mensaje = "Hemos guardado correctamente sus datos"
+			return render(request, 'UserProfile/NuevoPerfil.html' , {'Form2':Form2, 'perfil':perfil, 'mensaje':mensaje})
 		else:
 			Form2	= ProfileForm
 			result = validatePerfil(tb_profile.objects.filter(user__id=request.user.id))
 			perfil = result[0]
-	return render(request, 'UserProfile/NuevoPerfil.html' , {'Form2':Form2, 'perfil':perfil})
+			fallido = "hemos tenido un problema al cargar sus datos, verificalos e intentalo de nuevo"
+	return render(request, 'UserProfile/NuevoPerfil.html' , {'Form2':Form2, 'perfil':perfil, 'fallido':fallido})
 
 #funcion que crea el nuevo usuario
 @login_required(login_url = 'Demo:login' )
 def NuevoUsuario(request):
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	perfil = result[0]
+	fallido - None
 	if request.method == 'POST':
 		Form	= UsuarioForm(request.POST , request.FILES  or None)
 		Form2	= ProfileForm(request.POST, request.FILES  or None)
@@ -109,11 +131,28 @@ def NuevoUsuario(request):
 				perfil.tipoUser = "Sin Definir"
 				perfil.birthdayDate = request.POST['birthdayDate'] 
 				perfil.save()
-				return redirect ('Usuarios:List')
+				#mandar mensaje de nuevo usuario
+				#Enviaremos los correos a el colaborador y al cliente 
+				#colaborador
+				usuario = perfil.mailUser #trato de traer el colaborador del formulario
+				email_subject_usuario = 'Bienvenido a Estilo Online'
+				email_body_usuario = "Hola %s, te damos una cordial bienvenida a nuestro sistema esperemos que tengas una experiencia agradable con nuestro sistema, para sacarle el maximo provecho ingrese aqui http://estiloonline.pythonanywhere.com" %(perfil.nameUser)
+				message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+				#mensaje para apreciasoft
+				email_subject_Soporte = 'Nuevo Usuario Registrado'
+				email_body_Soporte = "se ha registrado un nuevo usuario de nombre %spara verificar ingrese aqui http://estiloonline.pythonanywhere.com" %(perfil.nameUser)
+				message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com'])
+				#enviamos el correo
+				send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+				mensaje = "Hemos guardado correctamente tus datos"
+
+				return render(request, 'UserProfile/NuevoUsuario.html' , {'Form2':Form2 ,'Form':Form , 'perfil':perfil, 'mensaje':mensaje})
+
 	else:
 		Form	= UsuarioForm
 		Form2	= ProfileForm
-	return render(request, 'UserProfile/NuevoUsuario.html' , {'Form2':Form2 ,'Form':Form , 'perfil':perfil})
+		fallido = "No pudimos guardar sus datos, intentalo de nuevo luego de verificarlos"
+	return render(request, 'UserProfile/NuevoUsuario.html' , {'Form2':Form2 ,'Form':Form , 'perfil':perfil, 'fallido':fallido})
 
 
 #registro principal 
@@ -135,6 +174,19 @@ def Registro(request):
 				perfil.tipoUser = "Sin Definir"
 				perfil.birthdayDate = request.POST['birthdayDate']
 				perfil.save()
+				#mandar mensaje de nuevo usuario
+				#Enviaremos los correos a el colaborador y al cliente 
+				#colaborador
+				usuario = perfil.mailUser #trato de traer el colaborador del formulario
+				email_subject_usuario = 'Bienvenido a Estilo Online'
+				email_body_usuario = "Hola %s, te damos una cordial bienvenida a nuestro sistema esperemos que tengas una experiencia agradable con nuestro sistema, para sacarle el maximo provecho ingrese aqui http://estiloonline.pythonanywhere.com" %(perfil.nameUser)
+				message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+				#mensaje para apreciasoft
+				email_subject_Soporte = 'Nuevo Usuario Registrado'
+				email_body_Soporte = "se ha registrado un nuevo usuario de nombre %spara verificar ingrese aqui http://estiloonline.pythonanywhere.com" %(perfil.nameUser)
+				message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com'])
+				#enviamos el correo
+				send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
 				return redirect ('Clientes:NuevoClientProfile')
 		else:
 			Form	= UsuarioForm

@@ -51,14 +51,19 @@ def NuevoIngreso(request):
 	if request.method == 'POST':
 		Form = IngresoForm(request.POST or None)
 		if Form.is_valid():
+			print(request.POST)
 			ingreso = Form.save(commit=False)
 			ingreso.user = request.user
+			if request.POST['descripcion'] == "":
+				ingreso.descripcion = 'Sin Comentarios'
+			else:
+				ingreso.descripcion = request.POST['descripcion']
 			ingreso.save()
-			mensaje = "Se cargo su ingreso satisfactoriamente"
-			return render(request, 'Caja/NuevoIngreso.html' , {'perfil':perfil, 'mensaje':mensaje})
+			mensaje = 'Hemos Cargado Su ingreso de manera exitosa'
+			return render(request, 'Caja/NuevoIngreso.html' , {'Form':Form, 'perfil':perfil, 'mensaje':mensaje})
 		else:
-			fallido = "Se produjo un error a procesar su solicitud, verifica los datos e intentalo de nuevo"
 			Form = IngresoForm()
+			fallido = "Hemos tenido algun problema con sus datos, por eso no hemos procesado su ingreso, verifiquelo e intentelo de nuevo"
 	return render(request, 'Caja/NuevoIngreso.html' , {'Form':Form, 'perfil':perfil, 'fallido':fallido})
 
 
@@ -110,10 +115,15 @@ def NuevoEgreso(request):
 		if Form.is_valid():
 			egreso = Form.save(commit=False)
 			egreso.user = request.user
+			if request.POST['descripcion'] == "":
+				egreso.descripcion = 'Sin Comentarios'
+			else:
+				egreso.descripcion = request.POST['descripcion']
 			egreso.save()
-			mensaje = "Se cargo su egreso satisfactoriamente"
-			return render(request, 'Caja/NuevoEgreso.html' , {'perfil':perfil, 'mensaje':mensaje})
+			mensaje = 'Hemos Cargado Su egreso de manera exitosa'
+			return render(request, 'Caja/NuevoEgreso.html' , {'Form':Form, 'perfil':perfil, 'mensaje':mensaje})
+
 		else:
-			fallido = "Se produjo un error a procesar su solicitud, verifica los datos e intentalo de nuevo"
 			Form = EgresoForm()
+			fallido = "Hemos tenido algun problema con sus datos, por eso no hemos procesado su ingreso, verifiquelo e intentelo de nuevo"
 	return render(request, 'Caja/NuevoEgreso.html' , {'Form':Form, 'perfil':perfil, 'fallido':fallido})

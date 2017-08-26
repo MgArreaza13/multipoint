@@ -157,7 +157,7 @@
                     
                     {% for cliente in clientes  %}
                       <li>
-                      <img src="http://multipoint.pythonanywhere.com/media/{{cliente.user.image}}" alt="User Image">
+                      <img src="http://estiloonline.pythonanywhere.com/media/{{cliente.user.image}}" alt="User Image">
                       <a class="users-list-name" href="{% url "Clientes:ClienteProfile" cliente.id %}">{{cliente.user.nameUser}}</a>
                       <span class="users-list-date">{{cliente.dateCreate}}</span>
                     </li>

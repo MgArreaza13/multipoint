@@ -122,7 +122,9 @@ def loockscreen(request):
 
 
 
-
+@login_required(login_url = 'Demo:login' )
+def registro(request):
+	return render (request, 'PanelPrincipal/registro.html')
 
 
 

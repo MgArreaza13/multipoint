@@ -21,9 +21,7 @@
       <div class="row">
         <!-- left column -->
         <div class="col-lg-2 col-sm-0"></div>
-        {% if mensaje %}
-            {% include "../Base/modalsucces.html" %}
-          {% else %}
+
             <div class="col-lg-8 col-sm-12">
               <!-- general form elements -->
               
@@ -125,16 +123,10 @@
               </div>
               <!-- /.box -->
             </div>
-        {% endif %}
+
         <div class="col-lg-2 col-sm-0"></div>
         <!--/.col (left) -->
         <!-- right column -->
-
-        
-       {% if fallido != None %}
-         {% include "../Base/modaldancer.html" %}
-         
-       {% endif %}
         
         <!--/.col (right) -->
       </div>

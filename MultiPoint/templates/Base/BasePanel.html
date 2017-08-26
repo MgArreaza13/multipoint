@@ -792,7 +792,11 @@
     </section>
     <!-- /.sidebar -->
   </aside>
-
+{% if mensaje %}
+    {% include "Base/modalsucces.html" %}
+    {% elif fallido != None %}
+    {% include "Base/modaldancer.html" %}
+  {% endif %}
   <!-- Content Wrapper. Contains page content -->
   {% block content %}
 

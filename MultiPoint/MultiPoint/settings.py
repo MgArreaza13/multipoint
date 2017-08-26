@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     'apps.UserProfile',
     'apps.Configuracion',
     'apps.Caja',
-    "apps.ReservasWeb",
     'social_django',
 ]
 
@@ -195,9 +194,3 @@ SOCIAL_AUTH_TWITTER_KEY = 'GKQe03bKfN0VnhMKWshj9qU2H'
 SOCIAL_AUTH_TWITTER_SECRET = '3fVH418FdvjLj6kPZ9jkLCqZMSoUEKjCul8f6qZfEHA5dt7ItN' 
 SOCIAL_AUTH_FACEBOOK_KEY = '306808163103691'
 SOCIAL_AUTH_FACEBOOK_SECRET = 'eb5ee7f19bad1431f28d1684727c2cc9' 
-
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'as.estiloonline@gmail.com'
-EMAIL_HOST_PASSWORD = 'asadmin123'
-EMAIL_PORT = 587

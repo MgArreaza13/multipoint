@@ -17,6 +17,9 @@ from apps.scripts.validatePerfil import validatePerfil
 from apps.UserProfile.forms import UsuarioForm
 from apps.UserProfile.forms import ProfileForm
 
+# enviar correos
+from django.core.mail import send_mail
+from django.core.mail import send_mass_mail
 
 #vista para crear el nuevo colaborador
 @login_required(login_url = 'Demo:login' )
@@ -27,6 +30,7 @@ def NuevoColaborador(request):
 	Form = UsuarioForm()
 	Form2 = ProfileForm()
 	Form3 = ColaboradorForm()
+	fallido = None
 	if request.method == 'POST':
 		Form = UsuarioForm(request.POST , request.FILES or None)
 		Form2 = ProfileForm(request.POST , request.FILES or None)
@@ -48,12 +52,28 @@ def NuevoColaborador(request):
 				colaborador = Form3.save(commit=False)
 				colaborador.user = tb_profile.objects.get(user__id = user.id)
 				colaborador.save()
+				#mandar mensaje de nuevo usuario
+				#Enviaremos los correos a el colaborador y al cliente 
+				#cliente
+				usuario = perfil.mailUser #trato de traer el colaborador del formulario
+				email_subject_usuario = 'Estilo Online Nuevo Colaborador'
+				email_body_usuario = "Hola %s, gracias por crearte un nuevo perfil colaborador , ya puedes crear nuevos turnos y muchas cosas mas para mas informacion ingrese aqui http://estiloonline.pythonanywhere.com" %(perfil.nameUser)
+				message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+				#mensaje para apreciasoft
+				email_subject_Soporte = 'Nuevo Colaborador Registrado'
+				email_body_Soporte = "se ha registrado un nuevo perfil de colaborador con nombre %s para verificar ingrese aqui http://estiloonline.pythonanywhere.com" %(perfil.nameUser)
+				message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com'])
+				#enviamos el correo
+				send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+				mensaje = "Hemos Registrado Su nuevo colaborador de manera exitosa"
 				return redirect ('Colaboradores:ListColaboradores')
+				return render(request, 'Collaborator/NuevoCollaborador.html' , {'Form':Form , 'Form2':Form2, 'Form3':Form3, 'perfil':perfil, 'mensaje':mensaje})
 		else:
 			Form = UsuarioForm()
 			Form2 = ProfileForm()
 			Form3 = ColaboradorForm()
-	return render(request, 'Collaborator/NuevoCollaborador.html' , {'Form':Form , 'Form2':Form2, 'Form3':Form3, 'perfil':perfil})
+			fallido = "hemos tenido problemas al cargar los datos , verifiquelos e intente de nuevo"
+	return render(request, 'Collaborator/NuevoCollaborador.html' , {'Form':Form , 'Form2':Form2, 'Form3':Form3, 'perfil':perfil, 'fallido':fallido})
 
 
 
@@ -66,6 +86,7 @@ def EditarColaborador(request, id_colaborador):
 	perfil = result[0]
 	ColaboradorEditar= tb_collaborator.objects.get(id=id_colaborador)
 	perfilEditar = tb_profile.objects.get(nameUser = ColaboradorEditar.user)
+	fallido = None
 	if request.method == 'GET':
 		Form2	= ProfileForm(instance = perfilEditar)
 		Form3= ColaboradorForm(instance = ColaboradorEditar)
@@ -80,8 +101,9 @@ def EditarColaborador(request, id_colaborador):
 			perfilEditar.birthdayDate = request.POST['birthdayDate']
 			perfilEditar.save()
 			Form3.save()
-			return redirect ('Colaboradores:ListColaboradores')
-	return render (request, 'Collaborator/NuevoCollaborador.html' , {'Form3':Form3 , 'Form2':Form2, 'perfil':perfil})
+			mensaje = "Hemos Guardado de Manera Exitosa sus nuevos datos"
+			return render (request, 'Collaborator/NuevoCollaborador.html' , {'Form3':Form3 , 'Form2':Form2, 'perfil':perfil, 'mensaje':mensaje})
+	return render (request, 'Collaborator/NuevoCollaborador.html' , {'Form3':Form3 , 'Form2':Form2, 'perfil':perfil, 'fallido':fallido})
 
 #listado de los colaboradores
 @login_required(login_url = 'Demo:login' )
@@ -157,9 +179,11 @@ def EliminarColaborador(request, id_colaborador):
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	perfil = result[0]
 	colaboradorBorrar= tb_collaborator.objects.get(id=id_colaborador)
+	fallido = None
 	if request.method == 'POST':
 		colaboradorBorrar.delete()
-		return redirect ('Colaboradores:ListColaboradores')
+		mensaje =  "Hemos Borrado de manera Exitosa su registro"
+		return render (request, 'Collaborator/CollaboradorBorrar.html', {'colaboradorBorrar':colaboradorBorrar, 'perfil':perfil, 'mensaje':mensaje})
 	return render (request, 'Collaborator/CollaboradorBorrar.html', {'colaboradorBorrar':colaboradorBorrar, 'perfil':perfil})
 
 

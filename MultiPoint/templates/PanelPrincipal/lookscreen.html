@@ -15,10 +15,10 @@
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="{% static 'dist/css/AdminLTE.min.css'%}">
+  <link rel="stylesheet" href="{% static 'dist/css/AdminLTEmultipoint.min.css'%}">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="{% static 'dist/css/skins/_all-skins.min.css' %}">
+  <link rel="stylesheet" href="{% static 'dist/css/skins/_all-skinsmultipoint.min.css' %}">
   <!-- iCheck -->
   <link rel="stylesheet" href="{% static 'plugins/iCheck/flat/blue.css' %}">
   <!-- Morris chart -->
@@ -45,12 +45,12 @@
 <body class="hold-transition lockscreen"  style="padding-bottom:20em;overflow:hidden">
 <!-- Automatic element centering -->
 <div class="lockscreen-wrapper" style="  padding-bottom: 30em;" >
-  <div class="login-logo" style="overflow:hidden;">
-    <span class="logo-lg"><img style="margin-top:-2em; width:100%; height:300px; " src="{% static 'img/logo.png' %}" alt=""></span>
+   <div class="login-logo" style="overflow:hidden;">
+    <span class="logo-lg"><img style="margin-top:0em; margin-left:-0.5em; width:100%; height:100%; " src="{% static 'img/multipoint-logo.png' %}" alt=""></span>
   </div>
    
   <!-- User name -->
-  <div style="margin-top:-8em;" class="lockscreen-name">{{request.user}}</div>
+  <div  style="margin-top:-1.8em; color:white;" class="lockscreen-name">{{request.user}}</div>
 
   <!-- START LOCK SCREEN ITEM -->
   <div class="lockscreen-item" style="">
@@ -91,7 +91,7 @@
   <div class="text-center">
     <a href="{% url "Panel:login" %}">O Ingresa con distinto usuario</a>
   </div>
-  <div class="lockscreen-footer text-center">
+  <div style="color:white" class="lockscreen-footer text-center">
     Copyright © 2017 <b><a href="#" class="text-black">Miguel Arreaza</a></b> para <b><a href="#" class="text-black">ApreciaSoft</a></b>  <br>
     All rights reserved
   </div>
