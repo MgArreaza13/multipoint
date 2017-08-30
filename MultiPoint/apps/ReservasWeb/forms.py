@@ -28,3 +28,27 @@ class ReservasWebForm(forms.ModelForm):
 		
 		
 		}
+
+
+class EditReservaWebForm(forms.ModelForm):
+	
+	class Meta:
+		model = tb_reservasWeb
+		fields = [
+		'statusTurn',
+		
+		
+		]
+		exclude = ['dateTurn', 'HoraTurn',  'mail', 'client', 'nombre', 'telefono',]
+
+		labels = {
+		'statusTurn':'Estatus',
+		
+		
+		}
+		widgets = {
+		'statusTurn':Select(attrs={'class':'form-control',
+			'required':True,
+			'autofocus':True,
+			'placeholder':'Seleccione el status'}),
+		}
