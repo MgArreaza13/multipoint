@@ -116,7 +116,7 @@ def NuevoPerfil(request):
 def NuevoUsuario(request):
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	perfil = result[0]
-	fallido - None
+	fallido = None
 	if request.method == 'POST':
 		Form	= UsuarioForm(request.POST , request.FILES  or None)
 		Form2	= ProfileForm(request.POST, request.FILES  or None)
