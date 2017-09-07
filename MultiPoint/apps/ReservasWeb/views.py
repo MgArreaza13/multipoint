@@ -115,3 +115,14 @@ def DeleteReservas(request , id_reservas):
 		mensaje = "hemos borrado sus datos de manera exitosa"
 		return render (request, 'Turn/DeleteTurno.html', {'ReservaBorrar':ReservaBorrar, 'perfil':perfil, 'mensaje':mensaje})
 	return render (request, 'ReservasWeb/DeleteReserva.html', {'ReservaBorrar':ReservaBorrar, 'perfil':perfil})
+
+
+
+#########################SERVICIOS@#####################
+
+from rest_framework import viewsets
+from apps.ReservasWeb.serializers import ReservasWebSerializer
+
+class ReservasWebViewsets(viewsets.ModelViewSet):
+	queryset = tb_reservasWeb.objects.all()
+	serializer_class = ReservasWebSerializer

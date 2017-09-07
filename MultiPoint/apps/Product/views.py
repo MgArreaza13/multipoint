@@ -86,3 +86,15 @@ def EliminarProducto(request, id_producto):
 		productoBorrar.delete()
 		return redirect ('Productos:ListProductos')
 	return render (request, 'Product/DeleteProduct.html', {'productoBorrar':productoBorrar, 'perfil':perfil})
+
+
+
+#######################SERVICIOS##########################
+
+from rest_framework import viewsets
+from apps.Product.serializers import ProductSerializer
+
+
+class ProductViewset(viewsets.ModelViewSet):
+	queryset = tb_product.objects.all()
+	serializer_class = ProductSerializer

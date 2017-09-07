@@ -109,3 +109,14 @@ def Servicios(request):
 
 	}
 	return render(request, 'Service/servicios.html' , context )
+
+
+
+	##################Servicios#######################
+
+from rest_framework import viewsets
+from apps.Service.serializers import ServiceSerializers
+
+class ServicioViewset(viewsets.ModelViewSet):
+	queryset = tb_service.objects.all()
+	serializer_class = ServiceSerializers
