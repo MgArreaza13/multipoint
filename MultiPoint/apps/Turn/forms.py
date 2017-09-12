@@ -13,7 +13,7 @@ class TurnForm(forms.ModelForm):
 		model = tb_turn
 		fields = [
 		'client',
-		'collaborator',
+		#'collaborator',
 		'servicioPrestar',
 		'isProcessClient',
 		'isProcessCollaborator',
@@ -44,10 +44,10 @@ class TurnForm(forms.ModelForm):
 			'autofocus':True,
 			'placeholder':'Seleccione el cliente'}),
 		
-		'collaborator':Select(attrs={'class':'form-control',
-			'required':True,
-			'autofocus':True,
-			'placeholder':'Seleccione collaborador'}),
+		#'collaborator':Select(attrs={'class':'form-control',
+		#	'required':True,
+		#	'autofocus':True,
+		#	'placeholder':'Seleccione collaborador'}),
 
 		'statusTurn':Select(attrs={'class':'form-control',
 			'required':True,
@@ -68,7 +68,7 @@ class EditTurnForm(forms.ModelForm):
 		
 		
 		]
-		exclude = ['user', 'dateTurn',  'isProcessCollaborator', 'client', 'collaborator', 'extraInfoTurn', 'isProcessClient', 'servicioPrestar',]
+		exclude = ['user', 'dateTurn',  'isProcessCollaborator', 'client',  'extraInfoTurn', 'isProcessClient', 'servicioPrestar',]
 
 		labels = {
 		'statusTurn':'Estatus',

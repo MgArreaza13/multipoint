@@ -1,7 +1,7 @@
 {% extends "../Base/BasePanel.html" %}
 {% load staticfiles %}
 {% block title %}
-  Listado de Turnos
+  Listado de Reservas Web
 {% endblock title %}
 
 
@@ -11,12 +11,12 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Listado de Turnos
+        Listado de Reservas Web
         <small>Detalles </small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i>Inicio</a></li>
-        <li><a href="#">Listado de Turnos  </a></li>
+        <li><a href="#">Listado de Reservas Web  </a></li>
         <li class="active">Detalles </li>
       </ol>
     </section>
@@ -103,7 +103,7 @@
 
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title">Lista de Turnos </h3>
+              <h3 class="box-title">Lista de Reservas Web </h3>
             </div>
             <div style="background-color: rgba(154, 153, 158, 0.09);" class="box-body">
             <h5 class="box-title">Filtrar por Fecha </h5>
@@ -124,7 +124,7 @@
                 <tr>
                   <th>COD</th>
                   <th>CLIENTE</th>
-                  <th>COLABORADOR</th>
+
                   <th>HORA</th>
                   <th>FECHA</th>
                   <th>INFO</th>
@@ -144,16 +144,14 @@
                     <td>
                           <a href="{% url "Clientes:ClienteProfile" turno.client.id %}" class="product-title">{{turno.client}}</a>
                     </td>
-                    <td>
-                          <a href="{% url "Colaboradores:ColaboradorProfile" turno.collaborator.id %}" class="product-title">{{turno.collaborator}}</a>
-                    </td>
+                    
                    
                          <td>{{turno.HoraTurn}}</td>
                     <td>{{turno.dateTurn}}</td>
                     
                     <td>{{turno.extraInfoTurn}}</td>  
 
-                    {% if turno.statusTurn.nameStatus == 'En Espera' %}
+                    {% if turno.statusTurn.nameStatus == 'Sin Aprobar' %}
                       
                       <td> 
                           <form action="" method="post">
@@ -175,7 +173,7 @@
                           </form>
                     </td>
 
-                   {% elif turno.statusTurn.nameStatus == 'Atendido' %}
+                   {% elif turno.statusTurn.nameStatus == 'Finalizada' %}
                        <td>
                             
                             <form action="" method="post">
@@ -197,7 +195,7 @@
                           </form>
                       </td>
 
-                    {% elif turno.statusTurn.nameStatus == 'Cancelado' %}
+                    {% elif turno.statusTurn.nameStatus == 'No Aprobada' %}
                        <td>
                             
                             <form action="" method="post">
@@ -218,7 +216,7 @@
                                 </td>
                           </form>
                       </td>
-                    {% elif turno.statusTurn.nameStatus == 'En Proceso' %}
+                    {% elif turno.statusTurn.nameStatus == 'Confirmada' %}
                     <!--No form-->
                        <td>
                             <form action="" method="post">
@@ -250,31 +248,29 @@
                           <td>
                                 <a href="{% url "Clientes:ClienteProfile" turno.client.id %}" class="product-title">{{turno.client}}</a>
                           </td>
-                          <td>
-                                <a href="{% url "Colaboradores:ColaboradorProfile" turno.collaborator.id %}" class="product-title">{{turno.collaborator}}</a>
-                          </td>
+                          
                          
                                <td>{{turno.HoraTurn}}</td>
                           <td>{{turno.dateTurn}}</td>
                           
                           <td>{{turno.extraInfoTurn}}</td>
                           
-                          {% if turno.statusTurn.nameStatus == 'En Espera' %}
+                          {% if turno.statusTurn.nameStatus == 'Sin Aprobar' %}
                             
                             <td>
                                   <span class="label label-warning">{{turno.statusTurn}}</span>
                             </td>
 
-                         {% elif turno.statusTurn.nameStatus == 'Atendido' %}
+                         {% elif turno.statusTurn.nameStatus == 'Finalizada' %}
                              <td>
                                   <span class="label label-success">{{turno.statusTurn}}</span>
                             </td>
 
-                          {% elif turno.statusTurn.nameStatus == 'Cancelado' %}
+                          {% elif turno.statusTurn.nameStatus == 'No Aprobada' %}
                              <td>
                                   <span class="label label-danger">{{turno.statusTurn}}</span>
                             </td>
-                          {% elif turno.statusTurn.nameStatus == 'En Proceso' %}
+                          {% elif turno.statusTurn.nameStatus == 'Confirmada' %}
                              <td>
                                   <span style="background-color:#00c0ef;" class="label">{{turno.statusTurn}}</span>
                             </td>
@@ -298,7 +294,7 @@
                 <tr>
                   <th>COD</th>
                   <th>CLIENTE</th>
-                  <th>COLABORADOR</th>
+                  
                   <th>HORA</th>
                   <th>FECHA</th>
                   <th>INFO</th>
@@ -323,7 +319,7 @@
     <div class="box-body" >
           
             <div class="col-sm-12">
-              <a href="{% url "Turnos:NuevoTurn" %}" type="button" class="btn btn-block btn-info">Nuevo Turno</a>
+              <a href="{% url "Turnos:NuevoTurn" %}" type="button" class="btn btn-block btn-info">Nueva Reserva </a>
             </div>
            
            

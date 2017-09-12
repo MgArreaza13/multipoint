@@ -218,7 +218,7 @@
 
       {% for turno in turnos %}
         {
-          title: '{{turno.collaborator}}'+ ' - ' +'{{turno.HoraTurn}}',
+          title: '{{turno.servicioPrestar}}'+ ' - ' +'{{turno.HoraTurn}}',
           start: '{{ turno.dateTurn|date:"Y-m-d" }}',
           backgroundColor: "#f56954", //red
           borderColor: "#f56954" //red

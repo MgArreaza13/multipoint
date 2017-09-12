@@ -53,7 +53,7 @@
     <!-- Content Header (Page header) -->
      <section class="content-header">
       <h1>
-        NUEVO TURNO 
+        NUEVA RESERVA WEB
         <small>Control panel</small>
       </h1>
       <ol class="breadcrumb">
@@ -69,7 +69,7 @@
           <!-- general form elements -->
           <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title">Nuevo Turno</h3>
+              <h3 class="box-title">Nueva Reserva Web </h3>
             </div>
             <!-- /.box-header -->
             <!-- form start -->
@@ -298,7 +298,7 @@ $('.clockpicker').clockpicker({
 
       {% for turno in turnos %}
         {
-          title: '{{turno.collaborator}}{{turno.HoraTurn}}',
+          title: '{{turno.servicioPrestar}}-{{turno.HoraTurn}}',
           start: '{{ turno.dateTurn|date:"Y-m-d" }}',
           backgroundColor: "#f56954", //red
           borderColor: "#f56954" //red

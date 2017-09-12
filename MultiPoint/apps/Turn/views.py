@@ -31,7 +31,7 @@ def index(request):
 	is_collaborador = tb_collaborator.objects.filter(user__id = request.user.id) #saber si el usuario actual es collaborador
 	turnos = tb_turn.objects.filter(dateTurn = fecha).order_by('HoraTurn')
 	#queryset 
-	turnos_hoy =  tb_turn.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='En Espera').count()
+	turnos_hoy =  tb_turn.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
 	ingresos_hoy = tb_ingreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	egresos_hoy  = tb_egreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	context = {
@@ -51,7 +51,7 @@ def index(request):
 @login_required(login_url = 'Demo:login' )
 def NuevoTurnParaHoy(request):
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
-	turnos = tb_turn.objects.filter(statusTurn__nameStatus="En Espera")
+	turnos = tb_turn.objects.filter(statusTurn__nameStatus="Confirmada")
 	perfil = result[0]
 	Form = TurnForm
 	fecha =  date.today()
@@ -60,8 +60,8 @@ def NuevoTurnParaHoy(request):
 	if request.method == 'POST':
 		Form = TurnForm(request.POST or None)
 		fecha =  date.today()
-		colaboradorOcupado = tb_turn.objects.filter(dateTurn=fecha).filter(statusTurn__nameStatus="En Espera").filter(HoraTurn=request.POST['TimeTurn']).filter(collaborator=request.POST['collaborator'])	
-		data = len(colaboradorOcupado)
+		ReservaWebOcupada = tb_turn.objects.filter(dateTurn=fecha).filter(statusTurn__nameStatus="Confirmada").filter(HoraTurn=request.POST['TimeTurn'])
+		data = len(ReservaWebOcupada)
 		if Form.is_valid():
 			if data == 0: #no encontro un collaborador ocupado para ese dia y hora
 				turno = Form.save(commit=False)
@@ -73,11 +73,11 @@ def NuevoTurnParaHoy(request):
 				else:
 					turno.extraInfoTurn = request.POST['extraInfoTurn']
 				#Envio de mensajes 
-				colaborador = tb_profile.objects.get(nameUser=turno.collaborator) #trato de traer el colaborador del formulario
-				email_subject_Colaborador = 'Nuevo Turno Solicitado Por Cliente'
-				email_body_Colaborador = "Hola %s, El presente mensaje es para informarle que ha recibido una nueva solicitud para un turno si desea revisarla y confirmarla ingrese aqui http://estiloonline.pythonanywhere.com" %(colaborador)
-				email_colaborador = colaborador.mailUser
-				message_colaborador = (email_subject_Colaborador, email_body_Colaborador , 'as.estiloonline@gmail.com', [email_colaborador])
+				#colaborador = tb_profile.objects.get(nameUser=turno.collaborator) #trato de traer el colaborador del formulario
+				#email_subject_Colaborador = 'Nuevo Turno Solicitado Por Cliente'
+				#email_body_Colaborador = "Hola %s, El presente mensaje es para informarle que ha recibido una nueva solicitud para un turno si desea revisarla y confirmarla ingrese aqui http://estiloonline.pythonanywhere.com" %(colaborador)
+				#email_colaborador = colaborador.mailUser
+				#message_colaborador = (email_subject_Colaborador, email_body_Colaborador , 'as.estiloonline@gmail.com', [email_colaborador])
 				#cliente
 				client = tb_profile.objects.get(user__username=turno.client) #trato de traer el colaborador del formulario
 				email_subject_client = 'Nuevo Turno Solicitado'
@@ -86,15 +86,15 @@ def NuevoTurnParaHoy(request):
 				message_client = (email_subject_client, email_body_Client, 'as.estiloonline@gmail.com', [email_client])
 				#mensaje para apreciasoft
 				email_subject_Soporte = 'Nuevo Turno Solicitado en Estilo Online'
-				email_body_Soporte = "Hola, soporte Apreciasoft, El presente mensaje es para informarle que el cliente  %s ha enviado una nueva solicitud para de turno para el colaborador %s , si desea revisarla ingrese aqui http://estiloonline.pythonanywhere.com" %(client,colaborador)
+				email_body_Soporte = "Hola, soporte Apreciasoftit, El presente mensaje es para informarle que el cliente  %s ha enviado una nueva solicitud de Reservas , si desea revisarla ingrese aqui http://estiloonline.pythonanywhere.com" %(client)
 				message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com'])
 				#enviamos el correo
-				send_mass_mail((message_colaborador, message_client, message_Soporte), fail_silently=False)
+				send_mass_mail((message_client, message_Soporte), fail_silently=False)
 				turno.save()
 				mensaje = 'Felicidades Hemos podido guardar su turno de manera exitosa'
 				return render(request, 'Turn/NuevoTurnoHoy.html' , {'Form':Form,'turnos':turnos ,'fecha':fecha , 'mensaje1':mensaje1, 'perfil':perfil, 'mensaje':mensaje})
 			elif data == 1: # collaborador ocupado para esa hora y fecha
-				mensaje1 = "El Colaborador que desea Contratar esta Ocupado Para El Dia y la hora deseado intente con otro collaborador o con otro dia"
+				mensaje1 = "El servicio desea Contratar esta Ocupado Para El Dia y la hora deseado intente con otro collaborador o con otro dia"
 				Form = TurnForm()
 				fallido = "No hemos podido cargar sus datos correctamente, verifique e intente nuevamente"
 		else:
@@ -125,7 +125,6 @@ def EditTurnStatus(request , id_turn):
 			turno.dateTurn = TurnEditar.dateTurn
 			turno.HoraTurn = TurnEditar.HoraTurn
 			turno.client = TurnEditar.client
-			turno.collaborator = TurnEditar.collaborator
 			turno.extraInfoTurn = TurnEditar.extraInfoTurn
 			turno.servicioPrestar = TurnEditar.servicioPrestar
 			turno.isProcessClient = TurnEditar.isProcessClient
@@ -163,15 +162,15 @@ def listTurnos(request):
 @login_required(login_url = 'Demo:login' )
 def NuevoTurn(request):
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
-	turnos = tb_turn.objects.filter(statusTurn__nameStatus="En Espera")
+	turnos = tb_turn.objects.filter(statusTurn__nameStatus="Confirmada")
 	perfil = result[0]
 	Form = TurnForm
 	mensaje1 = None
 	fallido = None
 	if request.method == 'POST':
 		Form = TurnForm(request.POST or None)
-		colaboradorOcupado = tb_turn.objects.filter(dateTurn=request.POST['TurnDate']).filter(statusTurn__nameStatus="En Espera").filter(HoraTurn=request.POST['TimeTurn']).filter(collaborator=request.POST['collaborator'])	
-		data = len(colaboradorOcupado)
+		ReservaWebOcupada = tb_turn.objects.filter(dateTurn=request.POST['TurnDate']).filter(statusTurn__nameStatus="Confirmada").filter(HoraTurn=request.POST['TimeTurn'])	
+		data = len(ReservaWebOcupada)
 		if Form.is_valid():
 			if data == 0: #no encontro un collaborador ocupado para ese dia y hora 
 				turno = Form.save(commit=False)
@@ -185,11 +184,11 @@ def NuevoTurn(request):
 				turno.save()
 				#Enviaremos los correos a el colaborador y al cliente 
 				#colaborador
-				colaborador = tb_profile.objects.get(nameUser=turno.collaborator) #trato de traer el colaborador del formulario
-				email_subject_Colaborador = 'Nuevo Turno Solicitado Por Cliente'
-				email_body_Colaborador = "Hola %s, El presente mensaje es para informarle que ha recibido una nueva solicitud para un turno si desea revisarla y confirmarla ingrese aqui http://estiloonline.pythonanywhere.com" %(colaborador)
-				email_colaborador = colaborador.mailUser
-				message_colaborador = (email_subject_Colaborador, email_body_Colaborador , 'as.estiloonline@gmail.com', [email_colaborador])
+				#colaborador = tb_profile.objects.get(nameUser=turno.collaborator) #trato de traer el colaborador del formulario
+				#email_subject_Colaborador = 'Nuevo Turno Solicitado Por Cliente'
+				#email_body_Colaborador = "Hola %s, El presente mensaje es para informarle que ha recibido una nueva solicitud para un turno si desea revisarla y confirmarla ingrese aqui http://estiloonline.pythonanywhere.com" %(colaborador)
+				#email_colaborador = colaborador.mailUser
+				#message_colaborador = (email_subject_Colaborador, email_body_Colaborador , 'as.estiloonline@gmail.com', [email_colaborador])
 				#cliente
 				client = tb_profile.objects.get(user__username=turno.client) #trato de traer el colaborador del formulario
 				email_subject_client = 'Nuevo Turno Solicitado'
@@ -198,14 +197,14 @@ def NuevoTurn(request):
 				message_client = (email_subject_client, email_body_Client, 'as.estiloonline@gmail.com', [email_client])
 				#mensaje para apreciasoft
 				email_subject_Soporte = 'Nuevo Turno Solicitado en Estilo Online'
-				email_body_Soporte = "Hola, soporte Apreciasoft, El presente mensaje es para informarle que el cliente  %s ha enviado una nueva solicitud para de turno para el colaborador %s , si desea revisarla ingrese aqui http://estiloonline.pythonanywhere.com" %(client,colaborador)
+				email_body_Soporte = "Hola, soporte Apreciasoft, El presente mensaje es para informarle que el cliente  %s ha enviado una nueva solicitud para de reserva , si desea revisarla ingrese aqui http://estiloonline.pythonanywhere.com" %(client)
 				message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com'])
 				#enviamos el correo
-				send_mass_mail((message_colaborador, message_client, message_Soporte), fail_silently=False)
+				send_mass_mail(( message_client, message_Soporte), fail_silently=False)
 				mensaje = "Hemos Guardado sus datos de manera correcta"
 				return render(request, 'Turn/NuevoTurno.html' , {'Form':Form ,'turnos':turnos ,'mensaje1':mensaje1, 'perfil':perfil, 'mensaje':mensaje})
 			elif data == 1: # collaborador ocupado para esa hora y fecha
-				mensaje1 = "El Colaborador que desea Contratar esta Ocupado Para El Dia y la hora deseado intente con otro collaborador o con otro dia"
+				mensaje1 = "El servicio esta Ocupado Para El Dia y la hora deseado intente con otro collaborador o con otro dia"
 				Form = TurnForm()
 				fallido = "Tuvimos un error al cargar sus datos, verifiquelo e intente de nuevo"
 		else:
@@ -256,7 +255,6 @@ def EditTurnList(request , id_turn):
 			turno.dateTurn = TurnEditar.dateTurn
 			turno.HoraTurn = TurnEditar.HoraTurn
 			turno.client = TurnEditar.client
-			turno.collaborator = TurnEditar.collaborator
 			turno.extraInfoTurn = TurnEditar.extraInfoTurn
 			turno.servicioPrestar = TurnEditar.servicioPrestar
 			turno.isProcessClient = TurnEditar.isProcessClient

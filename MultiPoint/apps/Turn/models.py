@@ -45,7 +45,7 @@ class tb_turn (models.Model):
 	#TypeHora				=	models.CharField(max_length=30,null=False,choices=TURNO_CHOICES,default='Mañana',)
 	HoraTurn				=	models.TimeField(auto_now=False, auto_now_add=False, blank=False, null=False, default='')
 	client					=  	models.ForeignKey(tb_client, on_delete=models.CASCADE, null=False, default='')
-	collaborator			=	models.ForeignKey(tb_collaborator, on_delete=models.CASCADE, null=False, default='')
+	#collaborator			=	models.ForeignKey(tb_collaborator, on_delete=models.CASCADE, null=False, default='')
 	extraInfoTurn			=	models.TextField(default='', null=False, max_length=300)
 	servicioPrestar			= 	models.ForeignKey(tb_service,on_delete=models.CASCADE, null=False, default='')
 	isProcessClient 		=	models.BooleanField()

@@ -82,11 +82,11 @@
       <!-- Main row -->
       <div class="row">
         <!-- Left col -->
-        <div class="col-md-8">
+        <div class="col-md-6">
           <!-- MAP & BOX PANE -->
           <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Estadistica De Ingresos - Egresos  Mensuales {{fecha.year}}</h3>
+              <h3 class="box-title">Reservas Web Confirmadas  Mensuales {{fecha.year}}</h3>
 
               <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -103,7 +103,7 @@
           </div>
           <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Estadistica De Turnos Mensuales {{fecha.year}}</h3>
+              <h3 class="box-title">Estadistica De Ingresos - Egresos  Mensuales  {{fecha.year}}</h3>
 
               <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -125,13 +125,13 @@
         </div>
         <!-- /.col -->
 
-        <div class="col-md-4">
+        <div class="col-md-6">
           
 
           <!-- PRODUCT LIST -->
           <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title">Servicios</h3>
+              <h3 class="box-title">Resumen del Listado de Reservas Web</h3>
 
               <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -145,18 +145,21 @@
                 <table class="table no-margin">
                   <thead>
                   <tr>
-                   
-                    <th>NOMBRE</th>
-                    <th>PRECIO </th>
+                  
+                    <th>SERVICIO</th>
+                    <th>CLIENTE</th>
+                    <th>FECHA </th>
+
                     
                   </tr>
                   </thead>
                   <tbody>
-                  {% for servicio in servicios  %}
+                  {% for turno in listturn  %}
                     <tr>
                     
-                    <td>{{servicio.nameService}}</td>
-                    <td><span class="label label-success">${{servicio.priceList}}</span></td>
+                    <td>{{turno.servicioPrestar}}</td>
+                    <td>{{turno.client}}</td>
+                    <td><span class="label label-warning">{{turno.dateTurn}}</span></td>
                     
                   </tr>
                   {% endfor %}
@@ -168,8 +171,8 @@
             </div>
             <!-- /.box-body -->
             <div class="box-footer clearfix">
-              <a href="{% url "Servicios:NuevoServicio" %}" class="btn btn-sm btn-info btn-flat pull-left">NUEVO SERVICIO</a>
-              <a href="{% url "Servicios:listService" %}" class="btn btn-sm btn-default btn-flat pull-right">VER TODOS LOS SERVICIOS</a>
+              <a href="{% url "Turnos:NuevoTurn" %}" class="btn btn-sm btn-info btn-flat pull-left">NUEVA RESERVA</a>
+              <a href="{% url "Turnos:listTurnos" %}" class="btn btn-sm btn-default btn-flat pull-right">VER TODAS LAS RESERVAS</a>
             </div>
             <!-- /.box-footer -->
           </div>
@@ -205,7 +208,7 @@ new Chart(document.getElementById("myChart"), {
     options: {
       title: {
         display: true,
-        text: 'Estadistica de turnos'
+        text: 'Estadistica de Reservas'
       },
       legend: { display: false }
     }

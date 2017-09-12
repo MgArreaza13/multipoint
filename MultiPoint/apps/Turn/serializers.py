@@ -10,7 +10,7 @@ class turnSerializer(serializers.HyperlinkedModelSerializer):
 		'dateTurn',
 		'HoraTurn',
 		'client',
-		'collaborator',
+		#'collaborator',
 		'extraInfoTurn',
 		'servicioPrestar',
 		'isProcessClient',

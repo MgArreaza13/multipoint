@@ -18,6 +18,7 @@ from apps.Caja.models import tb_ingreso
 from apps.Caja.models import tb_egreso
 
 #script de validar el perfil
+from apps.ReservasWeb.models import tb_reservasWeb
 
 from apps.scripts.validatePerfil import validatePerfil
 
@@ -37,7 +38,8 @@ def inicio(request):
 	fecha = date.today()
 	servicios = tb_service.objects.all()[:10]
 	productos = tb_product.objects.all()[:10]
-	dataturn = tb_turn.objects.all() #traigo todos los turnos 
+	dataturn = tb_turn.objects.filter(statusTurn__nameStatus = "Confirmada") #traigo todos los turnos 
+	listturn = tb_turn.objects.filter(statusTurn__nameStatus = "Confirmada")[:10]
 	data = [] #creo la data que rendeare luego 
 	ing = [] #ingresos chart
 	egr = [] #egresos chart
@@ -72,6 +74,7 @@ def inicio(request):
 	ingresos_hoy = tb_ingreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	egresos_hoy  = tb_egreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	context = {
+	'listturn':listturn,
 	'perfil':perfil,
 	'servicios':servicios,
 	'productos':productos,
@@ -107,7 +110,7 @@ def logout(request):
 
 @login_required(login_url = 'Demo:login' )
 def calendario(request):
-	turnos = tb_turn.objects.filter(statusTurn__nameStatus="En Espera")
+	turnos = tb_turn.objects.filter(statusTurn__nameStatus="Confirmada")
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	fecha = date.today()
 	perfil = result[0]

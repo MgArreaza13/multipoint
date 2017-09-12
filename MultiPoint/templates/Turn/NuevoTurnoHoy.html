@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="{% static 'plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'%}">
    <link rel="stylesheet" href="{% static "plugins/fullcalendar/fullcalendar.min.css" %}">
   <link rel="stylesheet" href="{% static "plugins/fullcalendar/fullcalendar.print.css" %}" media="print">
-  cript type="text/javascript" src="{% static "bootstrap/js/jquery-1.8.0.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "bootstrap/js/jquery-1.8.0.min.js" %}"></script>
 
 
 
@@ -294,7 +294,7 @@ $('.clockpicker').clockpicker({
 
       {% for turno in turnos %}
         {
-          title: '{{turno.collaborator}}{{turno.HoraTurn}}',
+          title: '{{turno.servicioPrestar}}-{{turno.HoraTurn}}',
           start: '{{ turno.dateTurn|date:"Y-m-d" }}',
           backgroundColor: "#f56954", //red
           borderColor: "#f56954" //red

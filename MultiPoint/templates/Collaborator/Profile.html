@@ -51,6 +51,13 @@
                       <b>Clientes Cancelados</b> <a class="pull-right">{{turnos_cancelados}}</a>
                   {% endif %}
                 </li>
+                </li>
+                 {% if colaborador. == None %}
+                     <b>Clientes Cancelados</b> <a class="pull-right">0</a>
+                    {% else %} 
+                      <b>Clientes Cancelados</b> <a class="pull-right">{{turnos_cancelados}}</a>
+                  {% endif %}
+                </li>
               </ul>
 
               <a href="{% url "Colaboradores:EditarColaborador" colaborador.id %}" class="btn btn-primary btn-block"><b>EDITAR PERFIL</b></a>
