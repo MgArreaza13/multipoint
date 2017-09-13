@@ -224,6 +224,15 @@
           borderColor: "#f56954" //red
         },
       {% endfor %}
+      {% for ReservasWeb in ReservasWeb %}
+        {
+          title: '{{ReservasWeb.servicioPrestar}}'+ ' - ' +'{{ReservasWeb.HoraTurn}}',
+          start: '{{ ReservasWeb.dateTurn|date:"Y-m-d" }}',
+          backgroundColor: "#f56954", //red
+          borderColor: "#f56954" //red
+        },
+      {% endfor %}
+      
       ],
       editable: false,
       droppable: true, // this allows things to be dropped onto the calendar !!!

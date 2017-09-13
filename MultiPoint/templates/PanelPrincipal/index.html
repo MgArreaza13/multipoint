@@ -163,6 +163,15 @@
                     
                   </tr>
                   {% endfor %}
+                  {% for turno in reservas  %}
+                    <tr>
+                    
+                    <td>{{turno.servicioPrestar}}</td>
+                    <td>{{turno.nombre}}</td>
+                    <td><span class="label label-warning">{{turno.dateTurn}}</span></td>
+                    
+                  </tr>
+                  {% endfor %}
                   
                   </tbody>
                 </table>

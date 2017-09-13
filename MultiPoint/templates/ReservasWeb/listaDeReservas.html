@@ -138,7 +138,7 @@
                
                   
                 {% for reserva in reservas  %}
-                    {% if ReservaWebEditar.id == reserva.id  %}
+                    {% if ReservaWebEditar.id == reserva.id and reserva.statusTurn.nameStatus != 'Confirmada'  %}
                     <!--form-->
                     <tr>
                     <td><a href="#">{{reserva.id}}</a></td>
@@ -262,7 +262,7 @@
                   
                     
                   </tr>
-                      {% elif ReservaWebEditar.id != reserva.id   %}
+                      {% elif ReservaWebEditar.id != reserva.id and reserva.statusTurn.nameStatus != 'Confirmada'   %}
                         <tr>
                           <td><a href="#">{{reserva.id}}</a></td>
                           <td>{{reserva.nombre}}</td>

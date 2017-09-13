@@ -65,16 +65,20 @@ def EditReservaList(request , id_reservas):
 			reserva.HoraTurn = ReservaWebEditar.HoraTurn
 			reserva.mail = ReservaWebEditar.mail
 			reserva.nombre = ReservaWebEditar.nombre
+			reserva.servicioPrestar = ReservaWebEditar.servicioPrestar
 			reserva.telefono = ReservaWebEditar.telefono
 			reserva.save()
 			return redirect ('Reservas:listReservas')
 	return render (request, 'ReservasWeb/listaDeReservas.html', {'ReservaWebEditar':ReservaWebEditar,'reservas':reservas,'Form':Form , 'perfil':perfil})
 
 def web(request):
-	turnos = tb_turn.objects.filter(statusTurn__nameStatus="En Espera")
+	turnos = tb_turn.objects.filter(statusTurn__nameStatus="Confirmada")
+	reservas = tb_reservasWeb.objects.filter(statusTurn__nameStatus="Confirmada")
+
 	Form = ReservasWebForm
 	fallido = None
 	if request.method == 'POST':
+		print(request.POST)
 		Form = ReservasWebForm(request.POST or None)
 		if Form.is_valid():
 			turno = Form.save(commit=False)
@@ -100,7 +104,7 @@ def web(request):
 		else:
 				fallido = "Errores en los datos Verifiquelos, y vuelva a intentarlo"
 				Form = ReservasWebForm()
-	return render(request, "ReservasWeb/reservasweb.html" , {'Form':Form ,'turnos':turnos ,'fallido':fallido,})
+	return render(request, "ReservasWeb/reservasweb.html" , {'Form':Form, 'reservas':reservas ,'turnos':turnos ,'fallido':fallido,})
 
 
 

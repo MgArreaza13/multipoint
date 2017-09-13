@@ -134,7 +134,7 @@
                 </thead>
                 <tbody>
                 
-               
+    Reservas           
                   
                 {% for turno in turnos  %}
                     {% if TurnEditar.id == turno.id  %}
@@ -254,6 +254,152 @@
                           <td>{{turno.dateTurn}}</td>
                           
                           <td>{{turno.extraInfoTurn}}</td>
+                          
+                          {% if turno.statusTurn.nameStatus == 'Sin Aprobar' %}
+                            
+                            <td>
+                                  <span class="label label-warning">{{turno.statusTurn}}</span>
+                            </td>
+
+                         {% elif turno.statusTurn.nameStatus == 'Finalizada' %}
+                             <td>
+                                  <span class="label label-success">{{turno.statusTurn}}</span>
+                            </td>
+
+                          {% elif turno.statusTurn.nameStatus == 'No Aprobada' %}
+                             <td>
+                                  <span class="label label-danger">{{turno.statusTurn}}</span>
+                            </td>
+                          {% elif turno.statusTurn.nameStatus == 'Confirmada' %}
+                             <td>
+                                  <span style="background-color:#00c0ef;" class="label">{{turno.statusTurn}}</span>
+                            </td>
+                          {% endif %}
+
+                          <td>
+                              <a href="{% url "Turnos:EditTurnList" turno.id %}" style="background-color:#39CCCC;" class="label">STATUS</a>
+                              <a href="{% url "Turnos:EditTurn" turno.id %}" style="background-color:#001F3F;" class="label">EDITAR</a>
+                              <a href="{% url "Turnos:DeleteTurn" turno.id %}" style="background-color:#D81B60;" class="label">ELIMINAR</a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+
+                {% for turno in Reservas  %}
+                    {% if TurnEditar.id == turno.id  %}
+                    <!--form-->
+                    <tr>
+                    <td><a href="#">{{turno.id}}</a></td>
+                    
+                    <td>{{turno.nombre}}</td
+                    
+                   
+                         <td>{{turno.HoraTurn}}</td>
+                    <td>{{turno.dateTurn}}</td>
+                    
+                    <td>Reserva Web</td>  
+
+                    {% if turno.statusTurn.nameStatus == 'Sin Aprobar' %}
+                      
+                      <td> 
+                          <form action="" method="post">
+                             {% csrf_token %}
+                               <div class="box-body">
+                                  {% for field in Form %}
+                                    {% if field.name == 'statusTurn' %}
+                                      <div class="form-group ">
+                                      <span class="label label-warning">{{turno.statusTurn}}</span>
+                                          {{ field }}   
+                                       </div>
+                                    {%endif%}
+                                  {% endfor %}
+                                </div>
+                                <td>
+                                  <button type="submit" class="label btn btn-primary">GUARDAR</button>
+                                  <a href="{% url "Turnos:listTurnos" %}" class="label btn btn-danger">CANCELAR</a>
+                                 </td>
+                          </form>
+                    </td>
+
+                   {% elif turno.statusTurn.nameStatus == 'Finalizada' %}
+                       <td>
+                            
+                            <form action="" method="post">
+                             {% csrf_token %}
+                               <div class="box-body">
+                                  {% for field in Form %}
+                                    {% if field.name == 'statusTurn' %}
+                                      <div class="form-group ">
+                                        <span class="label label-success">{{turno.statusTurn}}</span>
+                                          {{ field }}   
+                                       </div>
+                                    {%endif%}
+                                  {% endfor %}
+                                </div>
+                                <td>
+                                  <button type="submit" class="label btn btn-primary">GUARDAR</button>
+                                  <a href="{% url "Turnos:listTurnos" %}" class="label btn btn-danger">CANCELAR</a>
+                                 </td>
+                          </form>
+                      </td>
+
+                    {% elif turno.statusTurn.nameStatus == 'No Aprobada' %}
+                       <td>
+                            
+                            <form action="" method="post">
+                             {% csrf_token %}
+                               <div class="box-body">
+                                  {% for field in Form %}
+                                    {% if field.name == 'statusTurn' %}
+                                      <div class="form-group ">
+                                      <span class="label label-danger">{{turno.statusTurn}}</span>
+                                          {{ field }}   
+                                       </div>
+                                    {%endif%}
+                                  {% endfor %}
+                                </div>
+                                <td>
+                                  <button type="submit" class="label btn btn-primary">GUARDAR</button>
+                                  <a href="{% url "Turnos:listTurnos" %}" class="label btn btn-danger">CANCELAR</a>
+                                </td>
+                          </form>
+                      </td>
+                    {% elif turno.statusTurn.nameStatus == 'Confirmada' %}
+                    <!--No form-->
+                       <td>
+                            <form action="" method="post">
+                            
+                             {% csrf_token %}
+                               <div class="box-body">
+                                  {% for field in Form %}
+                                    {% if field.name == 'statusTurn' %}
+                                      <div class="form-group ">
+                                          <span style="background-color:#00c0ef;" class="label">{{turno.statusTurn}}</span>
+                                          {{ field }}   
+                                       </div>
+                                    {%endif%}
+                                  {% endfor %}
+                                </div>
+                                <td>
+                                  <button type="submit" class="label btn btn-primary">GUARDAR</button>
+                                  <a href="{% url "Turnos:listTurnos" %}" class="label btn btn-danger">CANCELAR</a>
+                                 </td>
+                          </form>
+                      </td>
+                    {% endif %}
+                  
+                    
+                  </tr>
+                      {% elif TurnEditar.id != turno.id   %}
+                        <tr>
+                          <td><a href="#">{{turno.id}}</a></td>
+                          
+                          <td>{{turno.nombre}}</td>
+                         
+                               <td>{{turno.HoraTurn}}</td>
+                          <td>{{turno.dateTurn}}</td>
+                          
+                          <td>Reserva Web </td>
                           
                           {% if turno.statusTurn.nameStatus == 'Sin Aprobar' %}
                             

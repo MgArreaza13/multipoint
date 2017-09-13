@@ -15,6 +15,7 @@ class ReservasWebForm(forms.ModelForm):
 		'mail',
 		'nombre',
 		'telefono',
+		'servicioPrestar'
 		
 		
 		
@@ -29,6 +30,17 @@ class ReservasWebForm(forms.ModelForm):
 		
 		}
 
+		widgets = {
+
+		'servicioPrestar': Select(attrs={'class':'form-control',
+			'required':True,
+			'autofocus':True,
+			'placeholder':'Seleccione el servicio'}),
+
+		
+		}
+
+
 
 class EditReservaWebForm(forms.ModelForm):
 	
@@ -39,7 +51,7 @@ class EditReservaWebForm(forms.ModelForm):
 		
 		
 		]
-		exclude = ['dateTurn', 'HoraTurn',  'mail', 'client', 'nombre', 'telefono',]
+		exclude = ['dateTurn', 'servicioPrestar', 'HoraTurn',  'mail', 'client', 'nombre', 'telefono',]
 
 		labels = {
 		'statusTurn':'Estatus',

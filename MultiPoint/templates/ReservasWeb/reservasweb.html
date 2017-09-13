@@ -51,6 +51,7 @@
   <link rel="stylesheet" type="text/css" href="{% static "bootstrap/css/bootstrap-datepicker.adminlte.min.css" %}">
 
   <script src="{% static "plugins/jQuery/jquery-2.2.3.min.js" %}"></script>
+  <link rel="stylesheet" href="{% static "bootstrap/css/miguel.css" %}">
 {% endblock styles %}
 
 
@@ -98,11 +99,11 @@
     <!-- Main content -->
      <section class="content">
       <div class="row">
-        <div class="col-lg-4 col-sm-12">
+        <div class="col-lg-4 col-sm-12 ">
           <!-- general form elements -->
           <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title">Nuevo Turno</h3>
+              <h3 class="box-title">Nueva Reserva</h3>
             </div>
             <!-- /.box-header -->
             <!-- form start -->
@@ -110,100 +111,13 @@
               {% include "../Base/modalsucces.html" %}
               {% elif fallido != None %}
               {% include "../Base/modaldancer.html" %}
-              <form action="" method="post">
-              {% csrf_token %}
-              <div class="box-body">
-                  
-                  {% for field in Form %}
-                     {% if Form.subject.errors %}
-                         <ol>
-                          {% for error in Form.subject.errors %}
-                              <li><strong>{{ error|escape }}</strong></li>
-                          {% endfor %}
-                        </ol>
-                    {% endif %}
-                    
-                    {{ field.errors }}
-
-
-                    {% if field.name == 'mail' %}
-                       <div class="form-group ">
-                    <label>Correo</label>
-                    <input class="form-control" placeholder="{{field.label}}" autocomplete="off" 
-                      required autofocus maxlength="{{field.max_length}}" {{ field }}    
-                  </div>
-                    {% elif field.name == 'nombre' %}
-                       <div class="form-group ">
-                    <label>Nombre</label>
-                    <input class="form-control" placeholder="{{field.label}}" autocomplete="off" 
-                      required autofocus maxlength="{{field.max_length}}" {{ field }}    
-                  </div>
-                    {% elif field.name == 'telefono' %}
-                       <div class="form-group ">
-                    <label>Telefono</label>
-                    <input class="form-control" placeholder="{{field.label}}" autocomplete="off" 
-                      required autofocus maxlength="{{field.max_length}}" {{ field }}    
-                  </div>
-
-                    
-                      
-                    {% endif %}
-        
-          
-
-          
-      
-                  {% if field.help_text %}
-                    <script> console.log('{{ field.help_text|safe }}')</script>
-                  {% endif %}
-               {% endfor %}
-
-                <div class="input-group clockpicker">
-                <label >  Sleccione la Hora del turno </label>
-                    <input type="text" name="TimeTurn" placeholder="Hora Del Turno" class="form-control" autocomplete="off" 
-                               step="1" required autofocus/>
-
-                </div>
-                <br>
-               <div class="form-group">
-                  <label >  Sleccione la fecha del turno </label>
-                      <input class="form-control" id="TurnDate" name="TurnDate" type="text" placeholder="Fecha del Turno" autocomplete="off" 
-                                required autofocus max="2030-12-31" />
-                </div>
-              
-                         
-           </div>
-
-
-                
-              
-             
-              
-                        <!-- /.box-body -->
-
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary">GUARDAR</button>
-                <a href="{% url "Turnos:listTurnos" %}" class="btn btn-danger">REGRESAR</a>
-              </div>
-            </form>
-          </div>
-          <!-- /.box -->
-        </div>
-        <!-- /.col -->
-        <div class="col-md-8">
-          <div class="box box-primary">
-            <div class="box-body no-padding">
-              <!-- THE CALENDAR -->
-              <div id="calendar"></div>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /. box -->
-        </div>
               {% else %}
               <form action="" method="post">
               {% csrf_token %}
-              <div class="box-body">
+              <div class="box-body paso1">
+              <div class="box-header with-border">
+              <h3 class="box-title">PASO 1</h3>
+            </div>
                   
                   {% for field in Form %}
                      {% if Form.subject.errors %}
@@ -244,6 +158,50 @@
 
           
       
+                  
+               {% endfor %}
+
+                
+              
+                  <div style="margin-top: 2em;" class="box-footer">
+                <a id="siguientePaso" href="javascript:void(0)" class="btn btn-primary">SIGUIENTE PASO</a>
+                
+              </div>       
+           </div>
+
+           <div class="box-body paso2">
+           <div class="box-header with-border">
+              <h3 class="box-title">PASO 2</h3>
+            </div>
+                  
+                  {% for field in Form %}
+                     {% if Form.subject.errors %}
+                         <ol>
+                          {% for error in Form.subject.errors %}
+                              <li><strong>{{ error|escape }}</strong></li>
+                          {% endfor %}
+                        </ol>
+                    {% endif %}
+                    
+                    {{ field.errors }}
+
+
+                    {% if field.name == 'servicioPrestar' %}
+                      <div class="form-group ">
+                              <label>Ingrese el servicio</label>
+                             {{ field }}
+                      
+                          </div>
+                   
+
+                    
+                      
+                    {% endif %}
+        
+          
+
+          
+      
                   {% if field.help_text %}
                     <script> console.log('{{ field.help_text|safe }}')</script>
                   {% endif %}
@@ -262,8 +220,13 @@
                                 required autofocus max="2030-12-31" />
                 </div>
               
-                         
+                   <div style="margin-top: 2em;"  class="box-footer">
+                <button type="submit" class="btn btn-primary">GUARDAR</button>
+                <a id="regresar" href="javascript:void(0)" class="btn btn-danger">REGRESAR</a>
+              </div>      
            </div>
+
+          
 
 
                 
@@ -272,14 +235,17 @@
               
                         <!-- /.box-body -->
 
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary">GUARDAR</button>
-                <a href="{% url "Turnos:listTurnos" %}" class="btn btn-danger">REGRESAR</a>
-              </div>
+              
             </form>
           </div>
           <!-- /.box -->
         </div>
+        
+        <!-- /.col -->
+        
+        
+         
+
         <!-- /.col -->
         <div class="col-md-8">
           <div class="box box-primary">
@@ -291,14 +257,17 @@
           </div>
           <!-- /. box -->
         </div>
-           {% endif %}
+         {% endif %}
+             
             
         <!-- /.col -->
       </div>
       <!-- /.row -->
     </section>
+   
     <!-- /.content -->
   </div>
+  <input type="hidden" id="displayMenu" value="0">
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="pull-right hidden-xs">
@@ -341,7 +310,41 @@
 
 
 
+<script>
+  $("#siguientePaso").click(function () {
+        if($('#displayMenu').val()==0){
+          $(".paso2").css("display", "block");
+          $('.paso2').addClass('animated bounceInDown');
+          $(".paso1").css("display", "none");
+          $('#displayMenu').val(1)
 
+        }else{
+          //$('.tipo_publicacion').removeClass('animated bounceInDown');
+          //$('.tipo_publicacion').addClass('animated bounceOutRight');
+          $(".tipo_publicacion").css("display", "none");
+          $('#displayMenu').val(0)
+        }
+        
+      });
+</script>
+
+<script>
+  $("#regresar").click(function () {
+        if($('#displayMenu').val()==1){
+          $(".paso1").css("display", "block");
+          $('.paso1').addClass('animated bounceInDown');
+          $(".paso2").css("display", "none");
+          $('#displayMenu').val(0)
+
+        }else{
+          //$('.tipo_publicacion').removeClass('animated bounceInDown');
+          //$('.tipo_publicacion').addClass('animated bounceOutRight');
+          $(".tipo_publicacion").css("display", "none");
+          $('#displayMenu').val(0)
+        }
+        
+      });
+</script>
 
 <script>
 $('.clockpicker').clockpicker({
@@ -418,6 +421,15 @@ $('.clockpicker').clockpicker({
           borderColor: "#f56954" //red
         },
       {% endfor %}
+      {% for ReservasWeb in reservas %}
+        {
+          title: '{{ReservasWeb.servicioPrestar}}'+ ' - ' +'{{ReservasWeb.HoraTurn}}',
+          start: '{{ ReservasWeb.dateTurn|date:"Y-m-d" }}',
+          backgroundColor: "#f56954", //red
+          borderColor: "#f56954" //red
+        },
+      {% endfor %}
+
       ],
       editable: false,
       droppable: true, // this allows things to be dropped onto the calendar !!!

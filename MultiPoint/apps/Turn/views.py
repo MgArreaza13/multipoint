@@ -7,6 +7,7 @@ from apps.Collaborator.models import tb_collaborator
 from apps.Turn.models import tb_turn
 from apps.Caja.models import tb_ingreso
 from apps.Caja.models import tb_egreso
+from apps.ReservasWeb.models import tb_reservasWeb
 #FORMULARIOS
 from apps.Turn.forms import TurnForm
 from apps.Turn.forms import EditTurnForm
@@ -52,6 +53,7 @@ def index(request):
 def NuevoTurnParaHoy(request):
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	turnos = tb_turn.objects.filter(statusTurn__nameStatus="Confirmada")
+	reservas = tb_reservasWeb.objects.filter(statusTurn__nameStatus="Confirmada")
 	perfil = result[0]
 	Form = TurnForm
 	fecha =  date.today()
@@ -104,7 +106,7 @@ def NuevoTurnParaHoy(request):
 			fallido = "No hemos podido cargar sus datos correctamente, verifique e intente nuevamente"
 
 	
-	return render(request, 'Turn/NuevoTurnoHoy.html' , {'Form':Form,'turnos':turnos ,'fecha':fecha , 'mensaje1':mensaje1, 'perfil':perfil, 'fallido':fallido})
+	return render(request, 'Turn/NuevoTurnoHoy.html' , {'Form':Form, 'reservas':reservas,'turnos':turnos ,'fecha':fecha , 'mensaje1':mensaje1, 'perfil':perfil, 'fallido':fallido})
 
 
 #Edita los Status de los turnos
@@ -140,6 +142,7 @@ def EditTurnStatus(request , id_turn):
 def listTurnos(request):
 	TurnEditar = -1 #para poder saber que turnos se le mostrara el formulario, verifico que ningun id coincida con -1
 	turnos = tb_turn.objects.all().order_by('dateTurn')
+	Reservas = tb_reservasWeb.objects.all().order_by('dateTurn')
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	perfil = result[0]
 	formulario = False
@@ -148,6 +151,7 @@ def listTurnos(request):
 	ingresos_hoy = tb_ingreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	egresos_hoy  = tb_egreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	context = {
+	'Reservas':Reservas,
 	'perfil':perfil,
 	'turnos':turnos,
 	'turnos_hoy':turnos_hoy,
@@ -163,6 +167,7 @@ def listTurnos(request):
 def NuevoTurn(request):
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	turnos = tb_turn.objects.filter(statusTurn__nameStatus="Confirmada")
+	reservas = tb_reservasWeb.objects.filter(statusTurn__nameStatus="Confirmada")
 	perfil = result[0]
 	Form = TurnForm
 	mensaje1 = None
@@ -211,14 +216,15 @@ def NuevoTurn(request):
 				mensaje1 = "Errores en los datos Verifiquelos, y vuelva a intentarlo"
 				Form = TurnForm()
 				fallido = "Tuvimos un error al cargar sus datos, verifiquelo e intente de nuevo"
-	return render(request, 'Turn/NuevoTurno.html' , {'Form':Form ,'turnos':turnos ,'mensaje1':mensaje1, 'perfil':perfil, 'fallido':fallido})
+	return render(request, 'Turn/NuevoTurno.html' , {'Form':Form, 'reservas':reservas ,'turnos':turnos ,'mensaje1':mensaje1, 'perfil':perfil, 'fallido':fallido})
 
 #edita los turnos en general
 @login_required(login_url = 'Demo:login' )
 def EditTurn(request , id_turn):
 	TurnEditar = tb_turn.objects.get(id = id_turn)
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
-	turnos = tb_turn.objects.filter(statusTurn__nameStatus="En Espera")
+	turnos = tb_turn.objects.filter(statusTurn__nameStatus="Confirmada")
+	reservas = tb_reservasWeb.objects.filter(statusTurn__nameStatus="Confirmada")
 	perfil = result[0]
 	fallido = None
 	if request.method == 'GET':
@@ -233,7 +239,7 @@ def EditTurn(request , id_turn):
 			turno.save()
 			mensaje = "Guardamos sus datos de manera exitosa"
 			return render (request, 'Turn/NuevoTurno.html', {'turnos':turnos,'Form':Form , 'perfil':perfil, 'mensaje':mensaje})
-	return render (request, 'Turn/NuevoTurno.html', {'turnos':turnos,'Form':Form , 'perfil':perfil, 'fallido':fallido})
+	return render (request, 'Turn/NuevoTurno.html', {'turnos':turnos, 'reservas':reservas ,'Form':Form , 'perfil':perfil, 'fallido':fallido})
 
 #edita los turnos en general
 @login_required(login_url = 'Demo:login' )
