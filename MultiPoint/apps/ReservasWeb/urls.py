@@ -5,11 +5,13 @@ from apps.ReservasWeb.views import web
 from apps.ReservasWeb.views import listReservas
 from apps.ReservasWeb.views import EditReservaList
 from apps.ReservasWeb.views import DeleteReservas
+from apps.ReservasWeb.views import Factura
 urlpatterns = [
 
 	#url(r'^$', Servicios , name='Servicios'  ),
 	#url(r'^Perfil/(?P<id_Client>\d+)$', ClienteProfile , name='ClienteProfile'  ),
 	url(r'^web/$', web , name='web'  ),
+	url(r'^factura/(?P<id_reservas>\d+)$', Factura , name='Factura'  ),
 	url(r'^list/$', listReservas , name='listReservas'  ),
 	#url(r'^Nuevo/$', NuevoProveedor , name='NuevoProveedor'  ),
 	url(r'^Editar/(?P<id_reservas>\d+)$', EditReservaList, name='EditReservaList'  ),

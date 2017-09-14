@@ -8,6 +8,7 @@ from apps.Collaborator.models import tb_collaborator
 from apps.Turn.models import tb_turn
 from apps.Caja.models import tb_ingreso
 from apps.Caja.models import tb_egreso
+from apps.Service.models import tb_service
 from apps.Product.models import tb_product
 #FORMULARIOS
 from apps.ReservasWeb.forms import ReservasWebForm
@@ -22,6 +23,7 @@ from apps.Configuracion.models import tb_status
 # enviar correos
 from django.core.mail import send_mail
 from django.core.mail import send_mass_mail
+from datetime import date 
 
 
 
@@ -72,6 +74,8 @@ def EditReservaList(request , id_reservas):
 			return redirect ('Reservas:listReservas')
 	return render (request, 'ReservasWeb/listaDeReservas.html', {'ReservaWebEditar':ReservaWebEditar,'reservas':reservas,'Form':Form , 'perfil':perfil})
 
+
+
 def web(request):
 	turnos = tb_turn.objects.filter(statusTurn__nameStatus="Confirmada")
 	reservas = tb_reservasWeb.objects.filter(statusTurn__nameStatus="Confirmada")
@@ -86,7 +90,11 @@ def web(request):
 			turno.dateTurn = request.POST['TurnDate']
 			turno.HoraTurn = request.POST['TimeTurn']
 			turno.statusTurn = tb_status.objects.get(nameStatus="Sin Aprobar")
+			servicio = tb_service.objects.get(id = request.POST['servicioPrestar'])
+			turno.montoAPagar = float(request.POST['total']) + float(servicio.priceList) 
+			turno.description = 'Sin Descripcion'
 			turno.save()
+			turno_enviar = tb_reservasWeb.objects.get(id=turno.id)
 			mensaje ="se ha registrado de forma correcta sus datos gracias por contactarnos"
 			#mandar mensaje de nuevo usuario
 			#Enviaremos los correos a el colaborador y al cliente 
@@ -101,13 +109,21 @@ def web(request):
 			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com"])
 			#enviamos el correo
 			send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
-			return render(request, "ReservasWeb/reservasweb.html" , {'Form':Form ,'turnos':turnos ,'mensaje':mensaje,})
+			return redirect('Reservas:Factura', id_reservas=turno.id)
 		else:
 				fallido = "Errores en los datos Verifiquelos, y vuelva a intentarlo"
 				Form = ReservasWebForm()
 	return render(request, "ReservasWeb/reservasweb.html" , {'Form':Form,'productos':productos ,'reservas':reservas ,'turnos':turnos ,'fallido':fallido,})
 
 
+def Factura(request, id_reservas):
+	reserva = tb_reservasWeb.objects.get(id=id_reservas)
+	fecha = date.today()
+	admin = tb_profile.objects.filter(tipoUser='Administrador')
+	administrador = admin[0]
+
+	
+	return render(request, 'ReservasWeb/Confirmacion.html', {'reserva':reserva,'administrador':administrador ,'fecha':fecha})
 
 
 @login_required(login_url = 'Demo:login' )

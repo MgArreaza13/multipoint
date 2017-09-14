@@ -231,7 +231,7 @@
                   <div class="checkbox">
                     <label>
                       <input name="{{productos.nameProduct}}" onclick=" Suma(this.checked,this.value)" value="{{productos.priceList}}" type="checkbox">
-                      {{productos.nameProduct}}
+                      {{productos.nameProduct}} - ${{productos.priceList}}
                     </label>
                   </div>
 
@@ -241,7 +241,8 @@
 
                 <div class="form-group col-md-6">
                   <h3>Monto A Pagar</h3>
-                  <input type="text" name="total" value="0">
+                  <p style="font-size: 4em;">$<estrong id="Monto">0</estrong></p>
+                  <input type="hidden" name="total" value="0">
                   
                 </div>
 
@@ -344,10 +345,17 @@
 <script>
   function Suma(isChecked, myValue)
 {
-tot = parseInt(document.form1.total.value);
-myValue = parseInt(myValue);
-if (isChecked) document.form1.total.value = tot + myValue;
-else document.form1.total.value = tot - myValue;
+tot = parseFloat(document.form1.total.value);
+myValue = parseFloat(myValue);
+if (isChecked) {
+ document.form1.total.value = tot + myValue; 
+ $('#Monto').html(tot + myValue)
+
+}
+else{
+  document.form1.total.value = tot - myValue;
+  $('#Monto').html(tot - myValue)
+} 
 }
 </script>
 
