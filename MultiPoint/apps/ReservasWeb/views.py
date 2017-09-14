@@ -8,6 +8,7 @@ from apps.Collaborator.models import tb_collaborator
 from apps.Turn.models import tb_turn
 from apps.Caja.models import tb_ingreso
 from apps.Caja.models import tb_egreso
+from apps.Product.models import tb_product
 #FORMULARIOS
 from apps.ReservasWeb.forms import ReservasWebForm
 from apps.ReservasWeb.forms import EditReservaWebForm
@@ -74,7 +75,7 @@ def EditReservaList(request , id_reservas):
 def web(request):
 	turnos = tb_turn.objects.filter(statusTurn__nameStatus="Confirmada")
 	reservas = tb_reservasWeb.objects.filter(statusTurn__nameStatus="Confirmada")
-
+	productos = tb_product.objects.all()
 	Form = ReservasWebForm
 	fallido = None
 	if request.method == 'POST':
@@ -104,7 +105,7 @@ def web(request):
 		else:
 				fallido = "Errores en los datos Verifiquelos, y vuelva a intentarlo"
 				Form = ReservasWebForm()
-	return render(request, "ReservasWeb/reservasweb.html" , {'Form':Form, 'reservas':reservas ,'turnos':turnos ,'fallido':fallido,})
+	return render(request, "ReservasWeb/reservasweb.html" , {'Form':Form,'productos':productos ,'reservas':reservas ,'turnos':turnos ,'fallido':fallido,})
 
 
 
