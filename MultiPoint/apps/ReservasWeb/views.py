@@ -24,8 +24,20 @@ from apps.Configuracion.models import tb_status
 from django.core.mail import send_mail
 from django.core.mail import send_mass_mail
 from datetime import date 
+from django.http import JsonResponse
 
 
+
+
+
+def validacion(request):
+	id_servicio = request.GET.get('id_servicio', None)
+	ser=tb_service.objects.filter(id=id_servicio)
+	servicio = ser[0]
+	data = {
+        'value':servicio.priceList
+    }
+	return JsonResponse(data)
 
 @login_required(login_url = 'Demo:login' )
 def listReservas(request):
@@ -70,7 +82,21 @@ def EditReservaList(request , id_reservas):
 			reserva.nombre = ReservaWebEditar.nombre
 			reserva.servicioPrestar = ReservaWebEditar.servicioPrestar
 			reserva.telefono = ReservaWebEditar.telefono
+			reserva.montoAPagar =  ReservaWebEditar.montoAPagar
+			reserva.description =  ReservaWebEditar.description
 			reserva.save()
+			print(reserva.statusTurn.nameStatus)
+			if reserva.statusTurn.nameStatus == 'Confirmada':
+				print('reserva confirmada email')
+				email_subject_usuario = 'Reserva confirmada, motor de pago enviado'
+				email_body_usuario = "Hola ha confirmado la reserva sera enviado el motor de pago mas informacion http://multipoint.pythonanywhere.com/" 
+				message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com"])
+				mail = reserva.mail
+				email_subject_Soporte = 'Multipoint - Reserva Confirmada'
+				email_body_Soporte = "hola %s, hemos confirmado tu reserva web te invitamos a procesar tu pago en http://multipoint.pythonanywhere.com/reservas/list/" %(reserva.nombre)
+				message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', [mail])
+				#enviamos el correo
+				send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
 			return redirect ('Reservas:listReservas')
 	return render (request, 'ReservasWeb/listaDeReservas.html', {'ReservaWebEditar':ReservaWebEditar,'reservas':reservas,'Form':Form , 'perfil':perfil})
 
@@ -83,15 +109,14 @@ def web(request):
 	Form = ReservasWebForm
 	fallido = None
 	if request.method == 'POST':
-		print(request.POST)
 		Form = ReservasWebForm(request.POST or None)
 		if Form.is_valid():
 			turno = Form.save(commit=False)
 			turno.dateTurn = request.POST['TurnDate']
 			turno.HoraTurn = request.POST['TimeTurn']
 			turno.statusTurn = tb_status.objects.get(nameStatus="Sin Aprobar")
-			servicio = tb_service.objects.get(id = request.POST['servicioPrestar'])
-			turno.montoAPagar = float(request.POST['total']) + float(servicio.priceList) 
+			
+			turno.montoAPagar = float(request.POST['total'])  
 			turno.description = 'Sin Descripcion'
 			turno.save()
 			turno_enviar = tb_reservasWeb.objects.get(id=turno.id)

@@ -341,9 +341,34 @@
 <script type="text/javascript" src="{% static "bootstrap/js/bootstrap-clockpicker.min.js" %}"></script>
 <script type="text/javascript" src="{% static "bootstrap/js/bootstrap-datepicker.adminlte.min.js" %}"></script>
 
+<script>
+  
+ 
+  $("#servicio").change(function () {
+      var id_servicio = $(this).val();
+
+      $.ajax({
+        url: 'http://localhost:8000/reservas/ajax/validacion/',
+        data: {
+          'id_servicio': id_servicio
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.value) {
+            tot = parseFloat(document.form1.total.value);
+            var miguel = parseFloat(data.value);
+            console.log(miguel)
+            document.form1.total.value = miguel; 
+             $('#Monto').html(miguel)
+          }
+        }
+      });
+
+    });
+</script>
 
 <script>
-  function Suma(isChecked, myValue)
+function Suma(isChecked, myValue)
 {
 tot = parseFloat(document.form1.total.value);
 myValue = parseFloat(myValue);

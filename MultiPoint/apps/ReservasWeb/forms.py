@@ -32,7 +32,7 @@ class ReservasWebForm(forms.ModelForm):
 
 		widgets = {
 
-		'servicioPrestar': Select(attrs={'class':'form-control',
+		'servicioPrestar': Select(attrs={'id':'servicio','class':'form-control',
 			'required':True,
 			'autofocus':True,
 			'placeholder':'Seleccione el servicio'}),
