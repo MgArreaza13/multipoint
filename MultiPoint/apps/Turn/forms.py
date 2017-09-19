@@ -14,7 +14,7 @@ class TurnForm(forms.ModelForm):
 		fields = [
 		'client',
 		#'collaborator',
-		'servicioPrestar',
+		
 		'isProcessClient',
 		'isProcessCollaborator',
 		'statusTurn',
@@ -22,7 +22,7 @@ class TurnForm(forms.ModelForm):
 		
 		
 		]
-		exclude = ['user', 'dateTurn', 'HoraTurn', 'extraInfoTurn',]
+		exclude = ['user', 'dateTurn', 'HoraTurn', 'extraInfoTurn', 'servicioPrestar',]
 
 		labels = {
 		'dateTurn':'Fecha Para El turno', 
@@ -34,10 +34,10 @@ class TurnForm(forms.ModelForm):
 		}
 		widgets = {
 
-		'servicioPrestar': Select(attrs={'class':'form-control',
-			'required':True,
-			'autofocus':True,
-			'placeholder':'Seleccione el servicio'}),
+		#'servicioPrestar': Select(attrs={'class':'form-control',
+		#	'required':True,
+		#	'autofocus':True,
+		#	'placeholder':'Seleccione el servicio'}),
 
 		'client':Select(attrs={'class':'form-control',
 			'required':True,
@@ -57,6 +57,51 @@ class TurnForm(forms.ModelForm):
 		}
 
           
+class TurnFormClient(forms.ModelForm):
+	
+	class Meta:
+		model = tb_turn
+		fields = [
+		
+		#'collaborator',
+		
+		'isProcessClient',
+		'isProcessCollaborator',
+		
+		
+		
+		
+		]
+		exclude = ['user', 'dateTurn','client', 'statusTurn','HoraTurn', 'extraInfoTurn', 'servicioPrestar',]
+
+		labels = {
+		'dateTurn':'Fecha Para El turno', 
+		'isProcessClient':'Es Atendido',
+		'isProcessCollaborator': 'Es activo el collaborador',
+		'statusTurn':'Estatus',
+		
+		
+		}
+		widgets = {
+
+		#'servicioPrestar': Select(attrs={'class':'form-control',
+		#	'required':True,
+		#	'autofocus':True,
+		#	'placeholder':'Seleccione el servicio'}),
+
+		
+		
+		#'collaborator':Select(attrs={'class':'form-control',
+		#	'required':True,
+		#	'autofocus':True,
+		#	'placeholder':'Seleccione collaborador'}),
+
+		'statusTurn':Select(attrs={'class':'form-control',
+			'required':True,
+			'autofocus':True,
+			'placeholder':'Seleccione el status'}),
+		
+		}
 		
 
 class EditTurnForm(forms.ModelForm):

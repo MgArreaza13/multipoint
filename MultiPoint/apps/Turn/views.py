@@ -8,9 +8,12 @@ from apps.Turn.models import tb_turn
 from apps.Caja.models import tb_ingreso
 from apps.Caja.models import tb_egreso
 from apps.ReservasWeb.models import tb_reservasWeb
+from apps.Client.models import tb_client
+from apps.Configuracion.models import tb_status
 #FORMULARIOS
 from apps.Turn.forms import TurnForm
 from apps.Turn.forms import EditTurnForm
+from apps.Turn.forms import TurnFormClient
 #datos para la vista principal arriba de las citas y los ingresos.
 from django.db.models import Count, Min, Sum, Avg
 from datetime import date 
@@ -20,6 +23,10 @@ from apps.scripts.validatePerfil import validatePerfil
 # enviar correos
 from django.core.mail import send_mail
 from django.core.mail import send_mass_mail
+
+from apps.Service.models import tb_service
+from apps.Product.models import tb_product
+from apps.Notificaciones.models import Notificacion
 
 
 #Resumen de todos los turnos, parte principal
@@ -48,6 +55,81 @@ def index(request):
 	}
 	return render(request,'Turn/ResumenTurnos.html', context )
 
+
+
+#crea los turnos
+@login_required(login_url = 'Demo:login' )
+def NuevoTurnClient(request , id_client):
+	result = validatePerfil(tb_profile.objects.filter(user=request.user))
+	turnos = tb_turn.objects.filter(statusTurn__nameStatus="Confirmada")
+	reservas = tb_reservasWeb.objects.filter(statusTurn__nameStatus="Confirmada")
+	servicios = tb_service.objects.all()
+	productos = tb_product.objects.all()
+	perfil = result[0]
+	Form = TurnFormClient
+	mensaje1 = None
+	fallido = None
+	notificacion = Notificacion()
+	if request.method == 'POST':
+		Form = TurnFormClient(request.POST or None)
+		ReservaWebOcupada = tb_turn.objects.filter(dateTurn=request.POST['TurnDate']).filter(statusTurn__nameStatus="Confirmada").filter(HoraTurn=request.POST['TimeTurn'])	
+		data = len(ReservaWebOcupada)
+		if Form.is_valid():
+			if data == 0: #no encontro un collaborador ocupado para ese dia y hora 
+				turno = Form.save(commit=False)
+
+				turno.user = request.user
+				turno.client = tb_client.objects.get(user__user__id = request.user.id)
+				turno.dateTurn = request.POST['TurnDate']
+				turno.HoraTurn = request.POST['TimeTurn']
+				if request.POST['extraInfoTurn'] == "":
+					turno.extraInfoTurn = 'Sin Comentarios'
+				else:
+					turno.extraInfoTurn = request.POST['extraInfoTurn']
+				turno.servicioPrestar = tb_service.objects.get(id= request.POST['ServicioSeleccionado'])
+				turno.montoAPagar = float(request.POST['total'])  
+				turno.statusTurn = tb_status.objects.get(nameStatus='Sin Aprobar')
+				turno.save()
+				notificacion.nombre = turno.client.user.nameUser
+				notificacion.dateTurn = turno.dateTurn
+				notificacion.save()
+				#Enviaremos los correos a el colaborador y al cliente 
+				#colaborador
+				#colaborador = tb_profile.objects.get(nameUser=turno.collaborator) #trato de traer el colaborador del formulario
+				#email_subject_Colaborador = 'Nuevo Turno Solicitado Por Cliente'
+				#email_body_Colaborador = "Hola %s, El presente mensaje es para informarle que ha recibido una nueva solicitud para un turno si desea revisarla y confirmarla ingrese aqui http://estiloonline.pythonanywhere.com" %(colaborador)
+				#email_colaborador = colaborador.mailUser
+				#message_colaborador = (email_subject_Colaborador, email_body_Colaborador , 'as.estiloonline@gmail.com', [email_colaborador])
+				#cliente
+				client = tb_profile.objects.get(user__username=turno.client) #trato de traer el colaborador del formulario
+				email_subject_client = 'Nuevo Turno Solicitado'
+				email_body_Client = "Hola %s, El presente mensaje es para informarle que se ha enviado una nueva solicitud para un turno si desea revisarla y confirmarla ingrese aqui http://estiloonline.pythonanywhere.com" %(client)
+				email_client = client.mailUser
+				message_client = (email_subject_client, email_body_Client, 'as.estiloonline@gmail.com', [email_client])
+				#mensaje para apreciasoft
+				email_subject_Soporte = 'Nuevo Turno Solicitado en Estilo Online'
+				email_body_Soporte = "Hola, soporte Apreciasoft, El presente mensaje es para informarle que el cliente  %s ha enviado una nueva solicitud para de reserva , si desea revisarla ingrese aqui http://estiloonline.pythonanywhere.com" %(client)
+				message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com'])
+				#enviamos el correo
+				send_mass_mail(( message_client, message_Soporte), fail_silently=False)
+				mensaje = "Hemos Guardado sus datos de manera correcta"
+				return render(request, 'Turn/NuevoTurno.html' , {'Form':Form ,'turnos':turnos ,'mensaje1':mensaje1, 'perfil':perfil, 'mensaje':mensaje})
+			elif data == 1: # collaborador ocupado para esa hora y fecha
+				mensaje1 = "El servicio esta Ocupado Para El Dia y la hora deseado intente con otro collaborador o con otro dia"
+				Form = TurnFormClient()
+				fallido = "Tuvimos un error al cargar sus datos, verifiquelo e intente de nuevo"
+		else:
+				mensaje1 = "Errores en los datos Verifiquelos, y vuelva a intentarlo"
+				Form = TurnFormClient()
+				fallido = "Tuvimos un error al cargar sus datos, verifiquelo e intente de nuevo"
+	return render(request, 'Turn/NuevoTurno.html' , {'Form':Form, 'servicios':servicios, 'productos':productos  ,'reservas':reservas ,'turnos':turnos ,'mensaje1':mensaje1, 'perfil':perfil, 'fallido':fallido})
+
+
+
+
+
+
+
 #Crea El turno para la fecha actual
 @login_required(login_url = 'Demo:login' )
 def NuevoTurnParaHoy(request):
@@ -57,8 +139,11 @@ def NuevoTurnParaHoy(request):
 	perfil = result[0]
 	Form = TurnForm
 	fecha =  date.today()
+	servicios = tb_service.objects.all()
+	productos = tb_product.objects.all()
 	mensaje1 = None
 	fallido = None
+	notificacion = Notificacion()
 	if request.method == 'POST':
 		Form = TurnForm(request.POST or None)
 		fecha =  date.today()
@@ -81,6 +166,12 @@ def NuevoTurnParaHoy(request):
 				#email_colaborador = colaborador.mailUser
 				#message_colaborador = (email_subject_Colaborador, email_body_Colaborador , 'as.estiloonline@gmail.com', [email_colaborador])
 				#cliente
+				turno.servicioPrestar = tb_service.objects.get(id= request.POST['ServicioSeleccionado'])
+				turno.montoAPagar = float(request.POST['total'])  
+				turno.save()
+				notificacion.nombre = turno.client.user.nameUser
+				notificacion.dateTurn = turno.dateTurn
+				notificacion.save()
 				client = tb_profile.objects.get(user__username=turno.client) #trato de traer el colaborador del formulario
 				email_subject_client = 'Nuevo Turno Solicitado'
 				email_body_Client = "Hola %s, El presente mensaje es para informarle que se ha enviado una nueva solicitud para un turno si desea revisarla y confirmarla ingrese aqui http://estiloonline.pythonanywhere.com" %(client)
@@ -92,7 +183,7 @@ def NuevoTurnParaHoy(request):
 				message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com'])
 				#enviamos el correo
 				send_mass_mail((message_client, message_Soporte), fail_silently=False)
-				turno.save()
+				
 				mensaje = 'Felicidades Hemos podido guardar su turno de manera exitosa'
 				return render(request, 'Turn/NuevoTurnoHoy.html' , {'Form':Form,'turnos':turnos ,'fecha':fecha , 'mensaje1':mensaje1, 'perfil':perfil, 'mensaje':mensaje})
 			elif data == 1: # collaborador ocupado para esa hora y fecha
@@ -106,7 +197,7 @@ def NuevoTurnParaHoy(request):
 			fallido = "No hemos podido cargar sus datos correctamente, verifique e intente nuevamente"
 
 	
-	return render(request, 'Turn/NuevoTurnoHoy.html' , {'Form':Form, 'reservas':reservas,'turnos':turnos ,'fecha':fecha , 'mensaje1':mensaje1, 'perfil':perfil, 'fallido':fallido})
+	return render(request, 'Turn/NuevoTurnoHoy.html' , {'Form':Form, 'servicios':servicios, 'productos':productos ,'reservas':reservas,'turnos':turnos ,'fecha':fecha , 'mensaje1':mensaje1, 'perfil':perfil, 'fallido':fallido})
 
 
 #Edita los Status de los turnos
@@ -168,10 +259,13 @@ def NuevoTurn(request):
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	turnos = tb_turn.objects.filter(statusTurn__nameStatus="Confirmada")
 	reservas = tb_reservasWeb.objects.filter(statusTurn__nameStatus="Confirmada")
+	servicios = tb_service.objects.all()
+	productos = tb_product.objects.all()
 	perfil = result[0]
 	Form = TurnForm
 	mensaje1 = None
 	fallido = None
+	notificacion = Notificacion()
 	if request.method == 'POST':
 		Form = TurnForm(request.POST or None)
 		ReservaWebOcupada = tb_turn.objects.filter(dateTurn=request.POST['TurnDate']).filter(statusTurn__nameStatus="Confirmada").filter(HoraTurn=request.POST['TimeTurn'])	
@@ -186,7 +280,12 @@ def NuevoTurn(request):
 					turno.extraInfoTurn = 'Sin Comentarios'
 				else:
 					turno.extraInfoTurn = request.POST['extraInfoTurn']
+				turno.servicioPrestar = tb_service.objects.get(id= request.POST['ServicioSeleccionado'])
+				turno.montoAPagar = float(request.POST['total'])  
 				turno.save()
+				notificacion.nombre = turno.client.user.nameUser
+				notificacion.dateTurn = turno.dateTurn
+				notificacion.save()
 				#Enviaremos los correos a el colaborador y al cliente 
 				#colaborador
 				#colaborador = tb_profile.objects.get(nameUser=turno.collaborator) #trato de traer el colaborador del formulario
@@ -216,7 +315,7 @@ def NuevoTurn(request):
 				mensaje1 = "Errores en los datos Verifiquelos, y vuelva a intentarlo"
 				Form = TurnForm()
 				fallido = "Tuvimos un error al cargar sus datos, verifiquelo e intente de nuevo"
-	return render(request, 'Turn/NuevoTurno.html' , {'Form':Form, 'reservas':reservas ,'turnos':turnos ,'mensaje1':mensaje1, 'perfil':perfil, 'fallido':fallido})
+	return render(request, 'Turn/NuevoTurno.html' , {'Form':Form, 'servicios':servicios, 'productos':productos  ,'reservas':reservas ,'turnos':turnos ,'mensaje1':mensaje1, 'perfil':perfil, 'fallido':fallido})
 
 #edita los turnos en general
 @login_required(login_url = 'Demo:login' )

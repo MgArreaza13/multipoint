@@ -89,6 +89,8 @@
         <ul class="nav navbar-nav">
           <!-- Messages: style can be found in dropdown.less-->
           
+          {%  if user.is_authenticated and user.is_staff == True and user.is_superuser == True%}
+
           <!-- Notifications: style can be found in dropdown.less -->
           <li class="dropdown messages-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -106,6 +108,8 @@
               <li class="footer"><a href="#">Ver Todos</a></li>
             </ul>
           </li>
+
+          {% endif %}
           <!-- Tasks: style can be found in dropdown.less -->
           
           <!-- User Account: style can be found in dropdown.less -->
@@ -474,8 +478,7 @@
             </span>
           </a>
           <ul class="treeview-menu" style="display: none;">
-            <li><a href="{% url "Turnos:index" %}"><i class="fa fa-calendar"></i> Resumen </a></li>
-            <li><a href="{% url "Turnos:listTurnos" %}"><i class="fa fa-calendar"></i> Listado Reservas </a></li>
+            <li><a href="{% url "Turnos:NuevoTurnClient" request.user.id %}"><i class="fa fa-plus"></i> Nuevo Reserva </a></li>
            
             
             

@@ -186,6 +186,47 @@
                                  </td>
                           </form>
                         </td>
+                        {% elif turno.statusTurn.nameStatus == 'En Espera' %}
+                          <td>
+                           <form action="" method="post">
+                             {% csrf_token %}
+                               <div class="box-body">
+                                  {% for field in Form %}
+                                    {% if field.name == 'statusTurn' %}
+                                      <div class="form-group ">
+                                      <span style="background-color:#00c0ef;" class="label">{{turno.statusTurn}}
+                                          {{ field }}   
+                                       </div>
+                                    {%endif%}
+                                  {% endfor %}
+                                </div>
+                                <td>
+                                  <button type="submit" class="label btn btn-primary">GUARDAR</button>
+                                  <a href="{% url "Turnos:index" %}" class="label btn btn-danger">CANCELAR</a>
+                                 </td>
+                          </form>
+                        </td>
+
+                        {% elif turno.statusTurn.nameStatus == 'Sin Aprobar' %}
+                          <td>
+                           <form action="" method="post">
+                             {% csrf_token %}
+                               <div class="box-body">
+                                  {% for field in Form %}
+                                    {% if field.name == 'statusTurn' %}
+                                      <div class="form-group ">
+                                      <span style="background-color:#00c0ef;" class="label">{{turno.statusTurn}}
+                                          {{ field }}   
+                                       </div>
+                                    {%endif%}
+                                  {% endfor %}
+                                </div>
+                                <td>
+                                  <button type="submit" class="label btn btn-primary">GUARDAR</button>
+                                  <a href="{% url "Turnos:index" %}" class="label btn btn-danger">CANCELAR</a>
+                                 </td>
+                          </form>
+                        </td>
                         {% endif %}
                     {% endif %}
 
@@ -210,6 +251,10 @@
                         {% elif turno.statusTurn.nameStatus == 'No Finalizada'   %}
                           <td><span class="label label-danger">{{turno.statusTurn}}</span></td>
                           {% elif turno.statusTurn.nameStatus == 'En Proceso' %}
+                          <td><span style="background-color:#00c0ef;" class="label">{{turno.statusTurn}}</span></td>
+                          {% elif turno.statusTurn.nameStatus == 'En Espera'   %}
+                          <td><span class="label label-danger">{{turno.statusTurn}}</span></td>
+                          {% elif turno.statusTurn.nameStatus == 'Sin Aprobar' %}
                           <td><span style="background-color:#00c0ef;" class="label">{{turno.statusTurn}}</span></td>
                         {% endif %}
                         

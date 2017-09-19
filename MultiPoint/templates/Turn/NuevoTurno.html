@@ -41,6 +41,24 @@
   <link rel="stylesheet" type="text/css" href="{% static "bootstrap/css/bootstrap-clockpicker.min.css" %}">
   <link rel="stylesheet" type="text/css" href="{% static "bootstrap/css/github.min.css" %}">
   <link rel="stylesheet" type="text/css" href="{% static "bootstrap/css/bootstrap-datepicker.adminlte.min.css" %}">
+  <link rel="stylesheet" href="{% static "bootstrap/css/miguel.css" %}">
+
+  <style>
+    
+    .hide-bullets {
+    list-style:none;
+    margin-left: -40px;
+    margin-top:20px;
+}
+
+.thumbnail {
+    padding: 0;
+}
+
+.carousel-inner>.item>img, .carousel-inner>.item>a>img {
+    width: 100%;
+}
+  </style>
 
 
   
@@ -71,6 +89,7 @@
             <div class="box-header with-border">
               <h3 class="box-title">Nueva Reserva Web </h3>
             </div>
+
             <!-- /.box-header -->
             <!-- form start -->
             {% if mensaje1 %}
@@ -80,11 +99,15 @@
                 {{mensaje1}}
               </div>
            {% endif %}
-            <form action="" method="post">
+            <form name="form1" action="" method="post">
               {% csrf_token %}
-              <div class="box-body">
-                  
-                  {% for field in Form %}
+
+
+              <div class="box-body paso1">
+              <div class="box-header with-border">
+                <h3 class="box-title">PASO 1</h3>
+              </div>
+                {% for field in Form %}
                      {% if Form.subject.errors %}
                          <ol>
                           {% for error in Form.subject.errors %}
@@ -102,44 +125,219 @@
                              {{ field }}
                       
                           </div>
-                    {% elif field.name == 'collaborator' %}
-                      <div class="form-group ">
-                              <label>Seleccione Colaborador</label>
-                             {{ field }}
+                    
                       
-                          </div>
-                    {% elif field.name == 'statusTurn' %}
+                    {% endif %}
+        
+               {% endfor %}
+
+               <div class="container col-md-12">
+          <div id="main_area">
+        <!-- Slider -->
+        <div class="row">
+
+        <div class="col-sm-12">
+                <div class="col-xs-12" id="slider">
+                <div class="box-header with-border">
+              <h3 class="box-title">Seleccione el Servicio a contratar</h3>
+            </div>
+                    <!-- Top part of the slider -->
+              <div class="row">
+                        <div class="col-sm-12" id="carousel-bounding-box">
+                            <div class="carousel slide" id="myCarousel">
+                                <!-- Carousel items -->
+                                <div class="carousel-inner">
+                                    <div class="active item" data-slide-number="0">
+                                        <img src="{% static "img/multipoint-logo2.png" %}">
+                                          
+
+                                
+                                        </div>
+
+                                        {% for servicios in servicios  %}
+                                          <div class="item" data-slide-number="{{servicios.id}}">
+                                            <img src="http://multipoint.pythonanywhere.com/media/{{servicios.image}}">
+                                          </div>
+
+
+                                        {% endfor %}
+
+                                    
+                                </div>
+                                <!-- Carousel nav -->
+                                <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                                    <span class="glyphicon glyphicon-chevron-left"></span>
+                                </a>
+                                <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12" id="slider-thumbs">
+                <!-- Bottom switcher of slider -->
+                <ul class="hide-bullets">
+                    
+
+                    {% for servicios in servicios  %}
+                                          
+
+                                          <li class="col-sm-6">
+                                             <a class="thumbnail" id="carousel-selector-{{servicios.id}}"><img src="http://multipoint.pythonanywhere.com/media/{{servicios.image}}"></a>
+                                             <div class="checkbox">
+                                            <label>
+                                              <input name="{{servicios.id}}" onclick=" Suma(this.checked,this.value); miguel(this.checked,this.name) " value="{{servicios.priceList}}" type="checkbox">
+                                              {{servicios.nameService}} <br> ${{servicios.priceList}}
+                                          
+
+                                       </li>
+                      {% endfor %}
+    
+
+                    <input type="hidden" id="ServicioSeleccionado" name="ServicioSeleccionado" value="None">
+                    
+
+                   
+                </ul>
+            </div>
+            
+            <!--/Slider-->
+        </div>
+        <div style="text-align:center;"  class="box-footer">
+                <a id="siguientePaso" href="javascript:void(0)" class="btn btn-primary"> PASO 2</a>
+              
+                
+              </div> 
+
+    </div>
+</div> 
+
+
+
+
+              </div>
+
+
+
+
+
+
+
+
+
+
+              <div class="box-body paso2">
+
+              <div class="box-header with-border">
+                <h3 class="box-title">PASO 2</h3>
+              </div>
+
+              <div class="col-md-12">
+          <div class="box box-solid">
+            <div class="box-header with-border">
+              <h3 class="box-title">Seleccione Productos a contratar</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                
+                <div class="carousel-inner">
+                  {% for productos  in productos  %}
+                  <div class="item">
+                  <div style="text-align:center;margin-lef:3em;" class="form-group">
+                  <div class="checkbox">
+                    <label>
+                      <input name="{{productos.nameProduct}}" onclick=" Suma(this.checked,this.value)" value="{{productos.priceList}}" type="checkbox">
+                      {{productos.nameProduct}} - ${{productos.priceList}}
+                    </label>
+                  </div>
+                  
+                  
+                </div>
+                    <img src="http://multipoint.pythonanywhere.com/media/{{productos.image}}" alt="{{productos.nameProduct}}">
+
+                    
+                  </div>
+                    
+                  {% endfor %}
+                  <div class="item active">
+                    <img src="{% static "img/multipoint.png" %}" alt="Logo">
+
+                    
+                  </div>
+                  
+                </div>
+                <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                  <span class="fa fa-angle-left"></span>
+                </a>
+                <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                  <span class="fa fa-angle-right"></span>
+                </a>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+                  
+                 
+
+            <div style="text-align:center;"  class="box-footer">
+                <a id="siguientePaso2" href="javascript:void(0)" class="btn btn-primary"> PASO 3</a>
+                <a id="regresar" href="javascript:void(0)" class="btn btn-danger">REGRESAR</a>
+              
+                
+              </div> 
+
+          
+           </div>
+
+
+           <div class="box-body paso3">
+
+           <div class="box-header with-border">
+                <h3 class="box-title">PASO 3</h3>
+              </div>
+              {% for field in Form %}
+                     {% if Form.subject.errors %}
+                         <ol>
+                          {% for error in Form.subject.errors %}
+                              <li><strong>{{ error|escape }}</strong></li>
+                          {% endfor %}
+                        </ol>
+                    {% endif %}
+                    
+                    {{ field.errors }}
+
+
+                    
+                    {% if field.name == 'statusTurn' %}
                       <div class="form-group ">
                               <label>Seleccione Status</label>
                              {{ field }}
                       
                           </div>
 
-                    {% elif field.name == 'servicioPrestar' %}
-                      <div class="form-group ">
-                              <label>Ingrese el servicio</label>
-                             {{ field }}
-                      
-                          </div>
 
-                  {% elif field.name == 'TypeHora' %}
-                      <div class="form-group ">
-                              <label>Ingrese el horario a convenir</label>
-                             {{ field }}
-                      
-                          </div>
-                      
                     {% endif %}
+
+                    
+
+                  
         
           
 
           
-      
-                  {% if field.help_text %}
-                    <script> console.log('{{ field.help_text|safe }}')</script>
-                  {% endif %}
                {% endfor %}
 
+              <div class="form-group ">
+                  <label>Comentarios Adicionales</label>
+                  <textarea name="extraInfoTurn" rows="6"  placeholder="Ingrese algun tipo de infomacion adicional si lo desea" maxlength="300" autofocus="" id="id_extraInfoTurn" cols="2" autocomplete="off," class="form-control"></textarea>
+                      
+                </div>  
+                <br>
                 <div class="input-group clockpicker">
                 <label >  Sleccione la Hora del turno </label>
                     <input type="text" name="TimeTurn" placeholder="Hora Del Turno" class="form-control" autocomplete="off" 
@@ -153,11 +351,19 @@
                                 required autofocus max="2030-12-31" />
                 </div>
               
-              <div class="form-group ">
-                  <label>Comentarios Adicionales</label>
-                  <textarea name="extraInfoTurn" rows="6"  placeholder="Ingrese algun tipo de infomacion adicional si lo desea" maxlength="300" autofocus="" id="id_extraInfoTurn" cols="2" autocomplete="off," class="form-control"></textarea>
-                      
-                </div>            
+
+
+                <div style="text-align:center;" class="form-group col-md-12">
+                  <h3>Monto A Pagar</h3>
+                  <p style="font-size: 4em;">$<estrong id="Monto">0</estrong></p>
+                  <input type="hidden" name="total" value="0">
+                  
+                </div>
+
+                <div style="text-align:center;" class="box-footer">
+                <button type="submit" class="btn btn-primary">GUARDAR</button>
+                <a id="regresar2" href="javascript:void(0)" class="btn btn-danger">REGRESAR</a>
+              </div>
            </div>
 
 
@@ -167,10 +373,6 @@
               
                         <!-- /.box-body -->
 
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary">GUARDAR</button>
-                <a href="{% url "Turnos:listTurnos" %}" class="btn btn-danger">REGRESAR</a>
-              </div>
             </form>
           </div>
           <!-- /.box -->
@@ -193,7 +395,8 @@
     <!-- /.content -->
   </div>
 
-
+<input type="hidden" id="displayMenu" value="0">
+<input type="hidden" id="displayMenu2" value="0">
 
 {% endblock %}
 
@@ -223,8 +426,173 @@
 <script type="text/javascript" src="{% static "bootstrap/js/bootstrap-datepicker.adminlte.min.js" %}"></script>
 
 
+<script>
+  
+
+    jQuery(document).ready(function($) {
+ 
+        $('#myCarousel').carousel({
+                interval: 5000
+        });
+ 
+        //Handles the carousel thumbnails
+        $('[id^=carousel-selector-]').click(function () {
+        var id_selector = $(this).attr("id");
+        try {
+            var id = /-(\d+)$/.exec(id_selector)[1];
+            console.log(id_selector, id);
+            jQuery('#myCarousel').carousel(parseInt(id));
+        } catch (e) {
+            console.log('Regex failed!', e);
+        }
+    });
+        // When the carousel slides, auto update the text
+        $('#myCarousel').on('slid.bs.carousel', function (e) {
+                 var id = $('.item.active').data('slide-number');
+                $('#carousel-text').html($('#slide-content-'+id).html());
+        });
+});
+</script>
+
+<script>
 
 
+  
+ 
+  validateSelect();
+
+function validateSelect(){
+    var id_servicio = $("#servicio").val();
+
+    $.ajax({
+        url: 'http://multipoint.pythonanywhere.com/reservas/ajax/validacion/',
+        data: {
+          'id_servicio': id_servicio
+      },
+      dataType: 'json',
+      success: function (data) {
+          if (data.value) {
+            tot = parseFloat(document.form1.total.value);
+            var miguel = parseFloat(data.value);
+            console.log(miguel)
+            document.form1.total.value = miguel; 
+            $('#Monto').html(miguel)
+        }
+    }
+});
+}
+
+$("#servicio").change(function () {
+    validateSelect();
+});
+</script>
+
+<script>
+
+function miguel(isChecked, myValue) {
+  if(isChecked){
+    console.log('miguel'+myValue);
+    console.log(myValue);
+    
+    $('#ServicioSeleccionado').val(myValue);
+  }
+  else{
+    
+     $('#ServicioSeleccionado').val('None');
+  }
+
+}
+
+
+
+function Suma(isChecked, myValue)
+{
+tot = parseFloat(document.form1.total.value);
+myValue = parseFloat(myValue);
+if (isChecked) {
+ document.form1.total.value = tot + myValue; 
+ $('#Monto').html(tot + myValue)
+
+}
+else{
+  document.form1.total.value = tot - myValue;
+  $('#Monto').html(tot - myValue)
+} 
+}
+</script>
+
+
+<script>
+  
+$("#siguientePaso").click(function () {
+        if($('#displayMenu').val()==0){
+          $(".paso2").css("display", "block");
+          $('.paso2').addClass('animated bounceInDown');
+          $(".paso1").css("display", "none");
+          $('#displayMenu').val(1)
+
+        }else{
+          //$('.tipo_publicacion').removeClass('animated bounceInDown');
+          //$('.tipo_publicacion').addClass('animated bounceOutRight');
+          $(".tipo_publicacion").css("display", "none");
+          $('#displayMenu').val(0)
+        }
+        
+      });
+
+$("#siguientePaso2").click(function () {
+        if($('#displayMenu2').val()==0){
+          $(".paso3").css("display", "block");
+          $('.paso3').addClass('animated bounceInDown');
+          $(".paso2").css("display", "none");
+          $('#displayMenu2').val(1)
+
+        }else{
+          //$('.tipo_publicacion').removeClass('animated bounceInDown');
+          //$('.tipo_publicacion').addClass('animated bounceOutRight');
+          $(".tipo_publicacion").css("display", "none");
+          $('#displayMenu').val(0)
+        }
+        
+      });
+
+
+
+
+  $("#regresar").click(function () {
+        if($('#displayMenu').val()==1){
+          $(".paso1").css("display", "block");
+          $('.paso1').addClass('animated bounceInDown');
+          $(".paso2").css("display", "none");
+          $('#displayMenu').val(0)
+
+        }else{
+          //$('.tipo_publicacion').removeClass('animated bounceInDown');
+          //$('.tipo_publicacion').addClass('animated bounceOutRight');
+          $(".tipo_publicacion").css("display", "none");
+          $('#displayMenu').val(0)
+        }
+        
+      });
+
+  $("#regresar2").click(function () {
+        if($('#displayMenu2').val()==1){
+          $(".paso2").css("display", "block");
+          $('.paso2').addClass('animated bounceInDown');
+          $(".paso3").css("display", "none");
+          $('#displayMenu2').val(0)
+
+        }else{
+          //$('.tipo_publicacion').removeClass('animated bounceInDown');
+          //$('.tipo_publicacion').addClass('animated bounceOutRight');
+          $(".tipo_publicacion").css("display", "none");
+          $('#displayMenu').val(0)
+        }
+        
+      });
+
+
+</script>
 
 
 <script>
