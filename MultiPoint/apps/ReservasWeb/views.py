@@ -25,6 +25,7 @@ from django.core.mail import send_mail
 from django.core.mail import send_mass_mail
 from datetime import date 
 from django.http import JsonResponse
+from apps.Notificaciones.models import Notificacion
 
 
 
@@ -106,19 +107,26 @@ def web(request):
 	turnos = tb_turn.objects.filter(statusTurn__nameStatus="Confirmada")
 	reservas = tb_reservasWeb.objects.filter(statusTurn__nameStatus="Confirmada")
 	productos = tb_product.objects.all()
+	servicios = tb_service.objects.all()
 	Form = ReservasWebForm
+	notificacion = Notificacion()
 	fallido = None
 	if request.method == 'POST':
+		print(request.POST)
 		Form = ReservasWebForm(request.POST or None)
 		if Form.is_valid():
 			turno = Form.save(commit=False)
 			turno.dateTurn = request.POST['TurnDate']
 			turno.HoraTurn = request.POST['TimeTurn']
 			turno.statusTurn = tb_status.objects.get(nameStatus="Sin Aprobar")
+			turno.servicioPrestar=tb_service.objects.get(id = request.POST['ServicioSeleccionado'])
 			
 			turno.montoAPagar = float(request.POST['total'])  
 			turno.description = 'Sin Descripcion'
 			turno.save()
+			notificacion.nombre = turno.nombre
+			notificacion.dateTurn = turno.dateTurn
+			notificacion.save()
 			turno_enviar = tb_reservasWeb.objects.get(id=turno.id)
 			mensaje ="se ha registrado de forma correcta sus datos gracias por contactarnos"
 			#mandar mensaje de nuevo usuario
@@ -138,7 +146,7 @@ def web(request):
 		else:
 				fallido = "Errores en los datos Verifiquelos, y vuelva a intentarlo"
 				Form = ReservasWebForm()
-	return render(request, "ReservasWeb/reservasweb.html" , {'Form':Form,'productos':productos ,'reservas':reservas ,'turnos':turnos ,'fallido':fallido,})
+	return render(request, "ReservasWeb/reservasweb.html" , {'Form':Form,'servicios':servicios,'productos':productos ,'reservas':reservas ,'turnos':turnos ,'fallido':fallido,})
 
 
 def Factura(request, id_reservas):

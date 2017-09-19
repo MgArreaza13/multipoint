@@ -79,6 +79,11 @@ router.register(r'api/usuarios', UserViewset)
 router.register(r'api/perfiles', UserProfileViewset)
 
 
+############NOTIFICACIONE############
+from apps.Notificaciones.views import NotificacionViewsets
+
+router.register(r'api/notificaciones', NotificacionViewsets)
+
 urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 	url(r'^', include('apps.PanelPrincipal.urls', namespace='Panel')),
@@ -92,6 +97,7 @@ urlpatterns = [
     url(r'^Configuracion/', include('apps.Configuracion.urls', namespace='Configuracion')),
     url(r'^Caja/', include('apps.Caja.urls', namespace='Caja')),
     url(r'^reservas/', include('apps.ReservasWeb.urls', namespace='Reservas')),
+    url(r'^notificaciones/', include('apps.Notificaciones.urls', namespace='Notificaciones')),
     url(r'^admin/', admin.site.urls),
     #url(r'^static/(?P<path>.*)$', 'django.views.static.serve' , settings.STATIC_ROOT),
     #url(r'^media/(?P<path>.*)$', 'django.views.static.serve', settings.MEDIA_ROOT), 

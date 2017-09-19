@@ -15,12 +15,12 @@ class ReservasWebForm(forms.ModelForm):
 		'mail',
 		'nombre',
 		'telefono',
-		'servicioPrestar'
+		
 		
 		
 		
 		]
-		exclude = ['dateTurn', 'HoraTurn',"statusTurn", 'montoAPagar', 'description']
+		exclude = ['dateTurn', 'HoraTurn',"statusTurn", 'montoAPagar', 'description','servicioPrestar']
 
 		labels = {
 		'mail':'ingrese su correo', 
@@ -32,10 +32,7 @@ class ReservasWebForm(forms.ModelForm):
 
 		widgets = {
 
-		'servicioPrestar': Select(attrs={'id':'servicio','class':'form-control',
-			'required':True,
-			'autofocus':True,
-			'placeholder':'Seleccione el servicio'}),
+		
 
 		
 		}

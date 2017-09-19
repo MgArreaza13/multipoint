@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'apps.Configuracion',
     'apps.Caja',
     'apps.ReservasWeb',
+    'apps.Notificaciones',
     'social_django',
 ]
 
