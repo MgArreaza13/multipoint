@@ -34,6 +34,8 @@ from apps.scripts.validatePerfil import validatePerfil
 @login_required(login_url = 'Demo:login' )
 def inicio(request):
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
+	turnos = tb_turn.objects.all()
+	ReservasWeb = tb_reservasWeb.objects.all()
 	perfil = result[0]
 	fecha = date.today()
 	servicios = tb_service.objects.all()[:10]
@@ -75,6 +77,8 @@ def inicio(request):
 	ingresos_hoy = tb_ingreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	egresos_hoy  = tb_egreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	context = {
+	'turnos':turnos,
+	'ReservasWeb':ReservasWeb,
 	'reservas':reservas,
 	'listturn':listturn,
 	'perfil':perfil,

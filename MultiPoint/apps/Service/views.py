@@ -17,7 +17,7 @@ def clientesServicios(request):
 	perfil = result[0]
 	productos = tb_service.objects.all()
 
-	return render(request, 'Service/serviciodetalles.html', {'productos':productos, 'perfil':perfil})
+	return render(request, 'Service/serviciosdetalles.html', {'productos':productos, 'perfil':perfil})
 
 
 
