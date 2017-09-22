@@ -15,6 +15,17 @@ from apps.Caja.models import tb_ingreso
 from apps.Caja.models import tb_egreso
 
 
+@login_required(login_url = 'Demo:login' )
+def pructosCliente(request):
+	result = validatePerfil(tb_profile.objects.filter(user=request.user))
+	perfil = result[0]
+	productos = tb_product.objects.all()
+	return render(request, 'Product/productosdetalles.html' , {'perfil':perfil,'productos':productos} )
+
+
+
+
+
 # Create your views here.
 @login_required(login_url = 'Demo:login' )
 def ListProductos(request):

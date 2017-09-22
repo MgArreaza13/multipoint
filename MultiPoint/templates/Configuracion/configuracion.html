@@ -267,62 +267,7 @@
 
       <div class="row">
         <!-- Left col -->
-        <div class="col-md-4">
-          <!-- MAP & BOX PANE -->
-          
-          
-
-          <!-- TABLE: LATEST ORDERS -->
-          <div class="box box-info">
-            <div class="box-header with-border">
-              <h3 class="box-title">TIPOS DE COLABORADORES </h3>
-
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <div class="table-responsive">
-                <table class="table no-margin">
-                  <thead>
-                  <tr>
-                    
-                    <th>COLABORADOR </th>
-                    <th>ACCIONES </th>
-                    
-                  </tr>
-                  </thead>
-                  <tbody>
-                  {% for collaborador in TipoDeCollaborador %}
-                    <tr>
-                      
-                      <td>{{collaborador.nameTipoCollaborador}}</td>
-                      <td>
-                        <a href="{% url "Configuracion:EditarTipoCollaborador" collaborador.id %}" class="label label-success">EDITAR</a>
-                        <a href="{% url "Configuracion:BorrarTipoCollaborador" collaborador.id %}" class="label label-danger">ELIMINAR</a>
-                      </td>
-                      
-                    </tr>
-                    
-                  {% endfor %}
-                  
-                  </tbody>
-                </table>
-              </div>
-              <!-- /.table-responsive -->
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer clearfix">
-              <a href="{% url "Configuracion:NuevoTipoCollaborador" %}" class="btn btn-sm btn-info btn-flat pull-left">NUEVO TIPO DE COLABORADOR </a>
-              
-            </div>
-            <!-- /.box-footer -->
-          </div>
-          <!-- /.box -->
-        </div>
+        
         <!-- /.col -->
 
         <div class="col-md-4">
@@ -440,15 +385,6 @@
           </div>
           <!-- /.box -->
         </div>
-        <!-- /.col -->
-      </div>
-
-       <div class="row">
-        <!-- Left col -->
-        
-
-        
-
 
         <div class="col-md-4">
           <!-- MAP & BOX PANE -->
@@ -508,6 +444,17 @@
           </div>
           <!-- /.box -->
         </div>
+        <!-- /.col -->
+      </div>
+
+       <div class="row">
+        <!-- Left col -->
+        
+
+        
+
+
+        
 
         <div class="col-md-4">
           <!-- MAP & BOX PANE -->
