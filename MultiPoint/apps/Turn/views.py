@@ -62,7 +62,7 @@ def index(request):
 def NuevoTurnClient(request , id_client):
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	turnos = tb_turn.objects.filter(statusTurn__nameStatus="Confirmada")
-	reservas = tb_reservasWeb.objects.filter(statusTurn__nameStatus="Confirmada")
+	ReservasWeb = tb_reservasWeb.objects.filter(statusTurn__nameStatus="Confirmada")
 	servicios = tb_service.objects.all()
 	productos = tb_product.objects.all()
 	perfil = result[0]
@@ -122,7 +122,7 @@ def NuevoTurnClient(request , id_client):
 				mensaje1 = "Errores en los datos Verifiquelos, y vuelva a intentarlo"
 				Form = TurnFormClient()
 				fallido = "Tuvimos un error al cargar sus datos, verifiquelo e intente de nuevo"
-	return render(request, 'Turn/NuevoTurno.html' , {'Form':Form, 'servicios':servicios, 'productos':productos  ,'reservas':reservas ,'turnos':turnos ,'mensaje1':mensaje1, 'perfil':perfil, 'fallido':fallido})
+	return render(request, 'Turn/NuevoTurno.html' , {'Form':Form, 'servicios':servicios, 'productos':productos  ,'ReservasWeb':ReservasWeb ,'turnos':turnos ,'mensaje1':mensaje1, 'perfil':perfil, 'fallido':fallido})
 
 
 
@@ -135,7 +135,7 @@ def NuevoTurnClient(request , id_client):
 def NuevoTurnParaHoy(request):
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	turnos = tb_turn.objects.filter(statusTurn__nameStatus="Confirmada")
-	reservas = tb_reservasWeb.objects.filter(statusTurn__nameStatus="Confirmada")
+	ReservasWeb = tb_reservasWeb.objects.filter(statusTurn__nameStatus="Confirmada")
 	perfil = result[0]
 	Form = TurnForm
 	fecha =  date.today()
@@ -197,7 +197,7 @@ def NuevoTurnParaHoy(request):
 			fallido = "No hemos podido cargar sus datos correctamente, verifique e intente nuevamente"
 
 	
-	return render(request, 'Turn/NuevoTurnoHoy.html' , {'Form':Form, 'servicios':servicios, 'productos':productos ,'reservas':reservas,'turnos':turnos ,'fecha':fecha , 'mensaje1':mensaje1, 'perfil':perfil, 'fallido':fallido})
+	return render(request, 'Turn/NuevoTurnoHoy.html' , {'Form':Form, 'servicios':servicios, 'productos':productos ,'ReservasWeb':ReservasWeb,'turnos':turnos ,'fecha':fecha , 'mensaje1':mensaje1, 'perfil':perfil, 'fallido':fallido})
 
 
 #Edita los Status de los turnos
@@ -258,7 +258,7 @@ def listTurnos(request):
 def NuevoTurn(request):
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	turnos = tb_turn.objects.filter(statusTurn__nameStatus="Confirmada")
-	reservas = tb_reservasWeb.objects.filter(statusTurn__nameStatus="Confirmada")
+	ReservasWeb = tb_reservasWeb.objects.filter(statusTurn__nameStatus="Confirmada")
 	servicios = tb_service.objects.all()
 	productos = tb_product.objects.all()
 	perfil = result[0]
@@ -315,7 +315,7 @@ def NuevoTurn(request):
 				mensaje1 = "Errores en los datos Verifiquelos, y vuelva a intentarlo"
 				Form = TurnForm()
 				fallido = "Tuvimos un error al cargar sus datos, verifiquelo e intente de nuevo"
-	return render(request, 'Turn/NuevoTurno.html' , {'Form':Form, 'servicios':servicios, 'productos':productos  ,'reservas':reservas ,'turnos':turnos ,'mensaje1':mensaje1, 'perfil':perfil, 'fallido':fallido})
+	return render(request, 'Turn/NuevoTurno.html' , {'Form':Form, 'servicios':servicios, 'productos':productos  ,'ReservasWeb':ReservasWeb ,'turnos':turnos ,'mensaje1':mensaje1, 'perfil':perfil, 'fallido':fallido})
 
 #edita los turnos en general
 @login_required(login_url = 'Demo:login' )
@@ -323,7 +323,7 @@ def EditTurn(request , id_turn):
 	TurnEditar = tb_turn.objects.get(id = id_turn)
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	turnos = tb_turn.objects.filter(statusTurn__nameStatus="Confirmada")
-	reservas = tb_reservasWeb.objects.filter(statusTurn__nameStatus="Confirmada")
+	ReservasWeb = tb_reservasWeb.objects.filter(statusTurn__nameStatus="Confirmada")
 	perfil = result[0]
 	fallido = None
 	if request.method == 'GET':
@@ -338,7 +338,7 @@ def EditTurn(request , id_turn):
 			turno.save()
 			mensaje = "Guardamos sus datos de manera exitosa"
 			return render (request, 'Turn/NuevoTurno.html', {'turnos':turnos,'Form':Form , 'perfil':perfil, 'mensaje':mensaje})
-	return render (request, 'Turn/NuevoTurno.html', {'turnos':turnos, 'reservas':reservas ,'Form':Form , 'perfil':perfil, 'fallido':fallido})
+	return render (request, 'Turn/NuevoTurno.html', {'turnos':turnos, 'ReservasWeb':ReservasWeb ,'Form':Form , 'perfil':perfil, 'fallido':fallido})
 
 #edita los turnos en general
 @login_required(login_url = 'Demo:login' )

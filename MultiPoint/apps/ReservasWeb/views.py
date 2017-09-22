@@ -105,7 +105,7 @@ def EditReservaList(request , id_reservas):
 
 def web(request):
 	turnos = tb_turn.objects.filter(statusTurn__nameStatus="Confirmada")
-	reservas = tb_reservasWeb.objects.filter(statusTurn__nameStatus="Confirmada")
+	ReservasWeb = tb_reservasWeb.objects.filter(statusTurn__nameStatus="Confirmada")
 	productos = tb_product.objects.all()
 	servicios = tb_service.objects.all()
 	Form = ReservasWebForm
@@ -146,7 +146,7 @@ def web(request):
 		else:
 				fallido = "Errores en los datos Verifiquelos, y vuelva a intentarlo"
 				Form = ReservasWebForm()
-	return render(request, "ReservasWeb/reservasweb.html" , {'Form':Form,'servicios':servicios,'productos':productos ,'reservas':reservas ,'turnos':turnos ,'fallido':fallido,})
+	return render(request, "ReservasWeb/reservasweb.html" , {'Form':Form,'servicios':servicios,'productos':productos ,'ReservasWeb':ReservasWeb ,'turnos':turnos ,'fallido':fallido,})
 
 
 def Factura(request, id_reservas):
