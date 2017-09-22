@@ -11,6 +11,17 @@ from apps.Caja.models import tb_egreso
 from apps.UserProfile.models import tb_profile
 from apps.scripts.validatePerfil import validatePerfil
 
+@login_required(login_url = 'Demo:login' )
+def clientesServicios(request):
+	result = validatePerfil(tb_profile.objects.filter(user=request.user))
+	perfil = result[0]
+	productos = tb_service.objects.all()
+
+	return render(request, 'Service/serviciodetalles.html', {'productos':productos, 'perfil':perfil})
+
+
+
+
 
 # Create your views here.
 @login_required(login_url = 'Demo:login' )

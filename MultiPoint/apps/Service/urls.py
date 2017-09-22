@@ -5,6 +5,7 @@ from apps.Service.views import NuevoService
 from apps.Service.views import EditService
 from apps.Service.views import DeleteService
 from apps.Service.views import listService
+from apps.Service.views import clientesServicios
 
 
 urlpatterns = [
@@ -12,6 +13,7 @@ urlpatterns = [
 	url(r'^$', Servicios , name='Servicios'  ),
 	#url(r'^Perfil/(?P<id_Client>\d+)$', ClienteProfile , name='ClienteProfile'  ),
 	url(r'^list/$', listService , name='listService'  ),
+	url(r'^detalles/$', clientesServicios , name='clientesServicios'  ),
 	url(r'^Nuevo/$', NuevoService , name='NuevoServicio'  ),
 	url(r'^Editar/(?P<id_service>\d+)$', EditService, name='EditService'  ),
 	url(r'^Borrar/(?P<id_service>\d+)$', DeleteService, name='DeleteService'  ),
