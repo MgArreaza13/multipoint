@@ -10,7 +10,7 @@ from apps.Caja.models import tb_ingreso
 from apps.Caja.models import tb_egreso
 from apps.UserProfile.models import tb_profile
 from apps.scripts.validatePerfil import validatePerfil
-
+from apps.ReservasWeb.models import tb_reservasWeb
 @login_required(login_url = 'Demo:login' )
 def clientesServicios(request):
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
@@ -87,7 +87,9 @@ def listService(request):
 	Listado = tb_service.objects.all()
 
 	#queryset 
-	turnos_hoy =  tb_turn.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='En Espera').count()
+	reservas_hoy = tb_reservasWeb.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
+	turnos__hoy =  tb_turn.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
+	turnos_hoy = reservas_hoy + turnos__hoy
 	ingresos_hoy = tb_ingreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	egresos_hoy  = tb_egreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 
@@ -107,7 +109,9 @@ def Servicios(request):
 	perfil = result[0]
 
 	#queryset 
-	turnos_hoy =  tb_turn.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='En Espera').count()
+	reservas_hoy = tb_reservasWeb.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
+	turnos__hoy =  tb_turn.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
+	turnos_hoy = reservas_hoy + turnos__hoy
 	ingresos_hoy = tb_ingreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	egresos_hoy  = tb_egreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 

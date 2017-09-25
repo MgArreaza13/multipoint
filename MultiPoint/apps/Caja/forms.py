@@ -43,6 +43,40 @@ class IngresoForm(forms.ModelForm):
 			'placeholder':'tipo de Pago'}),
 
 		}
+
+
+class WebReservasIngresoForm(forms.ModelForm):
+	
+	class Meta:
+		model = tb_ingreso
+		fields = [
+		'tipoPago',
+		'tipoIngreso',
+		
+		
+		
+		]
+		exclude = ['user', 'dateCreate', 'descripcion', 'service',  'monto',]
+
+		labels = {
+		
+		
+		}
+		widgets = {
+
+		
+
+		'tipoPago':Select(attrs={'class':'form-control',
+			'required':True,
+			'autofocus':True,
+			'placeholder':'tipo de Pago'}),
+
+		'tipoIngreso':Select(attrs={'class':'form-control',
+			'required':True,
+			'autofocus':True,
+			'placeholder':'tipo de Pago'}),
+
+		}
           
 
 class EgresoForm(forms.ModelForm):

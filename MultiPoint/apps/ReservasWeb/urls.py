@@ -7,6 +7,7 @@ from apps.ReservasWeb.views import EditReservaList
 from apps.ReservasWeb.views import DeleteReservas
 from apps.ReservasWeb.views import Factura
 from apps.ReservasWeb.views import validacion
+from apps.ReservasWeb.views import ReservaWebPorPagar
 
 urlpatterns = [
 
@@ -19,5 +20,6 @@ urlpatterns = [
 	#url(r'^Nuevo/$', NuevoProveedor , name='NuevoProveedor'  ),
 	url(r'^Editar/(?P<id_reservas>\d+)$', EditReservaList, name='EditReservaList'  ),
 	url(r'^Borrar/(?P<id_reservas>\d+)$', DeleteReservas, name='DeleteReservas'  ),
+	url(r'^Pagar/(?P<id_reserva>\d+)$', ReservaWebPorPagar, name='ReservaWebPorPagar'  ),
   
 ]

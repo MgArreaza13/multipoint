@@ -34,16 +34,20 @@ from apps.scripts.validatePerfil import validatePerfil
 @login_required(login_url = 'Demo:login' )
 def inicio(request):
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
-	turnos = tb_turn.objects.all()
-	ReservasWeb = tb_reservasWeb.objects.all()
+	turnos = tb_turn.objects.filter(statusTurn__nameStatus = "Confirmada")
+	ReservasWeb = tb_reservasWeb.objects.filter(statusTurn__nameStatus = "Confirmada")
+	turnosSinPagar = tb_turn.objects.filter(isPay = False).filter(statusTurn__nameStatus = "Confirmada")
+	ReservasSinPagar = tb_reservasWeb.objects.filter(isPay = False).filter(statusTurn__nameStatus = "Confirmada")
 	perfil = result[0]
 	fecha = date.today()
 	servicios = tb_service.objects.all()[:10]
 	productos = tb_product.objects.all()[:10]
+	datataWebTurn = tb_reservasWeb.objects.filter(statusTurn__nameStatus = "Confirmada") #traigo todos los turnos 
 	dataturn = tb_turn.objects.filter(statusTurn__nameStatus = "Confirmada") #traigo todos los turnos 
 	listturn = tb_turn.objects.filter(statusTurn__nameStatus = "Confirmada")[:10]
 	reservas = tb_reservasWeb.objects.filter(statusTurn__nameStatus = "Confirmada")[:10]
 	data = [] #creo la data que rendeare luego 
+	dataweb =[]
 	ing = [] #ingresos chart
 	egr = [] #egresos chart
 
@@ -56,6 +60,13 @@ def inicio(request):
 			if mes == dataturn[fecha1].dateTurn.month and fecha.year ==  dataturn[fecha1].dateTurn.year : # si la en el listdo de turnos hay uno igual al mes en curso aumentara el contador
 				count += 1
 		data.append(count) # agrego a la data la sumatoria de los turnos del mes en curso
+	#dataweb	
+	for mes in range(1,13): #mes variara de 1 a 12
+		count = 0 #contador en cero luego de cada mes
+		for fecha1 in range(0,len(datataWebTurn)): # se ecargara de recorrer todo los turnos 
+			if mes == datataWebTurn[fecha1].dateTurn.month and fecha.year ==  datataWebTurn[fecha1].dateTurn.year : # si la en el listdo de turnos hay uno igual al mes en curso aumentara el contador
+				count += 1
+		dataweb.append(count) # agrego a la data la sumatoria de los turnos del mes en curso
 	#ingreso
 	for mes in range(1,13): #mes variara de 1 a 12
 		counti = 0 #contador en cero luego de cada mes
@@ -73,10 +84,14 @@ def inicio(request):
 		egr.append(counten)
 
 	#queryset 
-	turnos_hoy =  tb_turn.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='En Espera').count()
+	reservas_hoy = tb_reservasWeb.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
+	turnos__hoy =  tb_turn.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
+	turnos_hoy = reservas_hoy + turnos__hoy
 	ingresos_hoy = tb_ingreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	egresos_hoy  = tb_egreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	context = {
+	'turnosSinPagar':turnosSinPagar,
+	'ReservasSinPagar':ReservasSinPagar,
 	'turnos':turnos,
 	'ReservasWeb':ReservasWeb,
 	'reservas':reservas,
@@ -88,6 +103,7 @@ def inicio(request):
 	'turnos_hoy':turnos_hoy,
 	'ingresos_hoy':ingresos_hoy,
 	'egresos_hoy':egresos_hoy,
+	'dataweb':dataweb,
 	'data':data,
 	'ing':ing,
 	'egr':egr
@@ -122,7 +138,9 @@ def calendario(request):
 	fecha = date.today()
 	perfil = result[0]
 	servicios = tb_service.objects.all()[:10]
-	turnos_hoy =  tb_turn.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='En Espera').count()
+	reservas_hoy = tb_reservasWeb.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
+	turnos__hoy =  tb_turn.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
+	turnos_hoy = reservas_hoy + turnos__hoy
 	ingresos_hoy = tb_ingreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	egresos_hoy  = tb_egreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 

@@ -48,8 +48,8 @@ class tb_turn (models.Model):
 	#collaborator			=	models.ForeignKey(tb_collaborator, on_delete=models.CASCADE, null=False, default='')
 	extraInfoTurn			=	models.TextField(default='', null=False, max_length=300)
 	servicioPrestar			= 	models.ForeignKey(tb_service,on_delete=models.CASCADE, null=False, default='')
-	isProcessClient 		=	models.BooleanField()
-	isProcessCollaborator 	=	models.BooleanField()
+	isPay			 		=	models.BooleanField(null=False, blank=True , default=False)
+	#isProcessCollaborator 	=	models.BooleanField()
 	montoAPagar				=   models.IntegerField(default=0, null=False, blank=True)
 	statusTurn 				=	models.ForeignKey(tb_status, on_delete=models.CASCADE, null=False, default='')
 	def __str__(self):

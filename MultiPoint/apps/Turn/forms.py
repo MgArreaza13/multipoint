@@ -15,8 +15,7 @@ class TurnForm(forms.ModelForm):
 		'client',
 		#'collaborator',
 		
-		'isProcessClient',
-		'isProcessCollaborator',
+		'isPay',
 		'statusTurn',
 		
 		
@@ -26,8 +25,7 @@ class TurnForm(forms.ModelForm):
 
 		labels = {
 		'dateTurn':'Fecha Para El turno', 
-		'isProcessClient':'Es Atendido',
-		'isProcessCollaborator': 'Es activo el collaborador',
+		'isPay':'Es Pagado',
 		'statusTurn':'Estatus',
 		
 		
@@ -65,8 +63,7 @@ class TurnFormClient(forms.ModelForm):
 		
 		#'collaborator',
 		
-		'isProcessClient',
-		'isProcessCollaborator',
+		'isPay',
 		
 		
 		
@@ -76,8 +73,7 @@ class TurnFormClient(forms.ModelForm):
 
 		labels = {
 		'dateTurn':'Fecha Para El turno', 
-		'isProcessClient':'Es Atendido',
-		'isProcessCollaborator': 'Es activo el collaborador',
+		'isPay':'Es Pagado',
 		'statusTurn':'Estatus',
 		
 		
@@ -113,7 +109,7 @@ class EditTurnForm(forms.ModelForm):
 		
 		
 		]
-		exclude = ['user', 'dateTurn',  'isProcessCollaborator', 'client',  'extraInfoTurn', 'isProcessClient', 'servicioPrestar',]
+		exclude = ['user', 'dateTurn',  'client',  'extraInfoTurn', 'isPay', 'servicioPrestar',]
 
 		labels = {
 		'statusTurn':'Estatus',

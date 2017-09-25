@@ -28,6 +28,8 @@ from apps.Service.models import tb_service
 from apps.Product.models import tb_product
 from apps.Notificaciones.models import Notificacion
 
+from apps.Caja.forms import WebReservasIngresoForm
+
 
 #Resumen de todos los turnos, parte principal
 @login_required(login_url = 'Demo:login' )
@@ -39,7 +41,9 @@ def index(request):
 	is_collaborador = tb_collaborator.objects.filter(user__id = request.user.id) #saber si el usuario actual es collaborador
 	turnos = tb_turn.objects.filter(dateTurn = fecha).order_by('HoraTurn')
 	#queryset 
-	turnos_hoy =  tb_turn.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
+	reservas_hoy = tb_reservasWeb.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
+	turnos__hoy =  tb_turn.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
+	turnos_hoy = reservas_hoy + turnos__hoy
 	ingresos_hoy = tb_ingreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	egresos_hoy  = tb_egreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	context = {
@@ -54,6 +58,63 @@ def index(request):
 
 	}
 	return render(request,'Turn/ResumenTurnos.html', context )
+
+
+
+
+@login_required(login_url = 'Demo:login' )
+def ReservaWebPanelPorPagar(request, id_reserva):
+	reserva = tb_turn.objects.get(id=id_reserva)
+	admin = tb_profile.objects.filter(tipoUser='Administrador')
+	administrador = admin[0]
+	fecha = date.today()
+	Form = WebReservasIngresoForm
+	result = validatePerfil(tb_profile.objects.filter(user=request.user))
+	perfil = result[0]
+	fallido = None
+
+	if request.method == 'POST':
+		Form = WebReservasIngresoForm(request.POST or None)
+		if Form.is_valid():
+			ingreso = Form.save(commit=False)
+			ingreso.user = request.user
+			ingreso.descripcion = "Pago de Reserva Web Desde el Panel"
+			ingreso.service = reserva.servicioPrestar
+			ingreso.monto = reserva.montoAPagar
+			ingreso.save()
+			reserva.isPay = True
+			reserva.save()
+			mensaje = "Gracias Por registrar Su Pago"
+			usuario = reserva.client.user.mailUser #trato de traer el colaborador del formulario
+			email_subject_usuario = 'Multipoint - Gracias Por su Pago'
+			email_body_usuario = "Hola %s, gracias por completar su pago de manera exitosa, esperemos disfrute nuestros servicios" %(reserva.client)
+			message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+			#mensaje para apreciasoft
+			email_subject_Soporte = 'Multipoint - Nueva Reserva WEB PAGADA'
+			email_body_Soporte = "se ha registrado un Pago de una  reserva , nombre:%s . correo:%s, numero:%s , te invitamos a contactarla y luego a cambiar el status de la reserva en  http://multipoint.pythonanywhere.com/reservas/list/" %(reserva.client, reserva.client.user.mailUser, reserva.client.phoneNumberClient)
+			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com"])
+			#enviamos el correo
+			send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+			return render(request, 'Turn/FacturaPorPagarPanel.html' , {'Form':Form, 'perfil':perfil, 'mensaje':mensaje, 'reserva':reserva,'administrador':administrador,'fecha':fecha,})
+		else: 
+			Form = WebReservasIngresoForm()
+			fallido = "Hemos tenido algun problema con sus datos, por eso no hemos procesado su ingreso, verifiquelo e intentelo de nuevo"
+			
+	return render(request , 'Turn/FacturaPorPagarPanel.html' , {'fallido':fallido,
+			'Form':Form,
+			'reserva':reserva,
+			'administrador':administrador,
+			'fecha':fecha,})
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -220,8 +281,7 @@ def EditTurnStatus(request , id_turn):
 			turno.client = TurnEditar.client
 			turno.extraInfoTurn = TurnEditar.extraInfoTurn
 			turno.servicioPrestar = TurnEditar.servicioPrestar
-			turno.isProcessClient = TurnEditar.isProcessClient
-			turno.isProcessCollaborator = TurnEditar.isProcessCollaborator
+			turno.isPay = TurnEditar.isPay
 			turno.save()
 			mensaje = "hemos cargado sus nuevos datos de manera exitosa"
 			return render (request, 'Turn/ResumenTurnos.html', {'turnos':turnos,'Form':Form, 'TurnEditar':TurnEditar, 'perfil':perfil, 'mensaje':mensaje})
@@ -238,7 +298,9 @@ def listTurnos(request):
 	perfil = result[0]
 	formulario = False
 	#queryset 
-	turnos_hoy =  tb_turn.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='En Espera').count()
+	reservas_hoy = tb_reservasWeb.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
+	turnos__hoy =  tb_turn.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
+	turnos_hoy = reservas_hoy + turnos__hoy
 	ingresos_hoy = tb_ingreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	egresos_hoy  = tb_egreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	context = {
@@ -362,8 +424,7 @@ def EditTurnList(request , id_turn):
 			turno.client = TurnEditar.client
 			turno.extraInfoTurn = TurnEditar.extraInfoTurn
 			turno.servicioPrestar = TurnEditar.servicioPrestar
-			turno.isProcessClient = TurnEditar.isProcessClient
-			turno.isProcessCollaborator = TurnEditar.isProcessCollaborator
+			turno.isPay = TurnEditar.isPay
 			turno.save()
 			return redirect ('Turnos:listTurnos')
 	return render (request, 'Turn/ListaDeTurnos.html', {'TurnEditar':TurnEditar,'turnos':turnos,'Form':Form , 'perfil':perfil})

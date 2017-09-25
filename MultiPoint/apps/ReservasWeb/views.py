@@ -26,6 +26,7 @@ from django.core.mail import send_mass_mail
 from datetime import date 
 from django.http import JsonResponse
 from apps.Notificaciones.models import Notificacion
+from apps.Caja.forms import WebReservasIngresoForm
 
 
 
@@ -40,6 +41,53 @@ def validacion(request):
     }
 	return JsonResponse(data)
 
+
+
+
+@login_required(login_url = 'Demo:login' )
+def ReservaWebPorPagar(request, id_reserva):
+	reserva = tb_reservasWeb.objects.get(id=id_reserva)
+	admin = tb_profile.objects.filter(tipoUser='Administrador')
+	administrador = admin[0]
+	fecha = date.today()
+	Form = WebReservasIngresoForm
+	result = validatePerfil(tb_profile.objects.filter(user=request.user))
+	perfil = result[0]
+	fallido = None
+	if request.method == 'POST':
+		Form = WebReservasIngresoForm(request.POST or None)
+		if Form.is_valid():
+			ingreso = Form.save(commit=False)
+			ingreso.user = request.user
+			ingreso.descripcion = "Pago de Reserva Web"
+			ingreso.service = reserva.servicioPrestar
+			ingreso.monto = reserva.montoAPagar
+			ingreso.save()
+			reserva.isPay = True
+			reserva.save()
+			mensaje = "Gracias Por registrar Su Pago"
+			usuario = reserva.mail #trato de traer el colaborador del formulario
+			email_subject_usuario = 'Multipoint - Gracias Por su Pago'
+			email_body_usuario = "Hola %s, gracias por completar su pago de manera exitosa, esperemos disfrute nuestros servicios" %(reserva.nombre)
+			message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+			#mensaje para apreciasoft
+			email_subject_Soporte = 'Multipoint - Nueva Reserva WEB PAGADA'
+			email_body_Soporte = "se ha registrado un Pago de una  reserva , nombre:%s . correo:%s, numero:%s , te invitamos a contactarla y luego a cambiar el status de la reserva en  http://multipoint.pythonanywhere.com/reservas/list/" %(reserva.nombre, reserva.mail, reserva.telefono)
+			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com"])
+			#enviamos el correo
+			send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+			return render(request, 'ReservasWeb/FacturaPorPagar.html' , {'Form':Form, 'perfil':perfil, 'mensaje':mensaje, 'reserva':reserva,'administrador':administrador,'fecha':fecha,})
+		else: 
+			Form = WebReservasIngresoForm()
+			fallido = "Hemos tenido algun problema con sus datos, por eso no hemos procesado su ingreso, verifiquelo e intentelo de nuevo"
+			
+	return render(request , 'ReservasWeb/FacturaPorPagar.html' , {'fallido':fallido,
+			'Form':Form,
+			'reserva':reserva,
+			'administrador':administrador,
+			'fecha':fecha,})
+
+
 @login_required(login_url = 'Demo:login' )
 def listReservas(request):
 	TurnEditar = -1 #para poder saber que turnos se le mostrara el formulario, verifico que ningun id coincida con -1
@@ -48,7 +96,9 @@ def listReservas(request):
 	perfil = result[0]
 	formulario = False
 	#queryset 
-	turnos_hoy =  tb_turn.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='En Espera').count()
+	reservas_hoy = tb_reservasWeb.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
+	turnos__hoy =  tb_turn.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
+	turnos_hoy = reservas_hoy + turnos__hoy
 	ingresos_hoy = tb_ingreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	egresos_hoy  = tb_egreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	context = {
@@ -85,6 +135,7 @@ def EditReservaList(request , id_reservas):
 			reserva.telefono = ReservaWebEditar.telefono
 			reserva.montoAPagar =  ReservaWebEditar.montoAPagar
 			reserva.description =  ReservaWebEditar.description
+			reserva.isPay =  ReservaWebEditar.isPay
 			reserva.save()
 			print(reserva.statusTurn.nameStatus)
 			if reserva.statusTurn.nameStatus == 'Confirmada':

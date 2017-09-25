@@ -324,8 +324,10 @@
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
+
           <ul class="treeview-menu" style="display: none;">
             <li><a href="{% url "Productos:ListProductos" %}"><i class="fa  fa-opencart"></i> Listado de Productos </a></li>
+            <li><a href="{% url "Productos:pructosCliente" %}"><i class="fa  fa-opencart"></i> Resumen de Productos </a></li>
      
             <li><a href="{% url "Productos:NuevoProducto" %}"><i class="fa fa-plus"></i> Nuevo Producto </a></li>
           
@@ -340,7 +342,7 @@
             </span>
           </a>
           <ul class="treeview-menu" style="display: none;">
-            <li><a href="{% url "Servicios:Servicios" %}"><i class="fa fa-star-o"></i> Resumen </a></li>
+            <li><a href="{% url "Servicios:clientesServicios" %}"><i class="fa fa-star-o"></i> Resumen de Servicios </a></li>
             <li><a href="{% url "Servicios:listService" %}"><i class="fa fa-star-o"></i> Listado Servicios </a></li>
            
             <li><a href="{% url "Servicios:NuevoServicio" %}"><i class="fa fa-plus"></i> Nuevo Servicio </a></li>

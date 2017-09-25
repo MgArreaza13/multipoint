@@ -22,6 +22,7 @@ from apps.Configuracion.forms import tipoProductoForm
 from apps.Configuracion.forms import tipoComisionForm
 from apps.Configuracion.forms import sucursalesForm
 from apps.Configuracion.forms import formasDePagoForm
+from apps.ReservasWeb.models import tb_reservasWeb
 
 # Create your views here.
 
@@ -48,7 +49,9 @@ def Configuracion(request):
 	formasdepago 		= 	tb_formasDePago.objects.all()
 
 	#queryset 
-	turnos_hoy =  tb_turn.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='En Espera').count()
+	reservas_hoy = tb_reservasWeb.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
+	turnos__hoy =  tb_turn.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
+	turnos_hoy = reservas_hoy + turnos__hoy
 	ingresos_hoy = tb_ingreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	egresos_hoy  = tb_egreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))

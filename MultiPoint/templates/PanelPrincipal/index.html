@@ -86,7 +86,7 @@
           <!-- MAP & BOX PANE -->
           <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Reservas Web Confirmadas  Mensuales {{fecha.year}}</h3>
+              <h3 class="box-title">Reservas desde El panel Confirmadas  Mensuales {{fecha.year}}</h3>
 
               <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -97,6 +97,24 @@
             <div class="box-body">
               <div class="chart">
                 <canvas id="myChart" style="height: 185px; width: 347px;" height="370" width="694"></canvas>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Reservas desde la Web Confirmadas  Mensuales {{fecha.year}}</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <div class="box-body">
+              <div class="chart">
+                <canvas id="myChartweb" style="height: 185px; width: 347px;" height="370" width="694"></canvas>
               </div>
             </div>
             <!-- /.box-body -->
@@ -134,6 +152,76 @@
 
           <!-- PRODUCT LIST -->
           <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">Resumen del Listado de Reservas Web Sin Pagar</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="table-responsive">
+                <table class="table no-margin">
+                  <thead>
+                  <tr>
+                  
+                    <th>SERVICIO</th>
+                    <th>FECHA </th>
+                    <th>MONTO </th>
+                    <th>FECHA </th>
+
+
+                    
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for turno in turnosSinPagar  %}
+                    <tr>
+                    
+                    <td>{{turno.servicioPrestar}}</td>
+                    <td>{{turno.dateTurn}}</td>
+                    <td><span class="label label-warning">${{turno.montoAPagar}}</span></td>
+                    <td>
+                      <a href="{% url "Turnos:ReservaWebPanelPorPagar" turno.id  %}"  class="label btn btn-primary">COBRAR</a>
+                                  
+                    </td>
+                  </tr>
+                  {% endfor %}
+                  {% for turno in ReservasSinPagar  %}
+                    <tr>
+                    
+                    <td>{{turno.servicioPrestar}}</td>
+                    <td>{{turno.dateTurn}}</td>
+                    <td><span class="label label-warning">${{turno.montoAPagar}}</span></td>
+                    <td>
+                      <a href="{% url "Reservas:ReservaWebPorPagar" turno.id  %}"  class="label btn btn-primary">COBRAR</a>
+                                  
+                    </td>
+                    
+                  </tr>
+                  {% endfor %}
+                  
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.table-responsive -->
+            </div>
+
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+            
+           
+            
+            </div>
+
+            <!-- /.box-footer -->
+          </div>
+
+
+           <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title">Resumen del Listado de Reservas Web</h3>
 
@@ -501,7 +589,7 @@ new Chart(document.getElementById("myChart"), {
     data: {
       labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiempre', 'Octubre', 'Noviembre', 'Diciembre'],
       datasets: [{
-          label: "Turnos",
+          label: "Reserva",
           type: "line",
           borderColor: "rgba(33, 150, 243, 0.8)",
           data: {{data}},
@@ -512,12 +600,39 @@ new Chart(document.getElementById("myChart"), {
     options: {
       title: {
         display: true,
-        text: 'Estadistica de Reservas'
+        text: 'Estadistica de Reservas desde El panel '
       },
       legend: { display: false }
     }
 });
 </script>
+
+
+<script type="text/javascript">
+new Chart(document.getElementById("myChartweb"), {
+    type: 'bar',
+    data: {
+      labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiempre', 'Octubre', 'Noviembre', 'Diciembre'],
+      datasets: [{
+          label: "Reserva Web",
+          type: "line",
+          borderColor: "rgba(33, 150, 243, 0.8)",
+          data: {{dataweb}},
+          fill: false
+        }
+      ]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Estadistica de Reservas desde la web'
+      },
+      legend: { display: false }
+    }
+});
+</script>
+
+
 
 <script>
   new Chart(document.getElementById("mixed-chart"), {

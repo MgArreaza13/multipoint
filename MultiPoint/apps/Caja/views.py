@@ -51,7 +51,7 @@ def NuevoIngreso(request):
 	if request.method == 'POST':
 		Form = IngresoForm(request.POST or None)
 		if Form.is_valid():
-			print(request.POST)
+			
 			ingreso = Form.save(commit=False)
 			ingreso.user = request.user
 			if request.POST['descripcion'] == "":
