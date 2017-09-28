@@ -177,7 +177,7 @@
               <!-- /.box-body -->
 
               <div class="box-footer pull-right">
-                <button type="submit" class="btn btn-primary ">PAGAR</button>
+                <a href="{% url "Reservas:Pago" reserva.id %}" class="btn btn-primary ">PAGAR</a>
                 <a href="{% url "Panel:inicio" %}" class="btn btn-danger">REGRESAR</a>
               </div>
             </form>

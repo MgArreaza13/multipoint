@@ -185,8 +185,10 @@
       <!-- this row will not appear when printing -->
       <div class="row no-print">
         <div class="col-xs-12">
+
+        
           
-          <a href="{% url "Panel:inicio" %}"  class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Pago Online
+          <a href="{% url "Reservas:Pago" reserva.id %}"  class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Pago Online
           </a>
           <a href="{% url "Panel:inicio" %}" class="btn btn-primary pull-right" style="margin-right: 5px;">
             <i class="fa fa-download"></i> Pago Sucursal

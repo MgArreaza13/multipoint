@@ -28,6 +28,7 @@ from django.http import JsonResponse
 from apps.Notificaciones.models import Notificacion
 from apps.Caja.forms import WebReservasIngresoForm
 from ingenico.connect.sdk.factory import Factory
+from apps.ingenico.MycheckoutSupport import Pago_Online
 
 
 
@@ -45,10 +46,11 @@ def validacion(request):
 
 
 
-
-#def ingenico(request):
-#	client = Factory.create_client_from_file(apps.ingenico.configuracin.ini, "2028d86b7bc19213", "bqz9C3UtR7MMO3zXL/v9uAwXSlnoUAXbn2wGbXeRo0w=")
-	#pass
+def Pago(request, id_reserva):
+	reserva = tb_reservasWeb.objects.get(id=id_reserva)
+	url = Pago_Online(reserva.montoAPagar)
+	
+	return redirect(url)
 
 
 @login_required(login_url = 'Demo:login' )
