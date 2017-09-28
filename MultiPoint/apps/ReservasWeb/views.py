@@ -27,6 +27,7 @@ from datetime import date
 from django.http import JsonResponse
 from apps.Notificaciones.models import Notificacion
 from apps.Caja.forms import WebReservasIngresoForm
+from ingenico.connect.sdk.factory import Factory
 
 
 
@@ -42,6 +43,12 @@ def validacion(request):
 	return JsonResponse(data)
 
 
+
+
+
+#def ingenico(request):
+#	client = Factory.create_client_from_file(apps.ingenico.configuracin.ini, "2028d86b7bc19213", "bqz9C3UtR7MMO3zXL/v9uAwXSlnoUAXbn2wGbXeRo0w=")
+	#pass
 
 
 @login_required(login_url = 'Demo:login' )
