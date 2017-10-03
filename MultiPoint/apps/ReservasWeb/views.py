@@ -1,4 +1,5 @@
 from django.shortcuts import render , redirect
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from datetime import date
 from apps.ReservasWeb.models import tb_reservasWeb
@@ -29,6 +30,7 @@ from apps.Notificaciones.models import Notificacion
 from apps.Caja.forms import WebReservasIngresoForm
 from ingenico.connect.sdk.factory import Factory
 from apps.ingenico.MycheckoutSupport import Pago_Online
+from apps.ingenico.MycheckoutSupport import statusDePago
 
 
 
@@ -46,11 +48,41 @@ def validacion(request):
 
 
 
-def Pago(request, id_reserva):
-	reserva = tb_reservasWeb.objects.get(id=id_reserva)
-	url = Pago_Online(reserva.montoAPagar)
+def Status(request ):
+	pk = request.GET.get('pk', None)
 	
+	reserva = tb_reservasWeb.objects.get(id= pk)
+	status = (statusDePago(reserva.ingenico_id))
+	data = {
+        'status':status._GetHostedCheckoutResponse__status
+    }
+	return JsonResponse(data)
+
+
+def StatusChange(request ):
+	pk = request.GET.get('pk', None)
+	print('hola bb')
+	
+	reserva = tb_reservasWeb.objects.get(id= pk)
+	reserva.isPay = True
+	reserva.statusTurn =  tb_status.objects.get(nameStatus= 'Confirmada') 
+	reserva.save()
+	
+	return JsonResponse('ok')
+
+
+def Pago(request, id_reserva):
+	metodo = request
+	reserva = tb_reservasWeb.objects.get(id=id_reserva)
+	data = Pago_Online(reserva.montoAPagar)
+	url = "https://payment."+data._CreateHostedCheckoutResponse__partial_redirect_url
+	print(data._CreateHostedCheckoutResponse__hosted_checkout_id)
+	reserva.ingenico_id =data._CreateHostedCheckoutResponse__hosted_checkout_id
+	reserva.save()
 	return redirect(url)
+
+
+
 
 
 @login_required(login_url = 'Demo:login' )

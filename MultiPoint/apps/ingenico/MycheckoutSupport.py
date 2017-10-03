@@ -18,7 +18,7 @@ def Pago_Online(monto):
 	hosted_checkout_specific_input = HostedCheckoutSpecificInput()
 	hosted_checkout_specific_input.locale = "en_GB"
 	hosted_checkout_specific_input.variant = "testVariant"
-	hosted_checkout_specific_input.return_ur = "http://multipoint.pythonanywhere.com/"
+	hosted_checkout_specific_input.return_ur = "http://localhost:8000/reservas/Procesar/Pago/Status"
 
 	amount_of_money = AmountOfMoney()
 	amount_of_money.amount = monto*100
@@ -39,7 +39,27 @@ def Pago_Online(monto):
 	body.hosted_checkout_specific_input = hosted_checkout_specific_input
 	body.order = order
 
-	response = client.merchant("3738").hostedcheckouts().create(body)
 
-	return "https://payment."+response._CreateHostedCheckoutResponse__partial_redirect_url
+
+	response = client.merchant("3738").hostedcheckouts().create(body)
 	
+	
+	return response 
+	 
+
+
+
+
+
+
+def statusDePago(id):
+	configuration_file_name = os.path.abspath(os.path.join(os.path.dirname(__file__),'./configuracion.ini'))
+	api_key_id = os.getenv("connect.api.apiKeyId", "2028d86b7bc19213")
+	secret_api_key = os.getenv("connect.api.secretApiKey", "bqz9C3UtR7MMO3zXL/v9uAwXSlnoUAXbn2wGbXeRo0w=")
+	client = Factory.create_client_from_file(configuration_file_name=configuration_file_name,api_key_id=api_key_id, secret_api_key=secret_api_key)
+
+	response2 = client.merchant("3738").hostedcheckouts().get(id)
+	
+	return response2 
+
+

@@ -188,7 +188,7 @@
 
         
           
-          <a href="{% url "Reservas:Pago" reserva.id %}"  class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Pago Online
+          <a id="pagoOnline" href="{% url "Reservas:Pago" reserva.id %}"  target="_blank" class="btn btn-success pull-right "><i class="fa fa-credit-card"></i> Pago Online
           </a>
           <a href="{% url "Panel:inicio" %}" class="btn btn-primary pull-right" style="margin-right: 5px;">
             <i class="fa fa-download"></i> Pago Sucursal
@@ -196,6 +196,8 @@
         </div>
       </div>
     </section>
+
+    <input type="hidden" id="id_reserva" value="{{reserva.id}}">
    
     <!-- /.content -->
   </div>
@@ -209,6 +211,11 @@
     reserved.
   </footer>
 </div>
+
+<div id="miguel">
+  
+</div>
+
 <!-- ./wrapper -->
 
 <!-- jQuery 3 -->
@@ -238,7 +245,72 @@
 <!-- Page specific script -->
 <script type="text/javascript" src="{% static "bootstrap/js/bootstrap-clockpicker.min.js" %}"></script>
 <script type="text/javascript" src="{% static "bootstrap/js/bootstrap-datepicker.adminlte.min.js" %}"></script>
-<script src="{% static 'bootstrap/js/notificaciones.js'%}"></script>
+<!--<script src="{% static 'bootstrap/js/notificaciones.js'%}"></script>-->
+
+<script>
+
+
+
+
+  $('#pagoOnline').on('click',  function(){
+    var pk = $('#id_reserva').val();
+    validar(pk);
+    if (validar(pk) != 'PAYMENT_CREATED') {
+      setInterval(function () {
+        validar(pk);
+      }, 3000);
+    }
+    
+  });
+
+   
+
+  function validar(pk){
+     $.ajax({
+        url: 'http://localhost:8000/reservas/Procesar/Pago/Status',
+        data: {
+          'pk': pk
+         },
+        dataType: 'json',
+        success: function (data) {
+          if (data) {
+            
+           if (data.status== 'PAYMENT_CREATED') {
+             $.ajax({
+                  url: 'http://localhost:8000/reservas/Procesar/Pago/Status/change',
+                  data: {
+                    'pk': pk
+                   },
+                  dataType: 'json',
+                  success: function (data) {
+                                       
+                     }
+
+                });
+            alert('Gracias Por Realizar su pago');
+            window.location.replace("http://localhost:8000");
+           }
+
+           return data.status;
+
+           
+           }
+            
+            
+          }
+        
+      });
+
+  }
+
+
+
+
+
+
+
+</script>
+
 
 
 <script>

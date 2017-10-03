@@ -14,5 +14,6 @@ class tb_reservasWeb (models.Model):
 	montoAPagar				=   models.IntegerField(default=0, null=False, blank=True)
 	isPay			 		=	models.BooleanField(null=False, blank=True , default=False)
 	description				=	models.CharField(default='Sin Descripcion', null=False, max_length=30, blank=True)	
+	ingenico_id             =  	models.TextField(default='None', null=False, max_length=3000)
 	def __str__(self):
 		return self.mail
