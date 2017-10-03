@@ -67,8 +67,10 @@ def StatusChange(request ):
 	reserva.isPay = True
 	reserva.statusTurn =  tb_status.objects.get(nameStatus= 'Confirmada') 
 	reserva.save()
+
+	#mandar correo cuando se paga la reserva
 	
-	return JsonResponse('ok')
+	return HttpResponse('ok')
 
 
 def Pago(request, id_reserva):
