@@ -10,8 +10,10 @@ from apps.Turn.views import index
 from apps.Turn.views import EditTurnList
 from apps.Turn.views import NuevoTurnClient
 from apps.Turn.views import ReservaWebPanelPorPagar
-
-
+from apps.Turn.views import FacturaTurn
+from apps.Turn.views import TurnPago
+from apps.Turn.views import TurnStatus
+from apps.Turn.views import TurnStatusChange
 urlpatterns = [
 
 	url(r'^$', index , name='index'  ),
@@ -25,5 +27,9 @@ urlpatterns = [
 	url(r'^Editar/(?P<id_turn>\d+)$', EditTurn, name='EditTurn'  ),
 	url(r'^Borrar/(?P<id_turn>\d+)$', DeleteTurn, name='DeleteTurn'  ),
 	url(r'^Pagar/(?P<id_reserva>\d+)$', ReservaWebPanelPorPagar, name='ReservaWebPanelPorPagar'  ),
-  
+	url(r'^Factura/(?P<id_turn>\d+)$', FacturaTurn, name='FacturaTurn'  ),
+  	url(r'^Procesar/Pago/(?P<id_turn>\d+)$', TurnPago, name='TurnPago'  ),
+	url(r'^Procesar/Pago/Status$', TurnStatus, name='TurnStatus'  ),
+	url(r'^Procesar/Pago/Status/change$', TurnStatusChange, name='TurnStatusChange'  ),
+
 ]

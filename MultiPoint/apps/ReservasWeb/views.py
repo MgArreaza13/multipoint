@@ -46,7 +46,10 @@ def validacion(request):
 	return JsonResponse(data)
 
 
-
+def returnPago(request):
+	if request.method == "GET":
+		print('miguel')
+	return HttpResponse("ok")
 
 def Status(request ):
 	pk = request.GET.get('pk', None)
@@ -61,25 +64,36 @@ def Status(request ):
 
 def StatusChange(request ):
 	pk = request.GET.get('pk', None)
-	print('hola bb')
+	
 	
 	reserva = tb_reservasWeb.objects.get(id= pk)
+	
 	reserva.isPay = True
 	reserva.statusTurn =  tb_status.objects.get(nameStatus= 'Confirmada') 
 	reserva.save()
 
 	#mandar correo cuando se paga la reserva
+	usuario = reserva.mail #trato de traer el colaborador del formulario
+	email_subject_usuario = 'Multipoint - Gracias Por su Pago'
+	email_body_usuario = "Hola %s, gracias por completar su pago de manera exitosa, hemos aprobado su solicitud ya de servicio , esperemos disfrute nuestros servicios" %(reserva.nombre)
+	message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+	#mensaje para apreciasoft
+	email_subject_Soporte = 'Multipoint - Nueva Reserva WEB PAGADA'
+	email_body_Soporte = "se ha registrado un Pago de una  reserva , nombre:%s . correo:%s, numero:%s , para un servicio %s, y un monto de $%s te invitamos a revisarla en http://multipoint.pythonanywhere.com/reservas/list/" %(reserva.nombre, reserva.mail, reserva.telefono, reserva.servicioPrestar, reserva.montoAPagar)
+	message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com"])
+	#enviamos el correo
+	send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
 	
 	return HttpResponse('ok')
 
 
 def Pago(request, id_reserva):
-	metodo = request
 	reserva = tb_reservasWeb.objects.get(id=id_reserva)
 	data = Pago_Online(reserva.montoAPagar)
 	url = "https://payment."+data._CreateHostedCheckoutResponse__partial_redirect_url
-	print(data._CreateHostedCheckoutResponse__hosted_checkout_id)
+
 	reserva.ingenico_id =data._CreateHostedCheckoutResponse__hosted_checkout_id
+	
 	reserva.save()
 	return redirect(url)
 

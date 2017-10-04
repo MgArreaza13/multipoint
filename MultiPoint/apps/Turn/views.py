@@ -1,7 +1,9 @@
 from django.shortcuts import render , redirect
 from django.contrib.auth.decorators import login_required
 from datetime import date
+from django.http import JsonResponse
 #Modelos 
+from django.http import HttpResponse
 from apps.Turn.models import tb_turn
 from apps.Collaborator.models import tb_collaborator
 from apps.Turn.models import tb_turn
@@ -31,6 +33,79 @@ from apps.Notificaciones.models import Notificacion
 from apps.Caja.forms import WebReservasIngresoForm
 
 
+
+from ingenico.connect.sdk.factory import Factory
+from apps.ingenico.MycheckoutSupport import Pago_Online
+from apps.ingenico.MycheckoutSupport import statusDePago
+
+
+
+
+
+
+def FacturaTurn(request, id_turn):
+	reserva = tb_turn.objects.get(id=id_turn)
+	fecha = date.today()
+	admin = tb_profile.objects.filter(tipoUser='Administrador')
+	administrador = admin[0]
+
+	
+	return render(request, 'Turn/Confirmacionturn.html', {'reserva':reserva,'administrador':administrador ,'fecha':fecha})
+
+
+
+def TurnPago(request, id_turn):
+	reserva = tb_turn.objects.get(id=id_turn)
+	data = Pago_Online(reserva.montoAPagar)
+	url = "https://payment."+data._CreateHostedCheckoutResponse__partial_redirect_url
+
+	reserva.ingenico_id =data._CreateHostedCheckoutResponse__hosted_checkout_id
+	
+	reserva.save()
+	return redirect(url)
+
+
+def TurnStatus(request):
+	pk = request.GET.get('pk', None)
+	
+	reserva = tb_turn.objects.get(id= pk)
+	status = (statusDePago(reserva.ingenico_id))
+	data = {
+        'status':status._GetHostedCheckoutResponse__status
+    }
+	return JsonResponse(data)
+
+
+def TurnStatusChange(request ):
+	pk = request.GET.get('pk', None)
+	
+	
+	reserva = tb_turn.objects.get(id= pk)
+	
+	reserva.isPay = True
+	reserva.statusTurn =  tb_status.objects.get(nameStatus= 'Confirmada') 
+	reserva.save()
+
+	#mandar correo cuando se paga la reserva
+	usuario = reserva.client.user.mailUser #trato de traer el colaborador del formulario
+	email_subject_usuario = 'Multipoint - Gracias Por su Pago'
+	email_body_usuario = "Hola %s, gracias por completar su pago de manera exitosa, hemos aprobado su solicitud ya de servicio , esperemos disfrute nuestros servicios" %(reserva.client)
+	message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+	#mensaje para apreciasoft
+	email_subject_Soporte = 'Multipoint - Nueva Reserva WEB PAGADA'
+	email_body_Soporte = "se ha registrado un Pago de una  reserva , nombre:%s . correo:%s, numero:%s , para un servicio %s, y un monto de $%s te invitamos a revisarla en http://multipoint.pythonanywhere.com/reservas/list/" %(reserva.client, reserva.client.user.mailUser, reserva.client.phoneNumberClient, reserva.servicioPrestar, reserva.montoAPagar)
+	message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com"])
+	#enviamos el correo
+	send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+	
+	return HttpResponse('ok')
+
+
+
+
+
+
+
 #Resumen de todos los turnos, parte principal
 @login_required(login_url = 'Demo:login' )
 def index(request):
@@ -40,6 +115,7 @@ def index(request):
 	TurnEditar = -1 #para poder saber que turnos se le mostrara el formulario, verifico que ningun id coincida con -1
 	is_collaborador = tb_collaborator.objects.filter(user__id = request.user.id) #saber si el usuario actual es collaborador
 	turnos = tb_turn.objects.filter(dateTurn = fecha).order_by('HoraTurn')
+	reservas = tb_reservasWeb.objects.filter(dateTurn = fecha).order_by('HoraTurn')
 	#queryset 
 	reservas_hoy = tb_reservasWeb.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
 	turnos__hoy =  tb_turn.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
@@ -47,6 +123,7 @@ def index(request):
 	ingresos_hoy = tb_ingreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	egresos_hoy  = tb_egreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	context = {
+	'reservas':reservas,
 	'perfil':perfil,
 	'is_collaborador':is_collaborador,
 	'turnos':turnos,
@@ -170,11 +247,11 @@ def NuevoTurnClient(request , id_client):
 				#mensaje para apreciasoft
 				email_subject_Soporte = 'Nuevo Turno Solicitado en Estilo Online'
 				email_body_Soporte = "Hola, soporte Apreciasoft, El presente mensaje es para informarle que el cliente  %s ha enviado una nueva solicitud para de reserva , si desea revisarla ingrese aqui http://estiloonline.pythonanywhere.com" %(client)
-				message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com'])
+				message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', 'mg.arreaza.13@gmail.com'])
 				#enviamos el correo
 				send_mass_mail(( message_client, message_Soporte), fail_silently=False)
 				mensaje = "Hemos Guardado sus datos de manera correcta"
-				return render(request, 'Turn/NuevoTurno.html' , {'Form':Form ,'turnos':turnos ,'mensaje1':mensaje1, 'perfil':perfil, 'mensaje':mensaje})
+				return redirect('Turnos:FacturaTurn', id_turn=turno.id)
 			elif data == 1: # collaborador ocupado para esa hora y fecha
 				mensaje1 = "El servicio esta Ocupado Para El Dia y la hora deseado intente con otro collaborador o con otro dia"
 				Form = TurnFormClient()
@@ -246,7 +323,7 @@ def NuevoTurnParaHoy(request):
 				send_mass_mail((message_client, message_Soporte), fail_silently=False)
 				
 				mensaje = 'Felicidades Hemos podido guardar su turno de manera exitosa'
-				return render(request, 'Turn/NuevoTurnoHoy.html' , {'Form':Form,'turnos':turnos ,'fecha':fecha , 'mensaje1':mensaje1, 'perfil':perfil, 'mensaje':mensaje})
+				return redirect('Turnos:FacturaTurn', id_turn=turno.id)
 			elif data == 1: # collaborador ocupado para esa hora y fecha
 				mensaje1 = "El servicio desea Contratar esta Ocupado Para El Dia y la hora deseado intente con otro collaborador o con otro dia"
 				Form = TurnForm()
@@ -368,7 +445,7 @@ def NuevoTurn(request):
 				#enviamos el correo
 				send_mass_mail(( message_client, message_Soporte), fail_silently=False)
 				mensaje = "Hemos Guardado sus datos de manera correcta"
-				return render(request, 'Turn/NuevoTurno.html' , {'Form':Form ,'turnos':turnos ,'mensaje1':mensaje1, 'perfil':perfil, 'mensaje':mensaje})
+				return redirect('Turnos:FacturaTurn', id_turn=turno.id)
 			elif data == 1: # collaborador ocupado para esa hora y fecha
 				mensaje1 = "El servicio esta Ocupado Para El Dia y la hora deseado intente con otro collaborador o con otro dia"
 				Form = TurnForm()

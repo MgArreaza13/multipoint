@@ -18,7 +18,7 @@ def Pago_Online(monto):
 	hosted_checkout_specific_input = HostedCheckoutSpecificInput()
 	hosted_checkout_specific_input.locale = "en_GB"
 	hosted_checkout_specific_input.variant = "testVariant"
-	#hosted_checkout_specific_input.return_url = "http://localhost:8000/reservas/Procesar/Pago/Status"
+	#hosted_checkout_specific_input.return_url = "http://localhost:8000/reservas/Procesar/Pago/Status/Retorno"
 
 	amount_of_money = AmountOfMoney()
 	amount_of_money.amount = monto*100
@@ -42,7 +42,7 @@ def Pago_Online(monto):
 
 
 	response = client.merchant("3738").hostedcheckouts().create(body)
-	
+	print(response.__dict__)
 	
 	return response 
 	 
@@ -59,7 +59,7 @@ def statusDePago(id):
 	client = Factory.create_client_from_file(configuration_file_name=configuration_file_name,api_key_id=api_key_id, secret_api_key=secret_api_key)
 
 	response2 = client.merchant("3738").hostedcheckouts().get(id)
-	
+	print(response2.__dict__)
 	return response2 
 
 
