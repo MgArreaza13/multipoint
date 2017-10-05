@@ -31,6 +31,10 @@ from apps.Caja.forms import WebReservasIngresoForm
 from ingenico.connect.sdk.factory import Factory
 from apps.ingenico.MycheckoutSupport import Pago_Online
 from apps.ingenico.MycheckoutSupport import statusDePago
+from django.contrib import auth
+from apps.Configuracion.models import tb_formasDePago
+from apps.Configuracion.models import tb_tipoIngreso
+
 
 
 
@@ -64,14 +68,22 @@ def Status(request ):
 
 def StatusChange(request ):
 	pk = request.GET.get('pk', None)
-	
-	
 	reserva = tb_reservasWeb.objects.get(id= pk)
-	
 	reserva.isPay = True
 	reserva.statusTurn =  tb_status.objects.get(nameStatus= 'Confirmada') 
 	reserva.save()
-
+	print(request.user)
+	## hay que crear este usuario en la base de Datos 'ReservasWeb'
+	user = auth.authenticate(username='ReservasWeb', password='miguel123')
+	ingreso = tb_ingreso()
+	ingreso.user = user
+	ingreso.tipoPago = tb_formasDePago.objects.get(nameFormasDePago='Pago Online')
+	ingreso.tipoIngreso = tb_tipoIngreso.objects.get(nameTipoIngreso='Servicios Web')
+	ingreso.service = reserva.servicioPrestar
+	ingreso.monto = reserva.montoAPagar
+	ingreso.descripcion = 'Pagado desde el Motor de Pagos Online'
+	ingreso.save()
+	auth.logout(request)
 	#mandar correo cuando se paga la reserva
 	usuario = reserva.mail #trato de traer el colaborador del formulario
 	email_subject_usuario = 'Multipoint - Gracias Por su Pago'
@@ -83,7 +95,6 @@ def StatusChange(request ):
 	message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com"])
 	#enviamos el correo
 	send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
-	
 	return HttpResponse('ok')
 
 
@@ -220,7 +231,6 @@ def web(request):
 	notificacion = Notificacion()
 	fallido = None
 	if request.method == 'POST':
-		print(request.POST)
 		Form = ReservasWebForm(request.POST or None)
 		if Form.is_valid():
 			turno = Form.save(commit=False)

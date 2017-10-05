@@ -12,6 +12,9 @@ from apps.Caja.models import tb_egreso
 from apps.ReservasWeb.models import tb_reservasWeb
 from apps.Client.models import tb_client
 from apps.Configuracion.models import tb_status
+
+from apps.Configuracion.models import tb_formasDePago
+from apps.Configuracion.models import tb_tipoIngreso
 #FORMULARIOS
 from apps.Turn.forms import TurnForm
 from apps.Turn.forms import EditTurnForm
@@ -78,14 +81,20 @@ def TurnStatus(request):
 
 def TurnStatusChange(request ):
 	pk = request.GET.get('pk', None)
-	
-	
 	reserva = tb_turn.objects.get(id= pk)
-	
 	reserva.isPay = True
 	reserva.statusTurn =  tb_status.objects.get(nameStatus= 'Confirmada') 
 	reserva.save()
-
+	request.session['user'] = reserva.nombre
+	#creamos el ingreso 
+	ingreso = tb_ingreso()
+	ingreso.user = request.session['user']
+	ingreso.tipoPago = tb_formasDePago.objects.get(nameFormasDePago='Pago Online')
+	ingreso.tipoIngreso = tb_tipoIngreso.objects.get(nameTipoIngreso='Servicios Web')
+	ingreso.service = reserva.servicioPrestar
+	ingreso.monto = reserva.montoAPagar
+	ingreso.descripcion = 'Pagado desde el Motor de Pagos Online'
+	ingreso.save()
 	#mandar correo cuando se paga la reserva
 	usuario = reserva.client.user.mailUser #trato de traer el colaborador del formulario
 	email_subject_usuario = 'Multipoint - Gracias Por su Pago'
