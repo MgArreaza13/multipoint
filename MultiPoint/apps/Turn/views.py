@@ -250,12 +250,12 @@ def NuevoTurnClient(request , id_client):
 				#cliente
 				client = tb_profile.objects.get(user__username=turno.client) #trato de traer el colaborador del formulario
 				email_subject_client = 'Nuevo Turno Solicitado'
-				email_body_Client = "Hola %s, El presente mensaje es para informarle que se ha enviado una nueva solicitud para un turno si desea revisarla y confirmarla ingrese aqui http://estiloonline.pythonanywhere.com" %(client)
+				email_body_Client = "Hola %s, El presente mensaje es para informarle que se ha enviado una nueva solicitud para un turno si desea revisarla y confirmarla ingrese aqui http://multipoint.pythonanywhere.com" %(client)
 				email_client = client.mailUser
 				message_client = (email_subject_client, email_body_Client, 'as.estiloonline@gmail.com', [email_client])
 				#mensaje para apreciasoft
 				email_subject_Soporte = 'Nuevo Turno Solicitado en Estilo Online'
-				email_body_Soporte = "Hola, soporte Apreciasoft, El presente mensaje es para informarle que el cliente  %s ha enviado una nueva solicitud para de reserva , si desea revisarla ingrese aqui http://estiloonline.pythonanywhere.com" %(client)
+				email_body_Soporte = "Hola, El presente mensaje es para informarle que el cliente  %s ha enviado una nueva solicitud para de reserva , si desea revisarla ingrese aqui http://multipoint.pythonanywhere.com" %(client)
 				message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', 'mg.arreaza.13@gmail.com'])
 				#enviamos el correo
 				send_mass_mail(( message_client, message_Soporte), fail_silently=False)
