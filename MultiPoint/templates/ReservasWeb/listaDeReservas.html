@@ -129,6 +129,7 @@
                   <th>TELEFONO</th>
                   <th>FECHA</th>
                   <th>HORA</th>
+                  <th>FORMA DE PAGO</th>
                   <th>STATUS</th>
                   <th>ACCIONES</th>
                 </tr>
@@ -147,6 +148,12 @@
                           <td>{{reserva.telefono}}</td>
                           <td>{{reserva.dateTurn}}</td>
                           <td>{{reserva.HoraTurn}}</td>
+
+                    {% if reserva.PagoOnline == 'True' %}
+                            <td> Pagado Online </td>
+                            {% else %}
+                            <td>Paga Por Sucursal</td>
+                          {% endif %}
                     
 
                     {% if reserva.statusTurn.nameStatus == 'Confirmada' %}
@@ -270,6 +277,12 @@
                           <td>{{reserva.telefono}}</td>
                           <td>{{reserva.dateTurn}}</td>
                           <td>{{reserva.HoraTurn}}</td>
+                          {% if reserva.PagoOnline == 'True' %}
+                            <td> Pagado Online </td>
+                            {% else %}
+                            <td>Paga Por Sucursal</td>
+                          {% endif %}
+
                          
                           
                           
@@ -318,6 +331,7 @@
                   <th>TELEFONO</th>
                   <th>FECHA</th>
                   <th>HORA</th>
+                  <th>FORMA DE PAGO</th>
                   <th>STATUS</th>
                   <th>ACCIONES</th>
 

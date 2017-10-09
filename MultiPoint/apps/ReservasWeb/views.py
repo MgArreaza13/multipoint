@@ -35,6 +35,8 @@ from django.contrib import auth
 from apps.Configuracion.models import tb_formasDePago
 from apps.Configuracion.models import tb_tipoIngreso
 
+from apps.scripts.SumarHora import sumar_hora
+
 
 
 
@@ -233,6 +235,7 @@ def web(request):
 	if request.method == 'POST':
 		Form = ReservasWebForm(request.POST or None)
 		if Form.is_valid():
+			print(request.POST)
 			turno = Form.save(commit=False)
 			turno.dateTurn = request.POST['TurnDate']
 			turno.HoraTurn = request.POST['TimeTurn']
@@ -241,6 +244,7 @@ def web(request):
 			
 			turno.montoAPagar = float(request.POST['total'])  
 			turno.description = 'Sin Descripcion'
+			turno.HoraTurnEnd = sumar_hora(request.POST['TimeTurn'], "3:00")
 			turno.save()
 			notificacion.nombre = turno.nombre
 			notificacion.dateTurn = turno.dateTurn

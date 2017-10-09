@@ -450,9 +450,7 @@
   </footer>
 </div>
 
-<div id="miguel">
-  
-</div>
+
 <!-- ./wrapper -->
 
 <!-- jQuery 3 -->
@@ -720,7 +718,8 @@ $('.clockpicker').clockpicker({
       {% for turno in turnos %}
         {
           title: '{{turno.servicioPrestar}}'+ ' - ' +'{{turno.HoraTurn}}',
-          start: '{{ turno.dateTurn|date:"Y-m-d" }}',
+          start: '{{ turno.dateTurn|date:"Y-m-d" }}{{turno.HoraTurn}}',
+          end:{{turno.HoraTurnEnd}},
           backgroundColor: "#f56954", //red
           borderColor: "#f56954",//red
           titulo:'{{turno.servicioPrestar}}',
@@ -732,8 +731,9 @@ $('.clockpicker').clockpicker({
       {% endfor %}
       {% for ReservasWeb in ReservasWeb %}
         {
-          title: '{{ReservasWeb.servicioPrestar}}'+ ' - ' +'{{ReservasWeb.HoraTurn}}',
-          start: '{{ ReservasWeb.dateTurn|date:"Y-m-d" }}',
+          title: 'RESERVA',
+          start: '{{ ReservasWeb.dateTurn|date:"Y-m-d" }} {{ReservasWeb.HoraTurn}}',
+          end:'{{ ReservasWeb.dateTurn|date:"Y-m-d" }} {{ReservasWeb.HoraTurnEnd}}',
           backgroundColor: "#f56954", //red
           borderColor: "#f56954", // red 
           titulo:'{{ReservasWeb.servicioPrestar}}',
@@ -781,7 +781,7 @@ $('.clockpicker').clockpicker({
           $("#myModal").modal("show");
 
     },
-      editable: true,
+      editable: false,
       droppable: true, // this allows things to be dropped onto the calendar !!!
       drop: function (date, allDay) { // this function is called when something is dropped
 
