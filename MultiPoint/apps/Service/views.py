@@ -11,6 +11,28 @@ from apps.Caja.models import tb_egreso
 from apps.UserProfile.models import tb_profile
 from apps.scripts.validatePerfil import validatePerfil
 from apps.ReservasWeb.models import tb_reservasWeb
+from django.http import JsonResponse
+from django.forms.models import model_to_dict
+
+
+
+
+
+def ServiceDetail(request):
+	id_servicio = request.GET.get('id_servicio', None)
+	ser=tb_service.objects.filter(id=id_servicio)
+	servicio = ser[0]
+	data = {
+        'value':servicio.priceList,
+        'nombre':servicio.nameService,
+        'descripcion':servicio.descriptionService,
+
+    }
+	return JsonResponse(data)
+
+
+
+
 @login_required(login_url = 'Demo:login' )
 def clientesServicios(request):
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))

@@ -73,6 +73,7 @@ def StatusChange(request ):
 	reserva = tb_reservasWeb.objects.get(id= pk)
 	reserva.isPay = True
 	reserva.statusTurn =  tb_status.objects.get(nameStatus= 'Confirmada') 
+	reserva.PagoOnline = True
 	reserva.save()
 	print(request.user)
 	## hay que crear este usuario en la base de Datos 'ReservasWeb'

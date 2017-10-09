@@ -127,6 +127,7 @@
 
                   <th>HORA</th>
                   <th>FECHA</th>
+                  <th>FORMA DE PAGO</th>
                   <th>INFO</th>
                   <th>STATUS</th>
                   <th>ACCIONES</th>
@@ -148,7 +149,11 @@
                    
                          <td>{{turno.HoraTurn}}</td>
                     <td>{{turno.dateTurn}}</td>
-                    
+                    {% if turno.PagoOnline == 'True' %}
+                            <td> Pagado Online </td>
+                            {% else %}
+                            <td>Paga Por Sucursal</td>
+                          {% endif %}
                     <td>{{turno.extraInfoTurn}}</td>  
 
                     {% if turno.statusTurn.nameStatus == 'Sin Aprobar' %}
@@ -252,7 +257,11 @@
                          
                                <td>{{turno.HoraTurn}}</td>
                           <td>{{turno.dateTurn}}</td>
-                          
+                          {% if turno.PagoOnline == 'True' %}
+                            <td> Pagado Online </td>
+                            {% else %}
+                            <td>Paga Por Sucursal</td>
+                          {% endif %}
                           <td>{{turno.extraInfoTurn}}</td>
                           
                           {% if turno.statusTurn.nameStatus == 'Sin Aprobar' %}
@@ -291,12 +300,16 @@
                     <tr>
                     <td><a href="#">{{turno.id}}</a></td>
                     
-                    <td>{{turno.nombre}}</td
+                    <td>{{turno.nombre}}</td>
                     
                    
                          <td>{{turno.HoraTurn}}</td>
                     <td>{{turno.dateTurn}}</td>
-                    
+                    {% if turno.PagoOnline == 'True' %}
+                            <td> Pagado Online </td>
+                            {% else %}
+                            <td>Paga Por Sucursal</td>
+                          {% endif %}
                     <td>Reserva Web</td>  
 
                     {% if turno.statusTurn.nameStatus == 'Sin Aprobar' %}
@@ -398,7 +411,11 @@
                          
                                <td>{{turno.HoraTurn}}</td>
                           <td>{{turno.dateTurn}}</td>
-                          
+                          {% if turno.PagoOnline == 'True' %}
+                            <td> Pagado Online </td>
+                            {% else %}
+                            <td>Paga Por Sucursal</td>
+                          {% endif %}
                           <td>Reserva Web </td>
                           
                           {% if turno.statusTurn.nameStatus == 'Sin Aprobar' %}
@@ -443,6 +460,7 @@
                   
                   <th>HORA</th>
                   <th>FECHA</th>
+                  <th>FORMA DE PAGO</th>
                   <th>INFO</th>
                   <th>STATUS</th>
                   <th>ACCIONES</th>

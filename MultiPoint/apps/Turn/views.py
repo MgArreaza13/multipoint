@@ -84,6 +84,7 @@ def TurnStatusChange(request ):
 	reserva = tb_turn.objects.get(id= pk)
 	reserva.isPay = True
 	reserva.statusTurn =  tb_status.objects.get(nameStatus= 'Confirmada') 
+	reserva.PagoOnline = True
 	reserva.save()
 	request.session['user'] = reserva.nombre
 	#creamos el ingreso 
