@@ -13,6 +13,7 @@ from apps.Client.views import CitasEnEsperaClient
 from apps.Client.views import CitasCanceladasClient
 from apps.Client.views import HistorialCitasClient
 from apps.Client.views import NuevoClientProfile
+from apps.Client.views import ClientesWeb
 
 urlpatterns = [
 
@@ -29,5 +30,6 @@ urlpatterns = [
 	url(r'^NuevoProfile/$', NuevoClientProfile , name='NuevoClientProfile'  ),
 	url(r'^Editar/(?P<id_Client>\d+)$', EditClient, name='EditClient'  ),
 	url(r'^Borrar/(?P<id_Client>\d+)$', DeleteClient, name='DeleteClient'  ),
+	url(r'^web$', ClientesWeb, name='ClientesWeb'  ),
   
 ]

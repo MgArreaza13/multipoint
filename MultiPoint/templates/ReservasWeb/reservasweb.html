@@ -67,7 +67,113 @@
 
 .carousel-inner>.item>img, .carousel-inner>.item>a>img {
     width: 100%;
+
 }
+@import url(http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css);
+.col-item
+{
+    border: 1px solid #E1E1E1;
+    border-radius: 5px;
+    background: #FFF;
+}
+.col-item .photo img
+{
+    margin: 0 auto;
+    width: 100%;
+}
+
+.col-item .info
+{
+    padding: 10px;
+    border-radius: 0 0 5px 5px;
+    margin-top: 1px;
+}
+
+.col-item:hover .info {
+    background-color: #F5F5DC;
+}
+.col-item .price
+{
+    /*width: 50%;*/
+    float: left;
+    margin-top: 5px;
+}
+
+.col-item .price h5
+{
+    line-height: 20px;
+    margin: 0;
+}
+
+.price-text-color
+{
+    color: #219FD1;
+}
+
+.col-item .info .rating
+{
+    color: #777;
+}
+
+.col-item .rating
+{
+    /*width: 50%;*/
+    float: left;
+    font-size: 17px;
+    text-align: right;
+    line-height: 52px;
+    margin-bottom: 10px;
+    height: 52px;
+}
+
+.col-item .separator
+{
+    border-top: 1px solid #E1E1E1;
+}
+
+.clear-left
+{
+    clear: left;
+}
+
+.col-item .separator p
+{
+    line-height: 20px;
+    margin-bottom: 0;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.col-item .separator p i
+{
+    margin-right: 5px;
+}
+.col-item .btn-add
+{
+    width: 50%;
+    float: left;
+}
+
+.col-item .btn-add
+{
+    border-right: 1px solid #E1E1E1;
+}
+
+.col-item .btn-details
+{
+    width: 50%;
+    float: left;
+    padding-left: 10px;
+}
+.controls
+{
+    margin-top: 20px;
+}
+[data-slide="prev"]
+{
+    margin-right: 10px;
+}
+
   </style>
 {% endblock styles %}
 
@@ -186,7 +292,7 @@
 
            <div class="box-body paso2">
            <div class="box-header with-border">
-              <h3 class="box-title">SELEECIONE UN SERVICIO QUE DESEA COTIZAR</h3>
+              <h3 class="box-title">SELECCIONE EL TIPO DE EVENTO QUE DESEA COTIZAR</h3>
             </div>
                   
                  <div class="container col-md-12">
@@ -200,47 +306,72 @@
 
             <!-- /.box-header -->
             <div class="box-body">
-              <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-                
-                <div class="carousel-inner">
-                  {% for servicios  in servicios  %}
-                  <div class="item">
-                  <img src="http://localhost:8000/media/{{servicios.image}}" alt="{{servicios.nameProduct}}">
-                  <div style="text-align:center;margin-lef:3em;" class="form-group">
-                  <div class="Detail">
-                    <div>
-                      <h3>{{servicios.nameService}} Costo: ${{servicios.priceList}}</h3>
-                    </div>
-                    <div>
-                      <a id="siguientePaso2" name="{{servicios.nameService}}" onclick=" Suma(this.checked,this.value)" value="{{servicios.priceList}}" class="btn btn-success">SOLICITAR</a>
-                    <button id="InfoServicio" value={{servicios.id}} onclick="query(this.value)" class="btn btn-info">DETALLES</button>
-                    <a id="regresar2" href="javascript:void(0)" class="btn btn-danger">REGRESAR</a>
-                    </div>
-                  </div>
-                  
-                 
-                  
-                </div>
-                    
+              <div class="row">
+            <div class="col-md-5">
+                <h3>
+                    SERVICIOS</h3>
+            </div>
+            <div class="col-md-6">
+                <!-- Controls -->
+                <div class="controls pull-right ">
+                    <a class="left fa fa-chevron-left btn btn-primary" href="#carousel-example-generic"
+                        data-slide="prev"></a><a class="right fa fa-chevron-right btn btn-primary" href="#carousel-example-generic"
+                            data-slide="next"></a>
 
-                    
-                  </div>
-                    
-                  {% endfor %}
-                  <div class="item active">
-                    <img src="{% static "img/multipoint.png" %}" alt="Logo">
-
-                    
-                  </div>
-                  
                 </div>
-                <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
-                  <span class="fa fa-angle-left"></span>
-                </a>
-                <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
-                  <span class="fa fa-angle-right"></span>
-                </a>
-              </div>
+            </div>
+        </div>
+        <div id="carousel-example-generic" class="carousel slide hidden-xs" data-ride="carousel">
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <img style="width:360px; height:320px;" class="img-responsive"  src="{% static "img/multipoint.png" %}" alt="Logo">
+                        </div>
+                       
+                        
+                       
+                    </div>
+                </div>
+        {% for servicios  in servicios  %}
+                <div class="item">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-item">
+                                <div class="photo">
+                                    <img src="http://localhost:8000/media/{{servicios.image}}" class="img-responsive" style="width:350px; height:260px;" alt="a" />
+                                </div>
+                                <div class="info">
+                                    <div class="row">
+                                        <div class="price col-md-12">
+                                            <h3>
+                                                {{servicios.nameService}} </h3>
+                                            <h4 class="price-text-color">
+                                                Costo: ${{servicios.priceList}}</h4>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="separator clear-left col-md-12">
+                                        <p class="btn-add col-sm-6">
+                                            <button type="button" name="{{servicios.id}}"  id="siguientePaso2" name="{{servicios.nameService}}"  value="{{servicios.priceList}}" class="btn btn-success btn-block" onclick=" Suma(this.value) ; miguel(this.name)"><i class="fa fa-shopping-cart"></i>COTIZAR</button></p>
+                                        <p style=""class="btn-details col-sm-6">
+                                            <button class="btn btn-info btn-block" id="InfoServicio" value={{servicios.id}} onclick="query(this.value)"><i class="fa fa-list"></i>VER MAS</button></p>
+                                    </div>
+                                    <div class="clearfix">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                     
+                    </div>
+                </div>
+
+                {% endfor %}
+                <input type="hidden" id="ServicioSeleccionado" name="ServicioSeleccionado" value="None">
+            </div>
+        </div>
             </div>
             <!-- /.box-body -->
           </div>  
@@ -248,11 +379,12 @@
           
             <!--/Slider-->
         </div>
-        <!--<div style="text-align:center;"  class="box-footer">
-                <a id="siguientePaso2" href="javascript:void(0)" class="btn btn-primary"> PASO 3</a>
+     
+        <div style="text-align:center;"  class="box-footer">
+                 <a id="regresar2" href="javascript:void(0)" class="btn btn-danger btn-block">REGRESAR</a>
               
                 
-              </div> -->
+              </div> 
 
     </div>
 </div> 
@@ -261,51 +393,78 @@
            </div>
 
            <div class="box-body paso3">
-           <div class="box-header with-border">
-              <h3 class="box-title">PASO 3</h3>
-            </div>
+           
             <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-header with-border">
-              <h3 class="box-title">Seleccione Productos a contratar</h3>
+              <h3 class="box-title">SELECCIONE PRODUCTOS ADICIONALES PARA TU EVENTO</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-                
-                <div class="carousel-inner">
-                  {% for productos  in productos  %}
-                  <div class="item">
-                  <div style="text-align:center;margin-lef:3em;" class="form-group">
-                  <div class="checkbox">
-                    <label>
-                      <input name="{{productos.nameProduct}}" onclick=" Suma(this.checked,this.value)" value="{{productos.priceList}}" type="checkbox">
-                      {{productos.nameProduct}} - ${{productos.priceList}}
-                    </label>
-                  </div>
-                  
-                  
+              <div class="row">
+            <div class="col-md-5">
+                <h3>
+                    Productos</h3>
+            </div>
+            <div class="col-md-6">
+                <!-- Controls -->
+                <div class="controls pull-right ">
+                    <a class="left fa fa-chevron-left btn btn-success" href="#carousel-example"
+                        data-slide="prev"></a><a class="right fa fa-chevron-right btn btn-success" href="#carousel-example"
+                            data-slide="next"></a>
                 </div>
-                    <img src="http://localhost:8000/media/{{productos.image}}" alt="{{productos.nameProduct}}">
-
-                    
-                  </div>
-                    
-                  {% endfor %}
-                  <div class="item active">
-                    <img src="{% static "img/multipoint.png" %}" alt="Logo">
-
-                    
-                  </div>
-                  
+            </div>
+        </div>
+        <div id="carousel-example" class="carousel slide " data-ride="carousel">
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <img style="width:350px; height:320px;" class="img-responsive"  src="{% static "img/multipoint.png" %}" alt="Logo">
+                        </div>
+                       
+                        
+                       
+                    </div>
                 </div>
-                <a class="left carousel-control" href="javascript:void(0)" data-slide="prev">
-                  <span class="fa fa-angle-left"></span>
-                </a>
-                <a class="right carousel-control" href="javascript:void(0)" data-slide="next">
-                  <span class="fa fa-angle-right"></span>
-                </a>
-              </div>
+                 {% for productos  in productos  %}
+                <div class="item">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-item">
+                                <div class="photo">
+                                    <img src="http://localhost:8000/media/{{productos.image}}" style="width:350px; height:260px;" class="img-responsive" alt="a" />
+                                </div>
+                                <div class="info">
+                                    <div class="row">
+                                        <div class="price col-md-12">
+                                            <h3>
+                                                {{productos.nameProduct}}</h3>
+                                            <h4 class="price-text-color">
+                                                ${{productos.priceList}}</h4>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="separator clear-left col-md-12">
+                                        <p class="btn-add col-sm-6">
+                                            <button type="button"  id="siguientePaso2" name="{{productos.nameProduct}}"  value="{{productos.priceList}}" class="btn btn-success btn-block" onclick=" Suma(this.value)"><i class="fa fa-shopping-cart"></i>AGREGAR</button></p>
+                                        <p style=""class="btn-details col-sm-6">
+                                            <button class="btn btn-info btn-block" id="InfoServicio" value={{productos.id}} onclick="query(this.value)"><i class="fa fa-list"></i>VER MAS</button></p>
+                                    </div>
+                                    <div class="clearfix">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                       
+                    </div>
+                </div>
+
+                 {% endfor %}
+            </div>
+        </div>
             </div>
             <!-- /.box-body -->
           </div>
@@ -363,7 +522,7 @@
                 
 
                 <div style="text-align:center;" class="form-group col-md-12">
-                  <h3>Monto A Pagar</h3>
+                  <h3>PRECIO TOTAL EVENTO</h3>
                   <p style="font-size: 4em;">$<estrong id="Monto">0</estrong></p>
                   <input type="hidden" name="total" value="0">
                   
@@ -581,14 +740,14 @@ $("#servicio").change(function () {
 
 <script>
 
-function miguel(isChecked, myValue) {
-  if(isChecked){
-    console.log('miguel'+myValue);
-    console.log(myValue);
+function miguel( myValue) {
+  if(myValue){
+    
     
     $('#ServicioSeleccionado').val(myValue);
   }
   else{
+
     
      $('#ServicioSeleccionado').val('None');
   }
@@ -597,19 +756,22 @@ function miguel(isChecked, myValue) {
 
 
 
-function Suma(isChecked, myValue)
+function Suma(myValue)
 {
+  
+ 
 tot = parseFloat(document.form1.total.value);
 myValue = parseFloat(myValue);
-if (isChecked) {
+
  document.form1.total.value = tot + myValue; 
  $('#Monto').html(tot + myValue)
 
-}
+/*
 else{
   document.form1.total.value = tot - myValue;
   $('#Monto').html(tot - myValue)
 } 
+*/
 }
 </script>
 <script>

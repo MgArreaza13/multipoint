@@ -36,7 +36,8 @@ from apps.Configuracion.models import tb_formasDePago
 from apps.Configuracion.models import tb_tipoIngreso
 
 from apps.scripts.SumarHora import sumar_hora
-
+from apps.Client.models import tb_client_WEB
+from apps.Configuracion.models import tb_logo
 
 
 
@@ -76,6 +77,7 @@ def StatusChange(request ):
 	reserva.PagoOnline = True
 	reserva.save()
 	print(request.user)
+
 	## hay que crear este usuario en la base de Datos 'ReservasWeb'
 	user = auth.authenticate(username='ReservasWeb', password='miguel123')
 	ingreso = tb_ingreso()
@@ -117,6 +119,7 @@ def Pago(request, id_reserva):
 
 @login_required(login_url = 'Demo:login' )
 def ReservaWebPorPagar(request, id_reserva):
+	logo = tb_logo.objects.get(id=1)
 	reserva = tb_reservasWeb.objects.get(id=id_reserva)
 	admin = tb_profile.objects.filter(tipoUser='Administrador')
 	administrador = admin[0]
@@ -154,6 +157,7 @@ def ReservaWebPorPagar(request, id_reserva):
 			
 	return render(request , 'ReservasWeb/FacturaPorPagar.html' , {'fallido':fallido,
 			'Form':Form,
+			'logo':logo,
 			'reserva':reserva,
 			'administrador':administrador,
 			'fecha':fecha,})
@@ -232,17 +236,17 @@ def web(request):
 	servicios = tb_service.objects.all()
 	Form = ReservasWebForm
 	notificacion = Notificacion()
+
+	user = tb_client_WEB()
 	fallido = None
 	if request.method == 'POST':
 		Form = ReservasWebForm(request.POST or None)
 		if Form.is_valid():
-			print(request.POST)
 			turno = Form.save(commit=False)
 			turno.dateTurn = request.POST['TurnDate']
 			turno.HoraTurn = request.POST['TimeTurn']
 			turno.statusTurn = tb_status.objects.get(nameStatus="Sin Aprobar")
 			turno.servicioPrestar=tb_service.objects.get(id = request.POST['ServicioSeleccionado'])
-			
 			turno.montoAPagar = float(request.POST['total'])  
 			turno.description = 'Sin Descripcion'
 			turno.HoraTurnEnd = sumar_hora(request.POST['TimeTurn'], "3:00")
@@ -250,6 +254,19 @@ def web(request):
 			notificacion.nombre = turno.nombre
 			notificacion.dateTurn = turno.dateTurn
 			notificacion.save()
+			#creo el cliente web , debo validar si ya existe y agregar un contador
+			query_set_user = tb_client_WEB.objects.filter(mail= turno.mail)
+			if (len(query_set_user) == 1):
+				print('entre en el condicional')
+				query_set_user[0].numeroReservasWeb += 1
+				query_set_user[0].save()
+			else:
+				user = tb_client_WEB()
+				user.nombre = turno.nombre
+				user.mail = turno.mail 
+				user.telefono = turno.telefono
+				user.save()
+
 			turno_enviar = tb_reservasWeb.objects.get(id=turno.id)
 			mensaje ="se ha registrado de forma correcta sus datos gracias por contactarnos"
 			#mandar mensaje de nuevo usuario
@@ -277,9 +294,10 @@ def Factura(request, id_reservas):
 	fecha = date.today()
 	admin = tb_profile.objects.filter(tipoUser='Administrador')
 	administrador = admin[0]
+	logo = tb_logo.objects.get(id=1)
 
 	
-	return render(request, 'ReservasWeb/Confirmacion.html', {'reserva':reserva,'administrador':administrador ,'fecha':fecha})
+	return render(request, 'ReservasWeb/Confirmacion.html', {'reserva':reserva,'logo':logo, 'administrador':administrador ,'fecha':fecha})
 
 
 @login_required(login_url = 'Demo:login' )
