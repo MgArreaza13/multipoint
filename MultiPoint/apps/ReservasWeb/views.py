@@ -43,6 +43,25 @@ from apps.Configuracion.models import tb_logo
 
 
 
+def CorreoDePagoSucursal(request):
+	pk = request.GET.get('pk', None)
+	reserva = tb_reservasWeb.objects.get(id= pk)
+	mensaje = "Gracias Por registrar Su Pago"
+	usuario = reserva.mail #trato de traer el colaborador del formulario
+	email_subject_usuario = 'Multipoint - Gracias Por Registrar su Reserva'
+	email_body_usuario = "Hola %s, gracias por hacer tu reserva con nosotros te recordamos que debes concretar el pago en nuestra sucursal en las proxima 24 horas para camniar el status de tu reserva, muchas gracias " %(reserva.nombre)
+	message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+	#mensaje para apreciasoft
+	email_subject_Soporte = 'Multipoint - Nueva Reserva WEB Completada Y Proximamente pagada en sucursal'
+	email_body_Soporte = "se ha registrado  una  nueva reserva , nombre:%s . correo:%s, numero:%s , te invitamos a contactarla y luego a cambiar el status de la reserva luego que se complete el pago en la sucursal, revisa el status  en  http://multipoint.pythonanywhere.com/reservas/list/" %(reserva.nombre, reserva.mail, reserva.telefono)
+	message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com"])
+	#enviamos el correo
+	send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+	data = {
+		'status':'ok'
+	}
+	return JsonResponse(data)
+
 def validacion(request):
 	id_servicio = request.GET.get('id_servicio', None)
 	ser=tb_service.objects.filter(id=id_servicio)

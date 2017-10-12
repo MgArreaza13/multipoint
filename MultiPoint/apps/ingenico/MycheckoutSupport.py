@@ -18,7 +18,7 @@ def Pago_Online(monto):
 	hosted_checkout_specific_input = HostedCheckoutSpecificInput()
 	hosted_checkout_specific_input.locale = "en_GB"
 	hosted_checkout_specific_input.variant = "testVariant"
-	#hosted_checkout_specific_input.return_url = "http://localhost:8000/reservas/Procesar/Pago/Status/Retorno"
+	#hosted_checkout_specific_input.return_url = "http://multipoint.pythonanywhere.com/reservas/Procesar/Pago/Status/Retorno"
 
 	amount_of_money = AmountOfMoney()
 	amount_of_money.amount = monto*100

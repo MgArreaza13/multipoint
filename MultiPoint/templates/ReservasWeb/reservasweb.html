@@ -340,7 +340,7 @@
                         <div class="col-xs-12">
                             <div class="col-item">
                                 <div class="photo">
-                                    <img src="http://localhost:8000/media/{{servicios.image}}" class="img-responsive" style="width:350px; height:260px;" alt="a" />
+                                    <img src="http://multipoint.pythonanywhere.com/media/{{servicios.image}}" class="img-responsive" style="width:350px; height:260px;" alt="a" />
                                 </div>
                                 <div class="info">
                                     <div class="row">
@@ -434,7 +434,7 @@
                         <div class="col-xs-12">
                             <div class="col-item">
                                 <div class="photo">
-                                    <img src="http://localhost:8000/media/{{productos.image}}" style="width:350px; height:260px;" class="img-responsive" alt="a" />
+                                    <img src="http://multipoint.pythonanywhere.com/media/{{productos.image}}" style="width:350px; height:260px;" class="img-responsive" alt="a" />
                                 </div>
                                 <div class="info">
                                     <div class="row">
@@ -448,7 +448,7 @@
                                     </div>
                                     <div class="separator clear-left col-md-12">
                                         <p class="btn-add col-sm-6">
-                                            <button type="button"  id="siguientePaso2" name="{{productos.nameProduct}}"  value="{{productos.priceList}}" class="btn btn-success btn-block" onclick=" Suma(this.value)"><i class="fa fa-shopping-cart"></i>AGREGAR</button></p>
+                                            <button type="button"  id="siguientePaso2" name="{{productos.nameProduct}}"  value="{{productos.priceList}}" class="btn btn-success btn-block" onclick=" Suma(this.value); Desabilitar(this); "><i class="fa fa-shopping-cart"></i>AGREGAR</button></p>
                                         <p style=""class="btn-details col-sm-6">
                                             <button class="btn btn-info btn-block" id="InfoServicio" value={{productos.id}} onclick="query(this.value)"><i class="fa fa-list"></i>VER MAS</button></p>
                                     </div>
@@ -630,12 +630,30 @@
 <script src="{% static 'bootstrap/js/notificaciones.js'%}"></script>
 
 <script>
-    
+    //desabhilito el boton de cada producto luego que es agregado 
+
+    setInterval(function(){ validarBotonPaso1(); }, 300);
+
+    function validarBotonPaso1(){
+      if ($('#campo1').val() != "" && $('#campo2').val() != "" && $('#campo3').val() != ""){
+        
+        $('#siguientePaso').attr("disabled", false);
+      }
+      else{
+        
+        $('#siguientePaso').attr("disabled", true);
+      }
+    }
+
+    function Desabilitar(boton){
+      console.log(boton);
+      $(boton).attr("disabled", true);
+    }
 
    function query(val){
     var id_servicio =  val;
     $.ajax({
-        url: 'http://localhost:8000/servicios/consulta/detail',
+        url: 'http://multipoint.pythonanywhere.com/servicios/consulta/detail',
         data: {
           'id_servicio': id_servicio
       },

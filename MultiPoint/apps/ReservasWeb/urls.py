@@ -12,6 +12,10 @@ from apps.ReservasWeb.views import Pago
 from apps.ReservasWeb.views import Status
 from apps.ReservasWeb.views import StatusChange
 from apps.ReservasWeb.views import returnPago
+from apps.ReservasWeb.views import CorreoDePagoSucursal
+
+
+
 
 urlpatterns = [
 
@@ -29,4 +33,6 @@ urlpatterns = [
 	url(r'^Procesar/Pago/Status$', Status, name='Status'  ),
 	url(r'^Procesar/Pago/Status/change$', StatusChange, name='StatusChange'  ),
 	url(r'^Procesar/Pago/Status/Retorno$', returnPago, name='returnPago'  ),
+	url(r'^Correo/Pago/Sucursal$', CorreoDePagoSucursal, name='CorreoDePagoSucursal'  ),
+
 ]
