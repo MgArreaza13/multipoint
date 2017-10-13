@@ -9,7 +9,7 @@ from apps.Configuracion.models import tb_tipoProducto
 class tb_product (models.Model):
 	user 				=	 models.ForeignKey(settings.AUTH_USER_MODEL)
 	nameProduct			=	 models.CharField(default='', null=False, max_length=30)
-	descriptionProduct	=	 models.CharField(default='', null=False, max_length=330)
+	descriptionProduct	=	 models.TextField(default='', null=False, max_length=33000)
 	tipoProducto 		=	 models.ForeignKey(tb_tipoProducto, on_delete=models.CASCADE, null=False, default='' )
 	#codProduct			=	 models.PositiveIntegerField(default='', null=False)
 	proveedor			=	 models.ForeignKey(tb_proveedor, on_delete=models.CASCADE, null=False, default='' )

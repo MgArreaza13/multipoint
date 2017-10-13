@@ -6,6 +6,7 @@ from apps.Product.views import EditarProducto
 from apps.Product.views import EliminarProducto
 from apps.Product.views import ListProductos
 from apps.Product.views import pructosCliente
+from apps.Product.views import ProductiDetail
 
 
 urlpatterns = [
@@ -17,5 +18,5 @@ urlpatterns = [
 	url(r'^Nuevo/$', NuevoProducto , name='NuevoProducto'  ),
 	url(r'^Editar/(?P<id_producto>\d+)$', EditarProducto, name='EditarProducto'  ),
 	url(r'^Borrar/(?P<id_producto>\d+)$', EliminarProducto, name='EliminarProducto'  ),
-  
+  	url(r'^consulta/detail$', ProductiDetail, name='ProductiDetail'  ),
 ]

@@ -5,7 +5,7 @@ from apps.Product.forms import ProductForm
 
 from apps.UserProfile.models import tb_profile
 from apps.scripts.validatePerfil import validatePerfil
-
+from django.http import JsonResponse
 
 #datos para la vista principal arriba de las citas y los ingresos.
 from django.db.models import Count, Min, Sum, Avg
@@ -13,6 +13,24 @@ from datetime import date
 from apps.Turn.models import tb_turn
 from apps.Caja.models import tb_ingreso
 from apps.Caja.models import tb_egreso
+
+
+
+
+def ProductiDetail(request):
+	id_producto = request.GET.get('id_producto', None)
+	pro=tb_product.objects.filter(id=id_producto)
+	producto = pro[0]
+	data = {
+        'value':producto.priceList,
+        'nombre':producto.nameProduct,
+        'descripcion':producto.descriptionProduct,
+
+    }
+	return JsonResponse(data)
+
+
+
 
 
 @login_required(login_url = 'Demo:login' )
