@@ -14,7 +14,7 @@ class tb_reservasWeb (models.Model):
 	statusTurn 				=	models.ForeignKey(tb_status, on_delete=models.CASCADE, null=False, default='')
 	montoAPagar				=   models.IntegerField(default=0, null=False, blank=True)
 	isPay			 		=	models.BooleanField(null=False, blank=True , default=False)
-	description				=	models.CharField(default='Sin Descripcion', null=False, max_length=30, blank=True)	
+	description				=	models.TextField(default='Sin Descripcion', null=False, max_length=3000000, blank=True)	
 	ingenico_id             =  	models.TextField(default='None', null=False, max_length=3000)
 	PagoOnline			 	=	models.BooleanField(null=False, blank=True , default=False)
 	def __str__(self):

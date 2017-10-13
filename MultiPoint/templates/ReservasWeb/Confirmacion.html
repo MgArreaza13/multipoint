@@ -145,7 +145,11 @@
             <tbody>
             <tr>
               
-              <td>{{reserva.servicioPrestar}}</td>
+              <td>{{reserva.servicioPrestar}} 
+              {% if reserva.description != 'Sin Descripcion' %} <br>
+                Con los siguientes productos :   <br>{{reserva.description |safe}}  
+              {% endif %}
+              </td>
               <td>{{reserva.dateTurn}}</td>
               <td>{{reserva.HoraTurn}}</td>
               

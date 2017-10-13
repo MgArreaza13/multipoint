@@ -354,7 +354,7 @@
                                     </div>
                                     <div class="separator clear-left col-md-12">
                                         <p class="btn-add col-sm-6">
-                                            <button type="button" name="{{servicios.id}}"  id="siguientePaso2" name="{{servicios.nameService}}"  value="{{servicios.priceList}}" class="btn btn-success btn-block" onclick=" Suma(this.value) ; miguel(this.name)"><i class="fa fa-shopping-cart"></i>COTIZAR</button></p>
+                                            <button type="button" name="{{servicios.id}}"  id="siguientePaso2" name="{{servicios.nameService}}"  value="{{servicios.priceList}}" class="btn btn-success btn-block" onclick="Suma(this.value);  ServiceSelected(this.name);"><i class="fa fa-shopping-cart"></i>COTIZAR</button></p>
                                         <p style=""class="btn-details col-sm-6">
                                             <button class="btn btn-info btn-block" id="InfoServicio" value={{servicios.id}} onclick="query(this.value)"><i class="fa fa-list"></i>VER MAS</button></p>
                                     </div>
@@ -376,7 +376,6 @@
             <!-- /.box-body -->
           </div>  
         </div>
-          
             <!--/Slider-->
         </div>
      
@@ -448,7 +447,7 @@
                                     </div>
                                     <div class="separator clear-left col-md-12">
                                         <p class="btn-add col-sm-6">
-                                            <button type="button"  id="siguientePaso2" name="{{productos.nameProduct}}"  value="{{productos.priceList}}" class="btn btn-success btn-block" onclick=" Suma(this.value); Desabilitar(this); "><i class="fa fa-shopping-cart"></i>AGREGAR</button></p>
+                                            <button type="button" name="{{productos.nameProduct}}"  id="siguientePaso2" name="{{productos.nameProduct}}"  value="{{productos.priceList}}" class="btn btn-success btn-block" onclick=" Suma(this.value); Desabilitar(this); ProductSeleccionado(this.name); "><i class="fa fa-shopping-cart"></i>AGREGAR</button></p>
                                         <p style=""class="btn-details col-sm-6">
                                             <button type="button" class="btn btn-info btn-block" id="InfoServicio" value={{productos.id}} onclick="queryProducto(this.value)"><i class="fa fa-list"></i>VER MAS</button></p>
                                     </div>
@@ -463,6 +462,7 @@
                 </div>
 
                  {% endfor %}
+          <input type="hidden" id="ProductosSeleccionados" name="ProductosSeleccionados" value=" ">
             </div>
         </div>
             </div>
@@ -804,8 +804,8 @@ $("#servicio").change(function () {
 
 <script>
 
-function miguel( myValue) {
-  if(myValue){
+function ServiceSelected(myValue) {
+   if(myValue){
     
     
     $('#ServicioSeleccionado').val(myValue);
@@ -815,8 +815,20 @@ function miguel( myValue) {
     
      $('#ServicioSeleccionado').val('None');
   }
-
 }
+
+function ProductSeleccionado(product) {
+      if(product){
+       
+       var  html = $('#ProductosSeleccionados').val();
+        html +=   '<li style="list-style:none;">'+ product +'</li>'  ;
+        
+        $('#ProductosSeleccionados').val(html);
+      }
+      else{
+         $('#ProductosSeleccionados').val(' ');
+      }
+    }
 
 
 

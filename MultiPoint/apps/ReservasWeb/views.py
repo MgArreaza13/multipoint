@@ -261,13 +261,18 @@ def web(request):
 	if request.method == 'POST':
 		Form = ReservasWebForm(request.POST or None)
 		if Form.is_valid():
+			print(request.POST)
 			turno = Form.save(commit=False)
 			turno.dateTurn = request.POST['TurnDate']
 			turno.HoraTurn = request.POST['TimeTurn']
 			turno.statusTurn = tb_status.objects.get(nameStatus="Sin Aprobar")
 			turno.servicioPrestar=tb_service.objects.get(id = request.POST['ServicioSeleccionado'])
 			turno.montoAPagar = float(request.POST['total'])  
-			turno.description = 'Sin Descripcion'
+			if request.POST['ProductosSeleccionados'] != ' ':
+				turno.description = request.POST['ProductosSeleccionados']
+			else:
+				turno.description = 'Sin Descripcion'
+			print(turno.description)
 			turno.HoraTurnEnd = sumar_hora(request.POST['TimeTurn'], "3:00")
 			turno.save()
 			notificacion.nombre = turno.nombre
