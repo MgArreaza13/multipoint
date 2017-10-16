@@ -142,7 +142,7 @@
                     {% if ReservaWebEditar.id == reserva.id and reserva.statusTurn.nameStatus != 'Confirmada'  %}
                     <!--form-->
                     <tr>
-                    <td><a href="#">{{reserva.id}}</a></td>
+                    <td><a href="{% url "Reservas:DetallesWeb" reserva.id %}" target="_blank">{{reserva.id}}</a></td>
                     <td>{{reserva.nombre}}</td>
                           <td>{{reserva.mail}}</td>
                           <td>{{reserva.telefono}}</td>
@@ -271,7 +271,7 @@
                   </tr>
                       {% elif ReservaWebEditar.id != reserva.id and reserva.statusTurn.nameStatus != 'Confirmada'   %}
                         <tr>
-                          <td><a href="#">{{reserva.id}}</a></td>
+                          <td><a href="{% url "Reservas:DetallesWeb" reserva.id %} " target="_blank">{{reserva.id}}</a></td>
                           <td>{{reserva.nombre}}</td>
                           <td>{{reserva.mail}}</td>
                           <td>{{reserva.telefono}}</td>

@@ -34,16 +34,25 @@ from apps.Product.models import tb_product
 from apps.Notificaciones.models import Notificacion
 
 from apps.Caja.forms import WebReservasIngresoForm
-
+from apps.scripts.SumarHora import sumar_hora
 
 
 from ingenico.connect.sdk.factory import Factory
 from apps.ingenico.MycheckoutSupport import Pago_Online
 from apps.ingenico.MycheckoutSupport import statusDePago
+from apps.Configuracion.models import tb_logo
 
 
+@login_required(login_url = 'Demo:login' )
+def DetallesTurn(request, id_turn):
+	reserva = tb_turn.objects.get(id=id_turn)
+	fecha = date.today()
+	admin = tb_profile.objects.filter(tipoUser='Administrador')
+	administrador = admin[0]
+	logo = tb_logo.objects.get(id=1)
 
-
+	
+	return render(request, 'Turn/DetallesTurn.html', {'reserva':reserva,'logo':logo, 'administrador':administrador ,'fecha':fecha})
 
 
 def FacturaTurn(request, id_turn):
@@ -230,6 +239,7 @@ def NuevoTurnClient(request , id_client):
 				turno.client = tb_client.objects.get(user__user__id = request.user.id)
 				turno.dateTurn = request.POST['TurnDate']
 				turno.HoraTurn = request.POST['TimeTurn']
+				turno.HoraTurnEnd = sumar_hora(request.POST['TimeTurn'], "3:00")
 				if request.POST['extraInfoTurn'] == "":
 					turno.extraInfoTurn = 'Sin Comentarios'
 				else:
@@ -303,6 +313,7 @@ def NuevoTurnParaHoy(request):
 				turno.user = request.user
 				turno.dateTurn = fecha
 				turno.HoraTurn = request.POST['TimeTurn']
+				turno.HoraTurnEnd = sumar_hora(request.POST['TimeTurn'], "3:00")
 				if request.POST['extraInfoTurn'] == "":
 					turno.extraInfoTurn = 'Sin Comentarios'
 				else:
@@ -353,6 +364,8 @@ def NuevoTurnParaHoy(request):
 def EditTurnStatus(request , id_turn):
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	perfil = result[0]
+	tipo = 'TURNO'
+	Reservas = tb_reservasWeb.objects.exclude(statusTurn__nameStatus='Sin Aprobar').order_by('dateTurn')
 	turnos = tb_turn.objects.filter(dateTurn = date.today()).order_by('HoraTurn')
 	TurnEditar = tb_turn.objects.get(id = id_turn)
 	fallido = None
@@ -371,8 +384,8 @@ def EditTurnStatus(request , id_turn):
 			turno.isPay = TurnEditar.isPay
 			turno.save()
 			mensaje = "hemos cargado sus nuevos datos de manera exitosa"
-			return render (request, 'Turn/ResumenTurnos.html', {'turnos':turnos,'Form':Form, 'TurnEditar':TurnEditar, 'perfil':perfil, 'mensaje':mensaje})
-	return render (request, 'Turn/ResumenTurnos.html', {'turnos':turnos,'Form':Form, 'TurnEditar':TurnEditar, 'perfil':perfil, 'fallido':fallido})
+			return render (request, 'Turn/ResumenTurnos.html', {'turnos':turnos,'Form':Form,'tipo':tipo, 'Reservas':Reservas, 'TurnEditar':TurnEditar, 'perfil':perfil, 'mensaje':mensaje})
+	return render (request, 'Turn/ResumenTurnos.html', {'turnos':turnos,'Form':Form,'tipo':tipo, 'Reservas':Reservas, 'TurnEditar':TurnEditar, 'perfil':perfil, 'fallido':fallido})
 
 
 #lista todo los turnos en la tabla
@@ -380,7 +393,7 @@ def EditTurnStatus(request , id_turn):
 def listTurnos(request):
 	TurnEditar = -1 #para poder saber que turnos se le mostrara el formulario, verifico que ningun id coincida con -1
 	turnos = tb_turn.objects.all().order_by('dateTurn')
-	Reservas = tb_reservasWeb.objects.all().order_by('dateTurn')
+	Reservas = tb_reservasWeb.objects.exclude(statusTurn__nameStatus='Sin Aprobar').order_by('dateTurn')
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	perfil = result[0]
 	formulario = False
@@ -425,6 +438,7 @@ def NuevoTurn(request):
 				turno.user = request.user
 				turno.dateTurn = request.POST['TurnDate']
 				turno.HoraTurn = request.POST['TimeTurn']
+				turno.HoraTurnEnd = sumar_hora(request.POST['TimeTurn'], "3:00")
 				if request.POST['extraInfoTurn'] == "":
 					turno.extraInfoTurn = 'Sin Comentarios'
 				else:
@@ -493,7 +507,9 @@ def EditTurn(request , id_turn):
 @login_required(login_url = 'Demo:login' )
 def EditTurnList(request , id_turn):
 	formulario = True
+	tipo = 'TURNO'
 	turnos = tb_turn.objects.all().order_by('dateTurn')
+	Reservas = tb_reservasWeb.objects.exclude(statusTurn__nameStatus='Sin Aprobar').order_by('dateTurn')
 	TurnEditar = tb_turn.objects.get(id = id_turn)
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	perfil = result[0]
@@ -514,7 +530,7 @@ def EditTurnList(request , id_turn):
 			turno.isPay = TurnEditar.isPay
 			turno.save()
 			return redirect ('Turnos:listTurnos')
-	return render (request, 'Turn/ListaDeTurnos.html', {'TurnEditar':TurnEditar,'turnos':turnos,'Form':Form , 'perfil':perfil})
+	return render (request, 'Turn/ListaDeTurnos.html', {'TurnEditar':TurnEditar,'tipo':tipo ,'Reservas':Reservas,'turnos':turnos,'Form':Form , 'perfil':perfil})
 
 
 

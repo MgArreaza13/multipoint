@@ -118,11 +118,11 @@
                   <tbody>
 
                   {% for turno in turnos  %}
-                    {% if TurnEditar.id == turno.id  %}
+                    {% if TurnEditar.id == turno.id and tipo == 'TURNO'  %}
                       <!--form-->
                         {% if turno.statusTurn.nameStatus != 'Finalizado' and turno.statusTurn.nameStatus != 'No Aprobada' %}
                         <tr>
-                        <td><a href="#">{{turno.id}}</a></td>
+                        <td><a href="{% url "Turnos:DetallesTurn" turno.id %}" target="_blank">TURNO-{{turno.id}}</a></td>
                         <td><a href="{% url "Clientes:ClienteProfile" turno.client.id %}">{{turno.client}}</a></td>
                          
                          <td>{{turno.HoraTurn}}</td>
@@ -242,7 +242,7 @@
                        {% if turno.statusTurn.nameStatus != 'Finalizada' and turno.statusTurn.nameStatus != 'No Aprobada' %}
                         <tr>
                         
-                        <td><a href="#">{{turno.id}}</a></td>
+                        <td><a href="{% url "Turnos:DetallesTurn" turno.id %}" target="_blank">TURNO-{{turno.id}}</a></td>
                         <td><a href="{% url "Clientes:ClienteProfile" turno.client.id %}">{{turno.client}}</a></td>
                          
                          <td>{{turno.HoraTurn}}</td>
@@ -285,11 +285,11 @@
                   <!-- ######################################################## -->
 
                   {% for turno in reservas  %}
-                    {% if TurnEditar.id == turno.id  %}
+                    {% if TurnEditar.id == turno.id and tipo == 'WEB' %}
                       <!--form-->
                         {% if turno.statusTurn.nameStatus != 'Finalizado' and turno.statusTurn.nameStatus != 'No Aprobada' %}
                         <tr>
-                        <td><a href="#">{{turno.id}}</a></td>
+                        <td><a href="{% url "Reservas:DetallesWeb" turno.id %} " target="_blank">RESERVA-{{turno.id}}</a></td>
                         <td>{{turno.nombre}}</td>
                          
                          <td>{{turno.HoraTurn}}</td>
@@ -409,7 +409,7 @@
                        {% if turno.statusTurn.nameStatus != 'Finalizada' and turno.statusTurn.nameStatus != 'No Aprobada' %}
                         <tr>
                         
-                        <td><a href="#">{{turno.id}}</a></td>
+                        <td><a href="{% url "Reservas:DetallesWeb" turno.id %} " target="_blank">RESERVA-{{turno.id}}</a></td>
                         <td>{{turno.nombre}}</td>
                          
                          <td>{{turno.HoraTurn}}</td>
@@ -440,7 +440,7 @@
 
                         {% if user.is_authenticated and user.is_staff == True and user.is_superuser == True  or request.user.id == turno.collaborator.user.id%}
                         <td>
-                            <a href="{% url "Reservas:EditReservaList" turno.id %}" style="background-color:#39CCCC;" class="label">STATUS</a>
+                            <a href="{% url "Reservas:EditReservaWebStatus" turno.id %}" style="background-color:#001F3F;" class="label">EDITAR STATUS</a>
                         </td>
                       </tr>
                        {% endif %}
@@ -499,7 +499,7 @@
                     {% if turno.statusTurn.nameStatus == 'Finalizada' %}
                         <tr>
                         
-                        <td><a href="#">{{turno.id}}</a></td>
+                        <td><a href="{% url "Turnos:DetallesTurn" turno.id %}" target="_blank">{{turno.id}}</a></td>
                         <td><a href="{% url "Clientes:ClienteProfile" turno.client.id %}">{{turno.client}}</a></td>
                       {% if turno.PagoOnline == 'True' %}
                             <td> Pagado Online </td>
@@ -522,7 +522,7 @@
                     {% if turno.statusTurn.nameStatus == 'Finalizada' %}
                         <tr>
                         
-                        <td><a href="#">{{turno.id}}</a></td>
+                        <td><a href="{% url "Reservas:DetallesWeb" turno.id %} " target="_blank">{{turno.id}}</a></td>
                         <td>{{turno.nombre}}</td>
                       {% if turno.PagoOnline == 'True' %}
                             <td> Pagado Online </td>
@@ -588,7 +588,7 @@
                     {% if turno.statusTurn.nameStatus == 'No Aprobada' %}
                         <tr>
                         
-                        <td><a href="#">{{turno.id}}</a></td>
+                        <td><a href="{% url "Turnos:DetallesTurn" turno.id %}" target="_blank">{{turno.id}}</a></td>
                         <td><a href="{% url "Clientes:ClienteProfile" turno.client.id %}">{{turno.client}}</a></td>
                         {% if turno.PagoOnline == 'True' %}
                             <td> Pagado Online </td>
@@ -613,7 +613,7 @@
                     {% if turno.statusTurn.nameStatus == 'No Aprobada' %}
                         <tr>
                         
-                        <td><a href="#">{{turno.id}}</a></td>
+                        <td><a href="{% url "Reservas:DetallesWeb" turno.id %} " target="_blank">{{turno.id}}</a></td>
                         <td>{{turno.nombre}}</td>
                         {% if turno.PagoOnline == 'True' %}
                             <td> Pagado Online </td>

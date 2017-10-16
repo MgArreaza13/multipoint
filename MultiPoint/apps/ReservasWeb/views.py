@@ -42,6 +42,65 @@ from apps.Configuracion.models import tb_logo
 
 
 
+#Edita los Status de los turnos
+@login_required(login_url = 'Demo:login' )
+def EditReservaWebStatus(request , id_turn):
+	result = validatePerfil(tb_profile.objects.filter(user=request.user))
+	perfil = result[0]
+	tipo = 'WEB'
+	reservas = tb_reservasWeb.objects.filter(dateTurn = date.today()).order_by('dateTurn')
+	turnos = tb_turn.objects.filter(dateTurn = date.today()).order_by('HoraTurn')
+	TurnEditar = tb_reservasWeb.objects.get(id = id_turn)
+	fallido = None
+	if request.method == 'GET':
+		Form= EditReservaWebForm(instance=TurnEditar)
+	else:
+		Form= EditReservaWebForm(request.POST,instance=TurnEditar)
+		if  Form.is_valid():
+			turno 		 = Form.save(commit=False)
+			turno.user	 = request.user
+			turno.save()
+			mensaje = "hemos cargado sus nuevos datos de manera exitosa"
+			return render (request, 'Turn/ResumenTurnos.html', {'turnos':turnos,'Form':Form,'tipo':tipo, 'reservas':reservas, 'TurnEditar':TurnEditar, 'perfil':perfil, 'mensaje':mensaje})
+	return render (request, 'Turn/ResumenTurnos.html', {'turnos':turnos,'Form':Form,'tipo':tipo, 'reservas':reservas, 'TurnEditar':TurnEditar, 'perfil':perfil, 'fallido':fallido})
+
+
+
+
+
+@login_required(login_url = 'Demo:login' )
+def EditReservaList2(request , id_turn):
+	formulario = True
+	tipo = 'WEB'
+	turnos = tb_turn.objects.all().order_by('dateTurn')
+	Reservas = tb_reservasWeb.objects.exclude(statusTurn__nameStatus='Sin Aprobar').order_by('dateTurn')
+	TurnEditar = tb_reservasWeb.objects.get(id = id_turn)
+	result = validatePerfil(tb_profile.objects.filter(user=request.user))
+	perfil = result[0]
+	if request.method == 'GET':
+		idturn = id_turn
+		Form= EditReservaWebForm(instance=TurnEditar)
+	else:
+		idturn = id_turn
+		Form= EditReservaWebForm(request.POST,instance=TurnEditar)
+		if  Form.is_valid():
+			turno 		 = Form.save(commit=False)
+			turno.user	 = request.user
+			turno.save()
+			return redirect ('Turnos:listTurnos')
+	return render (request, 'Turn/ListaDeTurnos.html', {'TurnEditar':TurnEditar,'tipo':tipo ,'Reservas':Reservas,'turnos':turnos,'Form':Form , 'perfil':perfil})
+
+
+@login_required(login_url = 'Demo:login' )
+def DetallesWeb(request, id_reservas):
+	reserva = tb_reservasWeb.objects.get(id=id_reservas)
+	fecha = date.today()
+	admin = tb_profile.objects.filter(tipoUser='Administrador')
+	administrador = admin[0]
+	logo = tb_logo.objects.get(id=1)
+
+	
+	return render(request, 'ReservasWeb/DetallesWeb.html', {'reserva':reserva,'logo':logo, 'administrador':administrador ,'fecha':fecha})
 
 def CorreoDePagoSucursal(request):
 	pk = request.GET.get('pk', None)

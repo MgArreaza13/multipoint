@@ -21,7 +21,7 @@ class TurnForm(forms.ModelForm):
 		
 		
 		]
-		exclude = ['user', 'dateTurn', 'HoraTurn', 'extraInfoTurn', 'servicioPrestar',]
+		exclude = ['user', 'dateTurn', 'HoraTurn', 'extraInfoTurn', 'servicioPrestar', 'HoraTurnEnd',]
 
 		labels = {
 		'dateTurn':'Fecha Para El turno', 
@@ -69,7 +69,7 @@ class TurnFormClient(forms.ModelForm):
 		
 		
 		]
-		exclude = ['user', 'dateTurn','client', 'statusTurn','HoraTurn', 'extraInfoTurn', 'servicioPrestar',]
+		exclude = ['user', 'dateTurn','client', 'statusTurn','HoraTurn', 'extraInfoTurn', 'servicioPrestar', 'HoraTurnEnd',]
 
 		labels = {
 		'dateTurn':'Fecha Para El turno', 
@@ -109,7 +109,7 @@ class EditTurnForm(forms.ModelForm):
 		
 		
 		]
-		exclude = ['user', 'dateTurn',  'client',  'extraInfoTurn', 'isPay', 'servicioPrestar',]
+		exclude = ['user', 'dateTurn',  'client',  'extraInfoTurn', 'isPay', 'servicioPrestar', 'HoraTurnEnd',]
 
 		labels = {
 		'statusTurn':'Estatus',
