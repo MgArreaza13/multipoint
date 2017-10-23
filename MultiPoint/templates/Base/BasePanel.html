@@ -52,7 +52,7 @@
 
 
 
-  <link rel="stylesheet" type="text/css" href="{% static "bootstrap/css/bootstrap-clockpicker.min.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "bootstrap/css/bootstrap-clockpicker.min.css" %}">
   <link rel="stylesheet" type="text/css" href="{% static "bootstrap/css/github.min.css" %}">
   <link rel="stylesheet" type="text/css" href="{% static "bootstrap/css/bootstrap-datepicker.adminlte.min.css" %}">
   <link rel="stylesheet" href="{% static "bootstrap/css/miguel.css" %}">
@@ -906,7 +906,36 @@
 <script src="{% static 'dist/js/pages/dashboard.js'%}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{% static 'dist/js/demo.js'%}"></script>
-<script src="{% static 'bootstrap/js/notificaciones.js'%}"></script>
+<script type="text/javascript" src="{% static "bootstrap/js/bootstrap-clockpicker.min.js" %}"></script>
+<script type="text/javascript" src="{% static "bootstrap/js/bootstrap-datepicker.adminlte.min.js" %}"></script>
+fullcalendar.min.js" %}"></script>
+<script type="text/javascript" src="{% static "bootstrap/js/bootstrap-clockpicker.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "bootstrap/js/highlight.min.js" %}"></script>
+<!-- Page specific script -->
+<script type="text/javascript" src="{% static "bootstrap/js/bootstrap-clockpicker.min.js" %}"></script>
+<script type="text/javascript" src="{% static "bootstrap/js/bootstrap-datepicker.adminlte.min.js" %}"></script>
+<!--<script src="{% static 'bootstrap/js/notificaciones.js'%}"></script>-->
+
+<script>
+
+$('.clockpicker').clockpicker({
+  placement: 'top',
+  donetext: 'GUARDAR'
+});
+
+</script>
+
+<script>
+  $("#TimeTurnStart").datepicker({
+    format: 'yyyy-mm-dd',
+     autoclose: true
+  });
+  $("#TimeTurnEnd").datepicker({
+    format: 'yyyy-mm-dd',
+     autoclose: true
+  });
+</script>
+
 
 {% endblock scripts %}
 

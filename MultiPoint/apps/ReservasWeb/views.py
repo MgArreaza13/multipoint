@@ -38,8 +38,23 @@ from apps.Configuracion.models import tb_tipoIngreso
 from apps.scripts.SumarHora import sumar_hora
 from apps.Client.models import tb_client_WEB
 from apps.Configuracion.models import tb_logo
+from apps.Configuracion.models import tb_turn_sesion
+from django.core import serializers
 
 
+
+
+
+
+
+
+def ReservaWebQueryset(request):
+	print('funciono entro')
+	date = request.GET.get('date', None)
+	print(date)
+	query = serializers.serialize("json", tb_reservasWeb.objects.filter(dateTurn = date))
+	print(query)
+	return HttpResponse(query)
 
 
 #Edita los Status de los turnos
@@ -314,6 +329,7 @@ def web(request):
 	servicios = tb_service.objects.all()
 	Form = ReservasWebForm
 	notificacion = Notificacion()
+	tipe_turnos = tb_turn_sesion.objects.all()
 
 	user = tb_client_WEB()
 	fallido = None
@@ -369,7 +385,7 @@ def web(request):
 		else:
 				fallido = "Errores en los datos Verifiquelos, y vuelva a intentarlo"
 				Form = ReservasWebForm()
-	return render(request, "ReservasWeb/reservasweb.html" , {'Form':Form,'servicios':servicios,'productos':productos ,'ReservasWeb':ReservasWeb ,'turnos':turnos ,'fallido':fallido,})
+	return render(request, "ReservasWeb/reservasweb.html" , {'Form':Form, 'tipe_turnos':tipe_turnos ,'servicios':servicios,'productos':productos ,'ReservasWeb':ReservasWeb ,'turnos':turnos ,'fallido':fallido,})
 
 
 def Factura(request, id_reservas):

@@ -17,7 +17,7 @@ from apps.ReservasWeb.views import DetallesWeb
 
 from apps.ReservasWeb.views import EditReservaList2
 from apps.ReservasWeb.views import EditReservaWebStatus
-
+from apps.ReservasWeb.views import ReservaWebQueryset
 
 
 urlpatterns = [
@@ -25,7 +25,7 @@ urlpatterns = [
 	#url(r'^$', Servicios , name='Servicios'  ),
 	#url(r'^Perfil/(?P<id_Client>\d+)$', ClienteProfile , name='ClienteProfile'  ),
 	url(r'^web/$', web , name='web'  ),
-
+	url(r'^web/consulta/$', ReservaWebQueryset , name='ReservaWebQueryset'  ),
 	url(r'^ajax/validacion/$', validacion , name='validacion'  ),
 	url(r'^factura/(?P<id_reservas>\d+)$', Factura , name='Factura'  ),
 	url(r'^detalles/(?P<id_reservas>\d+)$', DetallesWeb , name='DetallesWeb'  ),

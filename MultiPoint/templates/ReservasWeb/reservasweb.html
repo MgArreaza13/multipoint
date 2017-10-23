@@ -53,6 +53,18 @@
   <script src="{% static "plugins/jQuery/jquery-2.2.3.min.js" %}"></script>
   <link rel="stylesheet" href="{% static "bootstrap/css/miguel.css" %}">
 
+
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.11.0/sweetalert2.all.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.11.0/sweetalert2.common.min.js'></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.11.0/sweetalert2.min.css">
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.11.0/sweetalert2.min.js'></script>
+
+
+
+
+
+
   <style>
     
     .hide-bullets {
@@ -621,13 +633,14 @@
 <!-- fullCalendar 2.2.5 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
 <script src="{% static "plugins/fullcalendar/fullcalendar.min.js" %}"></script>
+<script src="{% static "plugins/fullcalendar/locale/es.js" %}"></script>
 <!-- Page specific script -->
 <script type="text/javascript" src="{% static "bootstrap/js/bootstrap-clockpicker.min.js" %}"></script>
   <script type="text/javascript" src="{% static "bootstrap/js/highlight.min.js" %}"></script>
 <!-- Page specific script -->
 <script type="text/javascript" src="{% static "bootstrap/js/bootstrap-clockpicker.min.js" %}"></script>
 <script type="text/javascript" src="{% static "bootstrap/js/bootstrap-datepicker.adminlte.min.js" %}"></script>
-<script src="{% static 'bootstrap/js/notificaciones.js'%}"></script>
+<!--<script src="{% static 'bootstrap/js/notificaciones.js'%}"></script>-->
 
 <script>
     //desabhilito el boton de cada producto luego que es agregado 
@@ -1002,8 +1015,8 @@ $('.clockpicker').clockpicker({
       {% for turno in turnos %}
         {
           title: 'RESERVADO',
-          start: '{{ turno.dateTurn|date:"Y-m-d" }} {{turno.HoraTurn}}',
-          end:'{{ turno.dateTurn|date:"Y-m-d" }} {{turno.HoraTurnEnd}}',
+          start: '{{ turno.dateTurn|date:"Y-m-d" }} {{turno.turn.HoraTurn}}',
+          end:'{{ turno.dateTurn|date:"Y-m-d" }} {{turno.turn.HoraTurnEnd}}',
           backgroundColor: "#f56954", //red
           borderColor: "#f56954",//red
           titulo:'{{turno.servicioPrestar}}',
@@ -1016,8 +1029,8 @@ $('.clockpicker').clockpicker({
       {% for ReservasWeb in ReservasWeb %}
         {
           title: 'RESERVADO',
-          start: '{{ ReservasWeb.dateTurn|date:"Y-m-d" }} {{ReservasWeb.HoraTurn}}',
-          end:'{{ ReservasWeb.dateTurn|date:"Y-m-d" }} {{ReservasWeb.HoraTurnEnd}}',
+          start: '{{ ReservasWeb.dateTurn|date:"Y-m-d" }} {{ReservasWeb.turn.HoraTurn}}',
+          end:'{{ ReservasWeb.dateTurn|date:"Y-m-d" }} {{ReservasWeb.turn.HoraTurnEnd}}',
           backgroundColor: "#f56954", //red
           borderColor: "#f56954", // red 
           titulo:'{{ReservasWeb.servicioPrestar}}',
@@ -1028,6 +1041,121 @@ $('.clockpicker').clockpicker({
       {% endfor %}
       
       ],
+      selectable: true,
+      selectHelper: true,
+      select: function(start, end) {
+        /*
+        var title = prompt('Event Title:');
+        var eventData;
+        if (title) {
+          eventData = {
+            title: title,
+            start: start,
+            end: end
+          };
+          $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+        }
+        $('#calendar').fullCalendar('unselect');
+      */
+
+      date = new Date(start);
+      year = date.getFullYear();
+      month = date.getMonth()+1;
+      dt = date.getDate()+1;
+
+      if (dt < 10) {
+        dt = '0' + dt;
+      }
+      if (month < 10) {
+        month = '0' + month;
+      }
+
+      var fecha = year+'-' + month + '-'+dt;
+
+      $.ajax({
+        url: 'http://localhost:8000/reservas/web/consulta/',
+        data: {
+          'date': fecha
+      },
+      dataType: 'json',
+      success: function (query) {
+          if(query.length != 0)
+          {
+            alert('hay reservas este dia');
+              swal({
+                  title: 'Seleccione el turno para cargar su cotizacion',
+                  input: 'select',
+                  inputOptions: {
+                    {% for Tturno in tipe_turnos %}
+                      '{{Tturno.id}}': '{{Tturno.nameturnsession}} . {{Tturno.HoraTurn}} - {{Tturno.HoraTurnEnd}}',
+                    {% endfor %}
+                  },
+                  inputPlaceholder: 'Seleccione El turno que desea cotizar',
+                  showCancelButton: true,
+                  inputValidator: function (value ) {
+                    return new Promise(function (resolve, reject) {
+                      console.log(query[0].fields.turn);
+                      for (var i = 0; i < query.length; i++) {
+                        if (value != query[i].fields.turn) {
+                        resolve('Has Seleccionado El turno Valido')
+                      } else {
+                        reject('Turno Ocupado')
+                      }
+                      }
+                    })
+                  }
+                }).then(function (result) {
+                  swal({
+                    type: 'success',
+                    html: 'Has seleccionado el turno: ' + result
+                  })
+              });
+          }
+          else{
+            alert('dia vacio');
+          }
+        }
+   
+});
+
+
+
+
+
+
+
+
+
+
+      //alerta bien bonito 
+      /*
+      swal({
+        title: 'Select Ukraine',
+        input: 'select',
+        inputOptions: {
+          'SRB': 'Serbia',
+          'UKR': 'Ukraine',
+          'HRV': 'Croatia'
+        },
+        inputPlaceholder: 'Select country',
+        showCancelButton: true,
+        inputValidator: function (value) {
+          return new Promise(function (resolve, reject) {
+            if (value === 'UKR') {
+              resolve()
+            } else {
+              reject('You need to select Ukraine :)')
+            }
+          })
+        }
+      }).then(function (result) {
+        swal({
+          type: 'success',
+          html: 'You selected: ' + result
+        })
+      });*/
+
+      },
       eventClick: function(calEvent) {
 
         
