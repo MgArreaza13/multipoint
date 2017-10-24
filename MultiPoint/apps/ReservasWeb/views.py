@@ -40,6 +40,7 @@ from apps.Client.models import tb_client_WEB
 from apps.Configuracion.models import tb_logo
 from apps.Configuracion.models import tb_turn_sesion
 from django.core import serializers
+from apps.Configuracion.models import tb_turn_sesion
 
 
 
@@ -52,7 +53,7 @@ def ReservaWebQueryset(request):
 	print('funciono entro')
 	date = request.GET.get('date', None)
 	print(date)
-	query = serializers.serialize("json", tb_reservasWeb.objects.filter(dateTurn = date))
+	query = serializers.serialize("json", tb_reservasWeb.objects.filter(dateTurn = date).filter(statusTurn__nameStatus='Confirmada'))
 	print(query)
 	return HttpResponse(query)
 
@@ -338,8 +339,8 @@ def web(request):
 		if Form.is_valid():
 			print(request.POST)
 			turno = Form.save(commit=False)
-			turno.dateTurn = request.POST['TurnDate']
-			turno.HoraTurn = request.POST['TimeTurn']
+			turno.dateTurn = request.POST['FechaSeleccionada']
+			turno.turn = tb_turn_sesion.objects.get(id=request.POST['TurnSeleccionado'])
 			turno.statusTurn = tb_status.objects.get(nameStatus="Sin Aprobar")
 			turno.servicioPrestar=tb_service.objects.get(id = request.POST['ServicioSeleccionado'])
 			turno.montoAPagar = float(request.POST['total'])  
@@ -348,7 +349,6 @@ def web(request):
 			else:
 				turno.description = 'Sin Descripcion'
 			print(turno.description)
-			turno.HoraTurnEnd = sumar_hora(request.POST['TimeTurn'], "3:00")
 			turno.save()
 			notificacion.nombre = turno.nombre
 			notificacion.dateTurn = turno.dateTurn

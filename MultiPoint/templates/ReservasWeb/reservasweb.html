@@ -510,7 +510,8 @@
                     <script> console.log('{{ field.help_text|safe }}')</script>
                   {% endif %}
                {% endfor %}
-
+          
+          <!--
                 <div class="input-group clockpicker">
                 <label >  Sleccione la Hora del turno </label>
                     <input type="text" name="TimeTurn" placeholder="Hora Del Turno" class="form-control" autocomplete="off" 
@@ -522,7 +523,15 @@
                   <label >  Sleccione la fecha del turno </label>
                       <input class="form-control" id="TurnDate" name="TurnDate" type="text" placeholder="Fecha del Turno" autocomplete="off" 
                                 required autofocus max="2030-12-31" />
-                </div>
+                </div> -->
+
+
+                 <input type="hidden" id="FechaSeleccionada" name="FechaSeleccionada" value="">
+                 <input type="hidden" id="TurnSeleccionado" name="TurnSeleccionado" value="">
+
+              
+
+
               
                         
            
@@ -1072,6 +1081,9 @@ $('.clockpicker').clockpicker({
 
       var fecha = year+'-' + month + '-'+dt;
 
+      $('#FechaSeleccionada').val(fecha);
+
+
       $.ajax({
         url: 'http://localhost:8000/reservas/web/consulta/',
         data: {
@@ -1081,22 +1093,50 @@ $('.clockpicker').clockpicker({
       success: function (query) {
           if(query.length != 0)
           {
-            console.log(query);
+            console.log('longitud del arreglo ' + query.length);
            var myArrayOfThings = [];
+           var cont = 0;
+           var arreglo_dos = [];
+           var band = 1;
             function cargarOpciones(query) {
+              console.log(query);
               {% for Tturno in tipe_turnos %}
-             console.log({{Tturno.id}} + 'id turno');
-                for(var i = 0; i<query.length; i++){
+                   console.log('##########################################################id  del turno a validar'+ {{Tturno.id}} + '######################################################');
+                   
                   
+                      for(var i = 0; i<query.length; i++){
+                         console.log('--------------------------valor de i ' + i + '---------------------------');
 
-                  if({{Tturno.id}} !=  query[i].fields.turn){
-                    
-                    
-                     myArrayOfThings.push( { id: {{Tturno.id}}, name: '{{Tturno.nameturnsession}} . {{Tturno.HoraTurn}} - {{Tturno.HoraTurnEnd}}' });
-                  }
-                  console.log(myArrayOfThings);
-                }
+                        if({{Tturno.id}} != query[i].fields.turn ){
+                          console.log('valor del id es ' + {{Tturno.id}} + ' valor del turno desocupado ' +query[i].fields.turn )
+                          console.log('Cargare');
+                          band = 1;
+                          
+                        }
+                        else{
+                          
+                          console.log('No voy a cargar nada me estoy volviendo loco');
+                          band = 0;
+                          i = query.length;
+                          
+                        }
+
+
+                        console.log('la bandera sale ' +band);
+
+
+                      }
+
+
+                      if(band == 1){
+                       myArrayOfThings.push( { id: {{Tturno.id}}, name: '{{Tturno.nameturnsession}} . {{Tturno.HoraTurn}} - {{Tturno.HoraTurnEnd}}' });
+                        console.log(' voy a cargarrrrrrrrrrrrrrrrrrrrrrrrrr cargare');
+                      }
+                      console.log(myArrayOfThings);
+                  
                 {% endfor %}
+
+             console.log(myArrayOfThings);
             }
               cargarOpciones(query);
 
@@ -1123,6 +1163,7 @@ $('.clockpicker').clockpicker({
                       console.log(query[0].fields.turn);
                       for (var i = 0; i < query.length; i++) {
                         if (value != query[i].fields.turn) {
+                          console.log(value);
                         resolve('Has Seleccionado El turno Valido')
                       } else {
                         reject('Turno Ocupado')
@@ -1150,10 +1191,7 @@ $('.clockpicker').clockpicker({
                 var options = {};
                 $.map(myArrayOfThings,
                     function(o,query) {
-                      
-                        options[o.id] = o.name;
-                      
-                        
+                        options[o.id] = o.name;  
                     });
                 
             
@@ -1166,20 +1204,22 @@ $('.clockpicker').clockpicker({
                   showCancelButton: true,
                   inputValidator: function (value ) {
                     return new Promise(function (resolve, reject) {
-                      console.log(query[0].fields.turn);
-                      for (var i = 0; i < query.length; i++) {
-                        if (value != query[i].fields.turn) {
+                          
+                        if (value) {
+                          console.log(value);
+                          $('#TurnSeleccionado').val(value);
                         resolve('Has Seleccionado El turno Valido')
-                      } else {
-                        reject('Turno Ocupado')
+                                     
                       }
+                      else{
+                        reject('ha ocurrido un error')
                       }
                     })
                   }
                 }).then(function (result) {
                   swal({
                     type: 'success',
-                    html: 'Has seleccionado el turno: ' + result
+                    html: 'Hemos Cargado perfectamente tu turno '
                   })
               });
           }
