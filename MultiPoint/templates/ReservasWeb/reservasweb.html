@@ -1081,15 +1081,41 @@ $('.clockpicker').clockpicker({
       success: function (query) {
           if(query.length != 0)
           {
-            alert('hay reservas este dia');
+            console.log(query);
+           var myArrayOfThings = [];
+            function cargarOpciones(query) {
+              {% for Tturno in tipe_turnos %}
+             console.log({{Tturno.id}} + 'id turno');
+                for(var i = 0; i<query.length; i++){
+                  
+
+                  if({{Tturno.id}} !=  query[i].fields.turn){
+                    
+                    
+                     myArrayOfThings.push( { id: {{Tturno.id}}, name: '{{Tturno.nameturnsession}} . {{Tturno.HoraTurn}} - {{Tturno.HoraTurnEnd}}' });
+                  }
+                  console.log(myArrayOfThings);
+                }
+                {% endfor %}
+            }
+              cargarOpciones(query);
+
+
+                var options = {};
+                $.map(myArrayOfThings,
+                    function(o,query) {
+                      
+                        options[o.id] = o.name;
+                      
+                        
+                    });
+                
+            
+           
               swal({
                   title: 'Seleccione el turno para cargar su cotizacion',
                   input: 'select',
-                  inputOptions: {
-                    {% for Tturno in tipe_turnos %}
-                      '{{Tturno.id}}': '{{Tturno.nameturnsession}} . {{Tturno.HoraTurn}} - {{Tturno.HoraTurnEnd}}',
-                    {% endfor %}
-                  },
+                  inputOptions: options,
                   inputPlaceholder: 'Seleccione El turno que desea cotizar',
                   showCancelButton: true,
                   inputValidator: function (value ) {
@@ -1112,7 +1138,50 @@ $('.clockpicker').clockpicker({
               });
           }
           else{
-            alert('dia vacio');
+            var myArrayOfThings = [
+            {% for Tturno in tipe_turnos %}
+
+            { id: {{Tturno.id}}, name: '{{Tturno.nameturnsession}} . {{Tturno.HoraTurn}} - {{Tturno.HoraTurnEnd}}' },
+
+            {% endfor %}
+
+            ];
+
+                var options = {};
+                $.map(myArrayOfThings,
+                    function(o,query) {
+                      
+                        options[o.id] = o.name;
+                      
+                        
+                    });
+                
+            
+           
+              swal({
+                  title: 'Seleccione el turno para cargar su cotizacion',
+                  input: 'select',
+                  inputOptions: options,
+                  inputPlaceholder: 'Seleccione El turno que desea cotizar',
+                  showCancelButton: true,
+                  inputValidator: function (value ) {
+                    return new Promise(function (resolve, reject) {
+                      console.log(query[0].fields.turn);
+                      for (var i = 0; i < query.length; i++) {
+                        if (value != query[i].fields.turn) {
+                        resolve('Has Seleccionado El turno Valido')
+                      } else {
+                        reject('Turno Ocupado')
+                      }
+                      }
+                    })
+                  }
+                }).then(function (result) {
+                  swal({
+                    type: 'success',
+                    html: 'Has seleccionado el turno: ' + result
+                  })
+              });
           }
         }
    
