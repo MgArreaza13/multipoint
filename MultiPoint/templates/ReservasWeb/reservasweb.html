@@ -62,6 +62,8 @@
 
 
 
+<link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:400,100,400italic,700italic,700'>
+<link rel='stylesheet prefetch' href='https://daneden.github.io/animate.css/animate.min.css'>
 
 
 
@@ -366,7 +368,7 @@
                                     </div>
                                     <div class="separator clear-left col-md-12">
                                         <p class="btn-add col-sm-6">
-                                            <button type="button" name="{{servicios.id}}"  id="siguientePaso2" name="{{servicios.nameService}}"  value="{{servicios.priceList}}" class="btn btn-success btn-block" onclick="Suma(this.value);  ServiceSelected(this.name);"><i class="fa fa-shopping-cart"></i>COTIZAR</button></p>
+                                            <button type="button" name="{{servicios.id}}"  id="siguientePaso2" name="{{servicios.nameService}}"  value="{{servicios.priceList}}" class="btn btn-success btn-block" onclick="Suma(this.value); PASO2 (); Desabilitar(this); ServiceSelected(this.name);"><i class="fa fa-shopping-cart"></i>COTIZAR</button></p>
                                         <p style=""class="btn-details col-sm-6">
                                             <button class="btn btn-info btn-block" id="InfoServicio" value={{servicios.id}} onclick="query(this.value)"><i class="fa fa-list"></i>VER MAS</button></p>
                                     </div>
@@ -459,7 +461,7 @@
                                     </div>
                                     <div class="separator clear-left col-md-12">
                                         <p class="btn-add col-sm-6">
-                                            <button type="button" name="{{productos.nameProduct}}"  id="siguientePaso2" name="{{productos.nameProduct}}"  value="{{productos.priceList}}" class="btn btn-success btn-block" onclick=" Suma(this.value); Desabilitar(this); ProductSeleccionado(this.name); "><i class="fa fa-shopping-cart"></i>AGREGAR</button></p>
+                                            <button type="button" name="{{productos.nameProduct}}"  id="siguientePaso2" name="{{productos.nameProduct}}"  value="{{productos.priceList}}" class="btn btn-success btn-block" onclick=" Suma(this.value); Desabilitar(this); PASO4(); ProductSeleccionado(this.name); "><i class="fa fa-shopping-cart"></i>AGREGAR</button></p>
                                         <p style=""class="btn-details col-sm-6">
                                             <button type="button" class="btn btn-info btn-block" id="InfoServicio" value={{productos.id}} onclick="queryProducto(this.value)"><i class="fa fa-list"></i>VER MAS</button></p>
                                     </div>
@@ -526,6 +528,153 @@
                 </div> -->
 
 
+                
+
+
+                 
+
+              
+
+
+              
+                        
+           
+
+           
+                  
+                 
+
+                
+
+                
+
+
+
+          
+
+          
+      
+                  
+
+              
+                   <div style="text-align:center;"  class="box-footer col-md-12">
+                <button type="button" onclick="PASO4();" class="btn btn-primary">SIGUIENTE</button>
+                <a id="regresar" href="javascript:void(0)" class="btn btn-danger">REGRESAR</a>
+              </div>      
+           </div>
+
+           <div class="box-body paso4">
+           
+            <div class="col-md-12">
+          <div class="box box-solid">
+            <div class="box-header with-border">
+              <h3 class="box-title">YA ESTAS A UN PASO !!! </h3>
+              <h4>SELECCIONA EN EL CALENDARIO EL DIA DE TU RESERVA Y PRESIONA GUARDAR</h4>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="row">
+
+
+              <div class='pricing animated swing'>
+                    <div class='thumbnail animated pulse infinite'>
+                      <div class='fa fa-paper-plane'></div>
+                    </div>
+                    <div class='title'>
+                      TOTAL DETALLES RESERVAS
+                    </div>
+                    <div class='content'>
+                      <div class='sub-title'>
+                      <h3>PRECIO TOTAL EVENTO</h3>
+                        <p style="font-size: 4em;">$<estrong id="Monto">0</estrong></p>
+                        
+                      </div>
+                      <ul>
+                      <li>
+                          <div id="ICONODATOS" class='fa fa-close'></div>
+                          DATOS DE USUARIO
+                        </li>
+                        <li>
+                          <div id="ICONOSSERVICIOS" class='fa fa-close'></div>
+                          SERVICIOS
+                        </li>
+                        <li>
+                          <div id="ICONOPRODUCTOS" class='fa fa-close''></div>
+                          PRODUCTOS
+                        </li>
+
+                        <li>
+                          <div id="INOCOFECHA" class='fa fa-close'></div>
+                          FECHA: <p class="pull-right" id="FECHATARJETA"></p>
+                        </li>
+                        <li>
+                          <div id="ICONOTARJETA" class='fa fa-close'></div>
+                          TURNO: <p class="pull-right" id="TURNOTARJETA"></p>
+                        </li>
+                        <!--
+                        <li>
+                          <div class='fa fa-check'></div>
+                          Premium Technical Support
+                        </li>
+                        <li>
+                          <div class='fa fa-close'></div>
+                          Complete Access To All Plugins
+                        </li>
+                        <li>
+                          <div class='fa fa-close'></div>
+                          Layered Photoshop Files
+                        </li>
+                        <li>
+                          <div class='fa fa-close'></div>
+                          No Yearly Fees
+                        </li>
+                      </ul>
+                      <a href='https://www.elegantthemes.com/cgi-bin/members/register.cgi?sub=16'>
+                        Sign Up
+                      </a> -->
+                    </div>
+                     <div style="text-align:center;"  class="box-footer col-md-12">
+                <button type="submit" class="btn btn-primary">GUARDAR</button>
+                <a onclick="REGRESARPASO3();"  href="javascript:void(0)" class="btn btn-danger">REGRESAR</a>
+              </div>
+          
+                    
+                  </div>
+            
+            
+        </div>
+        
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+                  
+                 
+
+
+                    
+                   
+
+                    
+                      
+        
+          
+          <!--
+                <div class="input-group clockpicker">
+                <label >  Sleccione la Hora del turno </label>
+                    <input type="text" name="TimeTurn" placeholder="Hora Del Turno" class="form-control" autocomplete="off" 
+                               step="1" required autofocus/>
+
+                </div>
+                <br>
+               <div class="form-group">
+                  <label >  Sleccione la fecha del turno </label>
+                      <input class="form-control" id="TurnDate" name="TurnDate" type="text" placeholder="Fecha del Turno" autocomplete="off" 
+                                required autofocus max="2030-12-31" />
+                </div> -->
+
+
                  <input type="hidden" id="FechaSeleccionada" name="FechaSeleccionada" value="">
                  <input type="hidden" id="TurnSeleccionado" name="TurnSeleccionado" value="">
 
@@ -542,12 +691,12 @@
 
                 
 
-                <div style="text-align:center;" class="form-group col-md-12">
-                  <h3>PRECIO TOTAL EVENTO</h3>
-                  <p style="font-size: 4em;">$<estrong id="Monto">0</estrong></p>
+                <div style="text-align:center; display: none" class="form-group col-md-12">
+                  <h3 style="display: hidden">PRECIO TOTAL EVENTO</h3>
+                  <p style="display: hidden" style="font-size: 4em;">$<estrong id="Monto">0</estrong></p>
                   <input type="hidden" name="total" value="0">
                   
-                </div>
+                </div> 
 
 
           
@@ -557,13 +706,11 @@
                   
 
               
-                   <div style="text-align:center;"  class="box-footer col-md-12">
-                <button type="submit" class="btn btn-primary">GUARDAR</button>
-                <a id="regresar" href="javascript:void(0)" class="btn btn-danger">REGRESAR</a>
-              </div>      
+                        
            </div>
 
-          
+
+
 
 
                 
@@ -606,6 +753,7 @@
   </div>
   <input type="hidden" id="displayMenu" value="0">
   <input type="hidden" id="displayMenu2" value="0">
+  <input type="hidden" id="displayMenu3" value="0">
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="pull-right hidden-xs">
@@ -887,9 +1035,12 @@ if ($('#siguientePaso').attr("disabled") == undefined) {
   $("#siguientePaso").click(function () {
         if($('#displayMenu').val()==0){
           $(".paso2").css("display", "block");
-          $('.paso2').addClass('animated bounceInDown');
           $(".paso1").css("display", "none");
-          $('#displayMenu').val(1)
+          $('#displayMenu').val(1);
+          $('#ICONODATOS').removeClass('fa-close');
+          $('#ICONODATOS').addClass('fa-check');
+
+
 
         }else{
           //$('.tipo_publicacion').removeClass('animated bounceInDown');
@@ -903,12 +1054,14 @@ if ($('#siguientePaso').attr("disabled") == undefined) {
  
 
 
-  $("#siguientePaso2").click(function () {
+ function PASO2 () {
         if($('#displayMenu2').val()==0){
           $(".paso3").css("display", "block");
-          $('.paso3').addClass('animated bounceInDown');
           $(".paso2").css("display", "none");
-          $('#displayMenu2').val(1)
+          $('#ICONOSSERVICIOS').removeClass('fa-close');
+          $('#ICONOSSERVICIOS').addClass('fa-check');
+          $('#displayMenu2').val(1);
+
 
         }else{
           //$('.tipo_publicacion').removeClass('animated bounceInDown');
@@ -917,7 +1070,25 @@ if ($('#siguientePaso').attr("disabled") == undefined) {
           $('#displayMenu').val(0)
         }
         
-      });
+      }
+
+  function PASO4 () {
+        if($('#displayMenu3').val()==0){
+          $(".paso4").css("display", "block");
+          $(".paso3").css("display", "none");
+          $('#ICONOPRODUCTOS').removeClass('fa-close');
+          $('#ICONOPRODUCTOS').addClass('fa-check');
+          $('#displayMenu3').val(1);
+ 
+
+        }else{
+          //$('.tipo_publicacion').removeClass('animated bounceInDown');
+          //$('.tipo_publicacion').addClass('animated bounceOutRight');
+          $(".tipo_publicacion").css("display", "none");
+          $('#displayMenu').val(0)
+        }
+        
+      }
 
 
   $("#regresar").click(function () {
@@ -951,6 +1122,16 @@ $("#regresar2").click(function () {
         }
         
       });
+
+function REGRESARPASO3 () {
+        if($('#displayMenu3').val()==1){
+          $(".paso3").css("display", "block");
+          $(".paso4").css("display", "none");
+          $('#displayMenu3').val(0)
+
+        }
+        
+      }
 
 </script>
 
@@ -1003,6 +1184,8 @@ $('.clockpicker').clockpicker({
     var d = date.getDate(),
         m = date.getMonth(),
         y = date.getFullYear();
+
+    var selectableoption = false;
     
     $('#calendar').fullCalendar({
       header: {
@@ -1082,6 +1265,7 @@ $('.clockpicker').clockpicker({
       var fecha = year+'-' + month + '-'+dt;
 
       $('#FechaSeleccionada').val(fecha);
+      
 
 
       $.ajax({
@@ -1091,6 +1275,9 @@ $('.clockpicker').clockpicker({
       },
       dataType: 'json',
       success: function (query) {
+        $('#INOCOFECHA').removeClass('fa-close');
+        $('#INOCOFECHA').addClass('fa-check');
+        $('#FECHATARJETA').html(fecha)
           if(query.length != 0)
           {
             console.log('longitud del arreglo ' + query.length);
@@ -1099,44 +1286,43 @@ $('.clockpicker').clockpicker({
            var arreglo_dos = [];
            var band = 1;
             function cargarOpciones(query) {
-              console.log(query);
+              //esta  funcion lo que esta hacioendo es validando 
+              //lo que traigo del query que en este momentos son todos los turnos que estan
+              //ocupados ese dia, y esta llenando las opciones 
+              //del select unica y exclusivamente con la informacion 
+              // de los turnos que se permiten en ese dia
+              //console.log(query);
               {% for Tturno in tipe_turnos %}
-                   console.log('##########################################################id  del turno a validar'+ {{Tturno.id}} + '######################################################');
-                   
-                  
+                 //console.log('##########################################################id  del turno a validar'+ {{Tturno.id}} + '######################################################');
                       for(var i = 0; i<query.length; i++){
-                         console.log('--------------------------valor de i ' + i + '---------------------------');
-
+                         //console.log('--------------------------valor de i ' + i + '---------------------------');
+                        // este for lo que hace es validar si existe alguna coincidencia 
+                        // dentro del query del turno 
+                        // si es asi sale 0 que es false 
+                        // de lo contrario ban es igual a 1 
+                        //y se cargara el turno
                         if({{Tturno.id}} != query[i].fields.turn ){
-                          console.log('valor del id es ' + {{Tturno.id}} + ' valor del turno desocupado ' +query[i].fields.turn )
-                          console.log('Cargare');
+                          //console.log('valor del id es ' + {{Tturno.id}} + ' valor del turno desocupado ' +query[i].fields.turn )
+                          //console.log('Cargare');
                           band = 1;
-                          
                         }
                         else{
-                          
-                          console.log('No voy a cargar nada me estoy volviendo loco');
+                          //console.log('No voy a cargar nada me estoy volviendo loco');
                           band = 0;
                           i = query.length;
-                          
                         }
-
-
-                        console.log('la bandera sale ' +band);
-
-
+                        //console.log('la bandera sale ' +band);
                       }
-
-
                       if(band == 1){
+                        // aqui cargo la opcion para el select
                        myArrayOfThings.push( { id: {{Tturno.id}}, name: '{{Tturno.nameturnsession}} . {{Tturno.HoraTurn}} - {{Tturno.HoraTurnEnd}}' });
-                        console.log(' voy a cargarrrrrrrrrrrrrrrrrrrrrrrrrr cargare');
+                        //console.log(' voy a cargarrrrrrrrrrrrrrrrrrrrrrrrrr cargare');
                       }
-                      console.log(myArrayOfThings);
+                      //console.log(myArrayOfThings);
                   
                 {% endfor %}
 
-             console.log(myArrayOfThings);
+             //console.log(myArrayOfThings);
             }
               cargarOpciones(query);
 
@@ -1148,10 +1334,7 @@ $('.clockpicker').clockpicker({
                         options[o.id] = o.name;
                       
                         
-                    });
-                
-            
-           
+                    });  
               swal({
                   title: 'Seleccione el turno para cargar su cotizacion',
                   input: 'select',
@@ -1172,6 +1355,9 @@ $('.clockpicker').clockpicker({
                     })
                   }
                 }).then(function (result) {
+                  $('#TURNOTARJETA').html(result);
+                  $('#ICONOTARJETA').removeClass('fa-close');
+                  $('#ICONOTARJETA').addClass('fa-check');
                   swal({
                     type: 'success',
                     html: 'Has seleccionado el turno: ' + result
@@ -1217,13 +1403,24 @@ $('.clockpicker').clockpicker({
                     })
                   }
                 }).then(function (result) {
+                  $('#TURNOTARJETA').html(result);
+                  $('#ICONOTARJETA').removeClass('fa-close');
+                  $('#ICONOTARJETA').addClass('fa-check');
                   swal({
                     type: 'success',
                     html: 'Hemos Cargado perfectamente tu turno '
                   })
               });
           }
-        }
+        },
+      error : function() {
+        swal({
+                    type: 'error',
+                    html: '<h1>Oops...</h1><h3>Hemos tenido un problema al procesar tu solicitud</h3>'+
+                          '<p>Te invitamos a seleccionar otro dia.</p>'
+                  })
+    },
+
    
 });
 
