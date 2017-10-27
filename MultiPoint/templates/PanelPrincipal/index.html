@@ -451,27 +451,29 @@
 
       {% for turno in turnos %}
         {
-          title: '{{turno.servicioPrestar}}'+ ' - ' +'{{turno.HoraTurn}}',
-          start: '{{ turno.dateTurn|date:"Y-m-d" }}',
+          title: 'RESERVADO',
+          start: '{{ turno.dateTurn|date:"Y-m-d" }} {{turno.turn.HoraTurn}}',
+          end:'{{ turno.dateTurn|date:"Y-m-d" }} {{turno.turn.HoraTurnEnd}}',
           backgroundColor: "#f56954", //red
           borderColor: "#f56954",//red
           titulo:'{{turno.servicioPrestar}}',
           cliente:'{{turno.client}}',
           fecha_de_inicio:'{{ turno.dateTurn|date:"d-m-Y" }}',
-          hora_de_inicio:'{{ turno.HoraTurn }}',
+          hora_de_inicio:'{{ turno.turn.HoraTurn }}',
           
         },
       {% endfor %}
       {% for ReservasWeb in ReservasWeb %}
         {
-          title: '{{ReservasWeb.servicioPrestar}}'+ ' - ' +'{{ReservasWeb.HoraTurn}}',
-          start: '{{ ReservasWeb.dateTurn|date:"Y-m-d" }}',
+          title: 'RESERVADO',
+          start: '{{ ReservasWeb.dateTurn|date:"Y-m-d" }} {{ReservasWeb.turn.HoraTurn}}',
+          end:'{{ ReservasWeb.dateTurn|date:"Y-m-d" }} {{ReservasWeb.turn.HoraTurnEnd}}',
           backgroundColor: "#f56954", //red
           borderColor: "#f56954", // red 
           titulo:'{{ReservasWeb.servicioPrestar}}',
           cliente:'{{ReservasWeb.nombre}}',
           fecha_de_inicio:'{{ ReservasWeb.dateTurn|date:"d-m-Y" }}',
-          hora_de_inicio:'{{ ReservasWeb.HoraTurn }}',
+          hora_de_inicio:'{{ ReservasWeb.turn.HoraTurn }}',
         },
       {% endfor %}
       
@@ -481,7 +483,7 @@
         
        
 
-        // creo el modal  
+        /* creo el modal  
 
         var modal = '<div class="col-lg-12">'+
           '<div  class="modal" id="myModal" role="dialog">'+
@@ -510,10 +512,10 @@
          '</div>';
 
          $('#miguel').html(modal);
-          $("#myModal").modal("show");
+          $("#myModal").modal("show"); */
 
     },
-      editable: true,
+      editable: false,
       droppable: true, // this allows things to be dropped onto the calendar !!!
       drop: function (date, allDay) { // this function is called when something is dropped
 

@@ -130,6 +130,8 @@
                   <th>FECHA</th>
                   <th>HORA</th>
                   <th>FORMA DE PAGO</th>
+                  <th>MONTO A PAGAR</th>
+                  <th>MONTO PAGADO</th>
                   <th>STATUS</th>
                   <th>ACCIONES</th>
                 </tr>
@@ -147,13 +149,15 @@
                           <td>{{reserva.mail}}</td>
                           <td>{{reserva.telefono}}</td>
                           <td>{{reserva.dateTurn}}</td>
-                          <td>{{reserva.HoraTurn}}</td>
+                          <td>{{reserva.turn}}</td>
 
                     {% if reserva.PagoOnline == 'True' %}
                             <td> Pagado Online </td>
                             {% else %}
                             <td>Paga Por Sucursal</td>
                           {% endif %}
+                          <td>${{reserva.montoAPagar}}</td>
+                          <td>${{reserva.montoPagado}}</td>
                     
 
                     {% if reserva.statusTurn.nameStatus == 'Confirmada' %}
@@ -276,12 +280,14 @@
                           <td>{{reserva.mail}}</td>
                           <td>{{reserva.telefono}}</td>
                           <td>{{reserva.dateTurn}}</td>
-                          <td>{{reserva.HoraTurn}}</td>
+                          <td>{{reserva.turn}}</td>
                           {% if reserva.PagoOnline == 'True' %}
                             <td> Pagado Online </td>
                             {% else %}
                             <td>Paga Por Sucursal</td>
                           {% endif %}
+                          <td>${{reserva.montoAPagar}}</td>
+                          <td>${{reserva.montoPagado}}</td>
 
                          
                           
@@ -311,6 +317,10 @@
                             </td>
                           {% endif %}
                         <td>
+
+                              {% if reserva.montoAPagar != reserva.montoPagado %}
+                                   <a href="" style="" class="label btn-info">PAGAR</a>
+                              {% endif %}
                               <a href="{% url "Reservas:EditReservaList" reserva.id %}" style="background-color:#39CCCC;" class="label">STATUS</a>
                               <a href="{% url "Reservas:DeleteReservas" reserva.id %}" style="background-color:#D81B60;" class="label">ELIMINAR</a>
                             </td>
@@ -332,6 +342,8 @@
                   <th>FECHA</th>
                   <th>HORA</th>
                   <th>FORMA DE PAGO</th>
+                  <th>MONTO A PAGAR</th>
+                  <th>MONTO PAGADO</th>
                   <th>STATUS</th>
                   <th>ACCIONES</th>
 

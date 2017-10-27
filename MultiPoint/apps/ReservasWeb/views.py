@@ -297,7 +297,7 @@ def EditReservaList(request , id_reservas):
 		if  Form.is_valid():
 			reserva 		 = Form.save(commit=False)
 			reserva.dateTurn = ReservaWebEditar.dateTurn
-			reserva.HoraTurn = ReservaWebEditar.HoraTurn
+			reserva.turn = ReservaWebEditar.turn
 			reserva.mail = ReservaWebEditar.mail
 			reserva.nombre = ReservaWebEditar.nombre
 			reserva.servicioPrestar = ReservaWebEditar.servicioPrestar

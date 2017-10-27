@@ -16,12 +16,12 @@ class TurnForm(forms.ModelForm):
 		#'collaborator',
 		
 		'isPay',
-		'statusTurn',
+		
 		
 		
 		
 		]
-		exclude = ['user', 'dateTurn', 'HoraTurn', 'extraInfoTurn', 'servicioPrestar', 'HoraTurnEnd',]
+		exclude = ['user', 'dateTurn', 'HoraTurn', 'extraInfoTurn', 'servicioPrestar', 'HoraTurnEnd', 'statusTurn',]
 
 		labels = {
 		'dateTurn':'Fecha Para El turno', 

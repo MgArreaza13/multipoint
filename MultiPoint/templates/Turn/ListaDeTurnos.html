@@ -128,6 +128,8 @@
                   <th>HORA</th>
                   <th>FECHA</th>
                   <th>FORMA DE PAGO</th>
+                  <th>MONTO A PAGAR</th>
+                  <th>MONTO PAGADO</th>
                   <th>INFO</th>
                   <th>STATUS</th>
                   <th>ACCIONES</th>
@@ -147,15 +149,16 @@
                     </td>
                     
                    
-                         <td>{{turno.HoraTurn}}</td>
+                         <td>{{turno.turn}}</td>
                     <td>{{turno.dateTurn}}</td>
                     {% if turno.PagoOnline == 'True' %}
                             <td> Pagado Online </td>
                             {% else %}
                             <td>Paga Por Sucursal</td>
                           {% endif %}
-                    <td>{{turno.extraInfoTurn}}</td>  
-
+                    <td>${{turno.montoAPagar}}</td> 
+                    <td>${{turno.montoPagado}}</td> 
+                    <td>{{turno.extraInfoTurn}}</td> 
                     {% if turno.statusTurn.nameStatus == 'Sin Aprobar' %}
                       
                       <td> 
@@ -255,15 +258,16 @@
                           </td>
                           
                          
-                               <td>{{turno.HoraTurn}}</td>
+                               <td>{{turno.turn}}</td>
                           <td>{{turno.dateTurn}}</td>
                           {% if turno.PagoOnline == 'True' %}
                             <td> Pagado Online </td>
                             {% else %}
                             <td>Paga Por Sucursal</td>
                           {% endif %}
+                          <td>${{turno.montoAPagar}}</td> 
+                          <td>${{turno.montoPagado}}</td>
                           <td>{{turno.extraInfoTurn}}</td>
-                          
                           {% if turno.statusTurn.nameStatus == 'Sin Aprobar' %}
                             
                             <td>
@@ -286,6 +290,9 @@
                           {% endif %}
 
                           <td>
+                          {% if turno.montoAPagar != turno.montoPagado %}
+                                  <a href="javascript:void(0)" onclick="ProcesarPago();" style="" class="label btn-info">PAGAR</a>
+                              {% endif %}
                               <a  href="{% url "Turnos:EditTurnList" turno.id %}" style="background-color:#39CCCC;" class="label">STATUS</a>
                               <a href="{% url "Turnos:EditTurn" turno.id %}" style="background-color:#001F3F;" class="label">EDITAR</a>
                               <a href="{% url "Turnos:DeleteTurn" turno.id %}" style="background-color:#D81B60;" class="label">ELIMINAR</a>
@@ -303,14 +310,17 @@
                     <td>{{turno.nombre}}</td>
                     
                    
-                         <td>{{turno.HoraTurn}}</td>
+                         <td>{{turno.turn}}</td>
                     <td>{{turno.dateTurn}}</td>
                     {% if turno.PagoOnline == 'True' %}
                             <td> Pagado Online </td>
                             {% else %}
                             <td>Paga Por Sucursal</td>
                           {% endif %}
-                    <td>Reserva Web</td>  
+                          <td>${{turno.montoAPagar}}</td> 
+                          <td>${{turno.montoPagado}}</td>
+                    <td>Reserva Web</td>
+                    
 
                    
 
@@ -389,13 +399,15 @@
                           
                           <td>{{turno.nombre}}</td>
                          
-                               <td>{{turno.HoraTurn}}</td>
+                               <td>{{turno.turn}}</td>
                           <td>{{turno.dateTurn}}</td>
                           {% if turno.PagoOnline == 'True' %}
                             <td> Pagado Online </td>
                             {% else %}
                             <td>Paga Por Sucursal</td>
                           {% endif %}
+                          <td>${{turno.montoAPagar}}</td> 
+                          <td>${{turno.montoPagado}}</td>
                           <td>Reserva Web </td>
                           
                          
@@ -416,6 +428,9 @@
                           {% endif %}
 
                           <td>
+                          {% if turno.montoAPagar != turno.montoPagado %}
+                                  <a href="javascript:void(0)" onclick="ProcesarPago(); style="" class="label btn-info">PAGAR</a>
+                              {% endif %}
                               <a href="{% url "Reservas:EditReservaList2" turno.id %}" style="background-color:#39CCCC;" class="label">STATUS</a>
                               <a href="{% url "Turnos:EditTurn" turno.id %}" style="background-color:#001F3F;" class="label">EDITAR</a>
                               <a href="{% url "Turnos:DeleteTurn" turno.id %}" style="background-color:#D81B60;" class="label">ELIMINAR</a>
@@ -437,6 +452,8 @@
                   <th>HORA</th>
                   <th>FECHA</th>
                   <th>FORMA DE PAGO</th>
+                  <th>MONTO A PAGAR</th>
+                  <th>MONTO PAGADO</th>
                   <th>INFO</th>
                   <th>STATUS</th>
                   <th>ACCIONES</th>
@@ -503,6 +520,58 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/jquery.dataTables.js" data-semver="1.9.4" data-require="datatables@*"></script>
 <script src="{% static "bootstrap/js/filtrado.js" %}"></script>
 <script src="{% static 'bootstrap/js/notificaciones.js'%}"></script>
+
+
+
+<script>
+  
+    function ProcesarPago() {
+            swal.setDefaults({
+            input: 'text',
+            confirmButtonText: 'Siguiente &rarr;',
+            showCancelButton: true,
+            progressSteps: ['1', '2',]
+          })
+
+          var steps = [
+            {
+              title: 'Seleccione el metodo de Pago',
+              input: 'select',
+              inputOptions: {
+                'SRB': 'Serbia',
+                'UKR': 'Ukraine',
+                'HRV': 'Croatia'
+              },
+              inputPlaceholder: 'metodo de pago',
+              showCancelButton: true,
+            },
+            {
+              title: 'Monto',
+              text: 'Ingrese el monto a pagar'
+            },
+            
+            
+          ]
+
+          swal.queue(steps).then(function (result) {
+            console.log(result);
+            swal.resetDefaults()
+            swal({
+              title: 'All done!',
+              html:
+                'Your answers: <pre>' +
+                  JSON.stringify(result) +
+                '</pre>',
+              confirmButtonText: 'Lovely!'
+            })
+          }, function () {
+            swal.resetDefaults()
+          })
+    }
+
+
+
+</script>
 
 <!-- page script -->
 
