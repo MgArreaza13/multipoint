@@ -291,7 +291,7 @@
 
                           <td>
                           {% if turno.montoAPagar != turno.montoPagado %}
-                                  <a href="javascript:void(0)" onclick="ProcesarPago();" style="" class="label btn-info">PAGAR</a>
+                                  <button  type="button" value='{{turno.id}}' href="javascript:void(0);" onclick="PagarOnlineTurno(this.value);" style="" class="label btn btn-info">PAGAR</button>
                               {% endif %}
                               <a  href="{% url "Turnos:EditTurnList" turno.id %}" style="background-color:#39CCCC;" class="label">STATUS</a>
                               <a href="{% url "Turnos:EditTurn" turno.id %}" style="background-color:#001F3F;" class="label">EDITAR</a>
@@ -429,7 +429,7 @@
 
                           <td>
                           {% if turno.montoAPagar != turno.montoPagado %}
-                                  <a href="javascript:void(0)" onclick="ProcesarPago(); style="" class="label btn-info">PAGAR</a>
+                                  <button  type="button" value='{{turno.id}}' href="javascript:void(0);" onclick="PagarOnlineReservaWeb(this.value);" style="" class="label btn btn-info">PAGAR</button>
                               {% endif %}
                               <a href="{% url "Reservas:EditReservaList2" turno.id %}" style="background-color:#39CCCC;" class="label">STATUS</a>
                               <a href="{% url "Turnos:EditTurn" turno.id %}" style="background-color:#001F3F;" class="label">EDITAR</a>
@@ -525,49 +525,113 @@
 
 <script>
   
-    function ProcesarPago() {
-            swal.setDefaults({
-            input: 'text',
-            confirmButtonText: 'Siguiente &rarr;',
-            showCancelButton: true,
-            progressSteps: ['1', '2',]
-          })
+    function PagarOnlineReservaWeb(id_reserva) {
+    var myArrayOfThings = [];
+    {% for turnos in formas_de_pago  %}
+       myArrayOfThings.push( { id: {{turnos.id}}, name: '{{turnos.nameFormasDePago}}' });
+    {% endfor %}
+    var options = {};
+    $.map(myArrayOfThings,function(o,query) {options[o.id] = o.name;});
+      swal.setDefaults({
+          input: 'text',
+          confirmButtonText: 'Siguiente &rarr;',
+          showCancelButton: true,
+          progressSteps: ['1', '2',]
+        })
+        var steps = [
+        {
+            title: 'Seleccione un metodo de pago',
+            input: 'select',
+            inputOptions: options,
+            inputPlaceholder: 'metodos de pago',
+          },
+          {
+            title: 'Ingrese el Monto a Cargar',
+            text: 'Monto'
+          },
 
-          var steps = [
-            {
-              title: 'Seleccione el metodo de Pago',
-              input: 'select',
-              inputOptions: {
-                'SRB': 'Serbia',
-                'UKR': 'Ukraine',
-                'HRV': 'Croatia'
-              },
-              inputPlaceholder: 'metodo de pago',
-              showCancelButton: true,
-            },
-            {
-              title: 'Monto',
-              text: 'Ingrese el monto a pagar'
-            },
-            
-            
-          ]
+          
+        ]
 
-          swal.queue(steps).then(function (result) {
-            console.log(result);
-            swal.resetDefaults()
-            swal({
-              title: 'All done!',
-              html:
-                'Your answers: <pre>' +
-                  JSON.stringify(result) +
-                '</pre>',
-              confirmButtonText: 'Lovely!'
-            })
-          }, function () {
-            swal.resetDefaults()
-          })
-    }
+        swal.queue(steps).then(function (result) {
+          id_metodo_pago = parseFloat(result[0]);
+          id_monto       = parseFloat(result[1]);
+               swal.resetDefaults()
+                $.ajax({
+                    url: '/Caja/ajax/nuevo/ingreso/reserva/web',
+                    data: {
+                      'id_reserva':id_reserva,
+                      'id_metodo_pago': id_metodo_pago,
+                      'id_monto':id_monto,
+                  },
+                  dataType: 'json',
+                  success: function (status) {
+                     swal({
+                        title: 'Hemos Cargado de manera exitosa su pago !',
+                        confirmButtonText: 'Aceptar!'
+                      })
+                     location.reload(); 
+                }
+            });
+
+        }, function () {
+          swal.resetDefaults()
+        })
+  }
+
+  function PagarOnlineTurno(id_reserva) {
+    var myArrayOfThings = [];
+    {% for turnos in formas_de_pago  %}
+       myArrayOfThings.push( { id: {{turnos.id}}, name: '{{turnos.nameFormasDePago}}' });
+    {% endfor %}
+    var options = {};
+    $.map(myArrayOfThings,function(o,query) {options[o.id] = o.name;});
+      swal.setDefaults({
+          input: 'text',
+          confirmButtonText: 'Siguiente &rarr;',
+          showCancelButton: true,
+          progressSteps: ['1', '2',]
+        })
+        var steps = [
+        {
+            title: 'Seleccione un metodo de pago',
+            input: 'select',
+            inputOptions: options,
+            inputPlaceholder: 'metodos de pago',
+          },
+          {
+            title: 'Ingrese el Monto a Cargar',
+            text: 'Monto'
+          },
+
+          
+        ]
+
+        swal.queue(steps).then(function (result) {
+          id_metodo_pago = parseFloat(result[0]);
+          id_monto       = parseFloat(result[1]);
+               swal.resetDefaults()
+                $.ajax({
+                    url: '/Caja/ajax/nuevo/ingreso/turno/web',
+                    data: {
+                      'id_reserva':id_reserva,
+                      'id_metodo_pago': id_metodo_pago,
+                      'id_monto':id_monto,
+                  },
+                  dataType: 'json',
+                  success: function (status) {
+                     swal({
+                        title: 'Hemos Cargado de manera exitosa su pago !',
+                        confirmButtonText: 'Aceptar!'
+                      })
+                     location.reload(); 
+                }
+            });
+
+        }, function () {
+          swal.resetDefaults()
+        })
+  }
 
 
 

@@ -5,12 +5,79 @@ from apps.Caja.models import tb_egreso
 from django.db.models import Count, Min, Sum, Avg
 from apps.Caja.forms import IngresoForm
 from apps.Caja.forms import EgresoForm
+from django.http import HttpResponse
+from apps.ReservasWeb.models import tb_reservasWeb
+from apps.Configuracion.models import tb_formasDePago
+from apps.Configuracion.models import tb_tipoIngreso
+from apps.Turn.models import tb_turn
 # Create your views here.
 from apps.scripts.validatePerfil import validatePerfil
 
 from apps.UserProfile.models import tb_profile
 
+
+
+def NuevoPagoReservaOnline(request):
+	status = 200
+	id_reserva = request.GET.get('id_reserva', None)
+	id_metodo_pago = request.GET.get('id_metodo_pago', None)
+	id_monto = request.GET.get('id_monto', None)
+	reserva = tb_reservasWeb.objects.get(id= id_reserva)
+	reserva.montoPagado += float(id_monto)
+	reserva.save()
+	if reserva.montoAPagar == reserva.montoPagado:
+		reserva.isPay = True
+		reserva.save()
+	ingreso = tb_ingreso()
+	ingreso.user = request.user
+	ingreso.reserva = reserva
+	ingreso.tipoPago = tb_formasDePago.objects.get(id = id_metodo_pago )
+	ingreso.tipoIngreso = tb_tipoIngreso.objects.get(id = 1)
+	ingreso.service = reserva.servicioPrestar
+	ingreso.monto = float(id_monto)
+	ingreso.descripcion = 'Pago de Reserva Web'
+	ingreso.save()
+	return HttpResponse(status)
+
+
+
+
+def NuevoPagoTurno(request):
+	status = 200
+	id_reserva = request.GET.get('id_reserva', None)
+	id_metodo_pago = request.GET.get('id_metodo_pago', None)
+	id_monto = request.GET.get('id_monto', None)
+	turno = tb_turn.objects.get(id= id_reserva)
+	turno.montoPagado += float(id_monto)
+	turno.save()
+	if turno.montoAPagar == turno.montoPagado:
+		turno.isPay = True
+		turno.save()
+	ingreso = tb_ingreso()
+	ingreso.user = request.user
+	ingreso.turno = turno
+	ingreso.tipoPago = tb_formasDePago.objects.get(id = id_metodo_pago )
+	ingreso.tipoIngreso = tb_tipoIngreso.objects.get(id = 1)
+	ingreso.service = turno.servicioPrestar
+	ingreso.monto = float(id_monto)
+	ingreso.descripcion = 'Pago de Turno Web'
+	ingreso.save()
+	return HttpResponse(status)
+
+
+
+
+
+
+
 #########Ingresos##############
+
+
+
+
+
+
+
 
 ###############LISTADO PRINCIPAL DE LOS INGRESOS, MUESTRA LA TABLA DE INGRESOS################
 @login_required(login_url = 'Demo:login' )

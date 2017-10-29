@@ -370,7 +370,7 @@
                                         <p class="btn-add col-sm-6">
                                             <button type="button" name="{{servicios.id}}"  id="siguientePaso2" name="{{servicios.nameService}}"  value="{{servicios.priceList}}" class="btn btn-success btn-block" onclick="Suma(this.value); PASO2 (); Desabilitar(this); ServiceSelected(this.name);"><i class="fa fa-shopping-cart"></i>COTIZAR</button></p>
                                         <p style=""class="btn-details col-sm-6">
-                                            <button class="btn btn-info btn-block" id="InfoServicio" value={{servicios.id}} onclick="query(this.value)"><i class="fa fa-list"></i>VER MAS</button></p>
+                                            <button type="button" class="btn btn-info btn-block" id="InfoServicio" value={{servicios.id}} onclick="query(this.value)"><i class="fa fa-list"></i>VER MAS</button></p>
                                     </div>
                                     <div class="clearfix">
                                     </div>
@@ -599,7 +599,7 @@
                           SERVICIOS
                         </li>
                         <li>
-                          <div id="ICONOPRODUCTOS" class='fa fa-close''></div>
+                          <div id="ICONOPRODUCTOS" class='fa fa-close'></div>
                           PRODUCTOS
                         </li>
 
@@ -823,7 +823,7 @@
    function query(val){
     var id_servicio =  val;
     $.ajax({
-        url: 'http://multipoint.pythonanywhere.com/servicios/consulta/detail',
+        url: '/servicios/consulta/detail',
         data: {
           'id_servicio': id_servicio
       },
@@ -869,7 +869,7 @@
    function queryProducto(val){
     var id_producto =  val;
     $.ajax({
-        url: 'http://multipoint.pythonanywhere.com/productos/consulta/detail',
+        url: '/productos/consulta/detail',
         data: {
           'id_producto': id_producto
       },
@@ -950,7 +950,7 @@ function validateSelect(){
     var id_servicio = $("#servicio").val();
 
     $.ajax({
-        url: 'http://multipoint.pythonanywhere.com/reservas/ajax/validacion/',
+        url: '/reservas/ajax/validacion/',
         data: {
           'id_servicio': id_servicio
       },

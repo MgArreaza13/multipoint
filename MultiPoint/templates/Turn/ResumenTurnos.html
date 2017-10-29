@@ -125,7 +125,7 @@
                         <td><a href="{% url "Turnos:DetallesTurn" turno.id %}" target="_blank">TURNO-{{turno.id}}</a></td>
                         <td><a href="{% url "Clientes:ClienteProfile" turno.client.id %}">{{turno.client}}</a></td>
                          
-                         <td>{{turno.HoraTurn}}</td>
+                         <td>{{turno.turn}}</td>
                         
                         <td>{{turno.servicioPrestar}}</td>
                         {% if turno.PagoOnline == 'True' %}
@@ -245,7 +245,7 @@
                         <td><a href="{% url "Turnos:DetallesTurn" turno.id %}" target="_blank">TURNO-{{turno.id}}</a></td>
                         <td><a href="{% url "Clientes:ClienteProfile" turno.client.id %}">{{turno.client}}</a></td>
                          
-                         <td>{{turno.HoraTurn}}</td>
+                         <td>{{turno.turn}}</td>
                         
                         <td>{{turno.servicioPrestar}}</td>
                         {% if turno.PagoOnline == 'True' %}
@@ -292,7 +292,7 @@
                         <td><a href="{% url "Reservas:DetallesWeb" turno.id %} " target="_blank">RESERVA-{{turno.id}}</a></td>
                         <td>{{turno.nombre}}</td>
                          
-                         <td>{{turno.HoraTurn}}</td>
+                         <td>{{turno.turn}}</td>
                         
                         <td>{{turno.servicioPrestar}}</td>
                         {% if turno.PagoOnline == 'True' %}
@@ -412,7 +412,7 @@
                         <td><a href="{% url "Reservas:DetallesWeb" turno.id %} " target="_blank">RESERVA-{{turno.id}}</a></td>
                         <td>{{turno.nombre}}</td>
                          
-                         <td>{{turno.HoraTurn}}</td>
+                         <td>{{turno.turn}}</td>
                         
                         <td>{{turno.servicioPrestar}}</td>
                         {% if turno.PagoOnline == 'True' %}
@@ -506,7 +506,7 @@
                             {% else %}
                             <td>Paga Por Sucursal</td>
                           {% endif %}
-                         <td>{{turno.HoraTurn}}</td>
+                         <td>{{turno.turn}}</td>
                         
                         
           
@@ -529,7 +529,7 @@
                             {% else %}
                             <td>Paga Por Sucursal</td>
                           {% endif %}
-                         <td>{{turno.HoraTurn}}</td>
+                         <td>{{turno.turn}}</td>
                         
                         
           
@@ -596,7 +596,7 @@
                             <td>Paga Por Sucursal</td>
                           {% endif %}
                        
-                         <td>{{turno.HoraTurn}}</td>
+                         <td>{{turno.turn}}</td>
                         
                         
                         
@@ -621,7 +621,7 @@
                             <td>Paga Por Sucursal</td>
                           {% endif %}
                        
-                         <td>{{turno.HoraTurn}}</td>
+                         <td>{{turno.turn}}</td>
                         
                         
                         

@@ -45,6 +45,7 @@ from apps.Configuracion.models import tb_logo
 from apps.Configuracion.models import tb_turn_sesion
 
 
+
 @login_required(login_url = 'Demo:login' )
 def DetallesTurn(request, id_turn):
 	reserva = tb_turn.objects.get(id=id_turn)
@@ -135,8 +136,8 @@ def index(request):
 	fecha =  date.today()
 	TurnEditar = -1 #para poder saber que turnos se le mostrara el formulario, verifico que ningun id coincida con -1
 	is_collaborador = tb_collaborator.objects.filter(user__id = request.user.id) #saber si el usuario actual es collaborador
-	turnos = tb_turn.objects.filter(dateTurn = fecha).order_by('HoraTurn')
-	reservas = tb_reservasWeb.objects.filter(dateTurn = fecha).order_by('HoraTurn')
+	turnos = tb_turn.objects.filter(dateTurn = fecha)
+	reservas = tb_reservasWeb.objects.filter(dateTurn = fecha)
 	#queryset 
 	reservas_hoy = tb_reservasWeb.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
 	turnos__hoy =  tb_turn.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
@@ -346,7 +347,7 @@ def EditTurnStatus(request , id_turn):
 	perfil = result[0]
 	tipo = 'TURNO'
 	Reservas = tb_reservasWeb.objects.exclude(statusTurn__nameStatus='Sin Aprobar').order_by('dateTurn')
-	turnos = tb_turn.objects.filter(dateTurn = date.today()).order_by('HoraTurn')
+	turnos = tb_turn.objects.filter(dateTurn = date.today())
 	TurnEditar = tb_turn.objects.get(id = id_turn)
 	fallido = None
 	if request.method == 'GET':
@@ -371,6 +372,7 @@ def EditTurnStatus(request , id_turn):
 #lista todo los turnos en la tabla
 @login_required(login_url = 'Demo:login' )
 def listTurnos(request):
+	formas_de_pago = tb_formasDePago.objects.all()
 	TurnEditar = -1 #para poder saber que turnos se le mostrara el formulario, verifico que ningun id coincida con -1
 	turnos = tb_turn.objects.all().order_by('dateTurn')
 	Reservas = tb_reservasWeb.objects.exclude(statusTurn__nameStatus='Sin Aprobar').order_by('dateTurn')
@@ -384,6 +386,7 @@ def listTurnos(request):
 	ingresos_hoy = tb_ingreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	egresos_hoy  = tb_egreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	context = {
+	'formas_de_pago':formas_de_pago,
 	'Reservas':Reservas,
 	'perfil':perfil,
 	'turnos':turnos,

@@ -319,7 +319,7 @@
                         <td>
 
                               {% if reserva.montoAPagar != reserva.montoPagado %}
-                                   <a href="" style="" class="label btn-info">PAGAR</a>
+                                   <button  type="button" value='{{reserva.id}}' href="javascript:void(0);" onclick="PagarOnlineReservaWeb(this.value);" style="" class="label btn btn-info">PAGAR</button>
                               {% endif %}
                               <a href="{% url "Reservas:EditReservaList" reserva.id %}" style="background-color:#39CCCC;" class="label">STATUS</a>
                               <a href="{% url "Reservas:DeleteReservas" reserva.id %}" style="background-color:#D81B60;" class="label">ELIMINAR</a>
@@ -448,4 +448,64 @@
 
 <!-- page script -->
 
+
+
+<script>
+  function PagarOnlineReservaWeb(id_reserva) {
+    var myArrayOfThings = [];
+    {% for turnos in formas_de_pago  %}
+       myArrayOfThings.push( { id: {{turnos.id}}, name: '{{turnos.nameFormasDePago}}' });
+    {% endfor %}
+    var options = {};
+    $.map(myArrayOfThings,function(o,query) {options[o.id] = o.name;});
+      swal.setDefaults({
+          input: 'text',
+          confirmButtonText: 'Siguiente &rarr;',
+          showCancelButton: true,
+          progressSteps: ['1', '2',]
+        })
+        var steps = [
+        {
+            title: 'Seleccione un metodo de pago',
+            input: 'select',
+            inputOptions: options,
+            inputPlaceholder: 'metodos de pago',
+          },
+          {
+            title: 'Ingrese el Monto a Cargar',
+            text: 'Monto'
+          },
+
+          
+        ]
+
+        swal.queue(steps).then(function (result) {
+          id_metodo_pago = parseFloat(result[0]);
+          id_monto       = parseFloat(result[1]);
+               swal.resetDefaults()
+                $.ajax({
+                    url: '/Caja/ajax/nuevo/ingreso/reserva/web',
+                    data: {
+                      'id_reserva':id_reserva,
+                      'id_metodo_pago': id_metodo_pago,
+                      'id_monto':id_monto,
+                  },
+                  dataType: 'json',
+                  success: function (status) {
+                     swal({
+                        title: 'Hemos Cargado de manera exitosa su pago !',
+                        confirmButtonText: 'Aceptar!'
+                      })
+                     location.reload(); 
+                }
+            });
+
+        }, function () {
+          swal.resetDefaults()
+        })
+  }
+</script>
+
 {% endblock scripts %}
+
+

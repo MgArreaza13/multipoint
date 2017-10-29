@@ -167,10 +167,10 @@
                 <table class="table no-margin">
                   <thead>
                   <tr>
-                  
-                    <th>SERVICIO</th>
+                    <th>COD</th>
                     <th>FECHA </th>
-                    <th>MONTO </th>
+                    <th>MONTO</th>
+                    <th>MONTO PAGADO</th>
                     <th>FECHA </th>
 
 
@@ -180,24 +180,26 @@
                   <tbody>
                   {% for turno in turnosSinPagar  %}
                     <tr>
-                    
+                    <td>TURNO-{{turno.id}}</td>
                     <td>{{turno.servicioPrestar}}</td>
                     <td>{{turno.dateTurn}}</td>
                     <td><span class="label label-warning">${{turno.montoAPagar}}</span></td>
+                    <td><span class="label label-warning">${{turno.montoPagado}}</span></td>
                     <td>
-                      <a href="{% url "Turnos:ReservaWebPanelPorPagar" turno.id  %}"  class="label btn btn-primary">COBRAR</a>
+                      <button  type="button" value='{{turno.id}}' href="javascript:void(0);" onclick="PagarOnlineTurno(this.value);" style="" class="label btn btn-info">PAGAR</button>
                                   
                     </td>
                   </tr>
                   {% endfor %}
                   {% for turno in ReservasSinPagar  %}
                     <tr>
-                    
+                    <td>RESERVA-{{turno.id}}</td>
                     <td>{{turno.servicioPrestar}}</td>
                     <td>{{turno.dateTurn}}</td>
                     <td><span class="label label-warning">${{turno.montoAPagar}}</span></td>
+                    <td><span class="label label-warning">${{turno.montoPagado}}</span></td>
                     <td>
-                      <a href="{% url "Reservas:ReservaWebPorPagar" turno.id  %}"  class="label btn btn-primary">COBRAR</a>
+                      <button  type="button" value='{{turno.id}}' href="javascript:void(0);" onclick="PagarOnlineReservaWeb(this.value);" style="" class="label btn btn-info">PAGAR</button>
                                   
                     </td>
                     
@@ -237,7 +239,7 @@
                 <table class="table no-margin">
                   <thead>
                   <tr>
-                  
+                    
                     <th>SERVICIO</th>
                     <th>CLIENTE</th>
                     <th>FECHA </th>
@@ -396,6 +398,119 @@
 <script src="{% static 'bootstrap/js/notificaciones.js'%}"></script>
 <!-- Page specific script -->
 <script>
+
+
+function PagarOnlineReservaWeb(id_reserva) {
+    var myArrayOfThings = [];
+    {% for turnos in formas_de_pago  %}
+       myArrayOfThings.push( { id: {{turnos.id}}, name: '{{turnos.nameFormasDePago}}' });
+    {% endfor %}
+    var options = {};
+    $.map(myArrayOfThings,function(o,query) {options[o.id] = o.name;});
+      swal.setDefaults({
+          input: 'text',
+          confirmButtonText: 'Siguiente &rarr;',
+          showCancelButton: true,
+          progressSteps: ['1', '2',]
+        })
+        var steps = [
+        {
+            title: 'Seleccione un metodo de pago',
+            input: 'select',
+            inputOptions: options,
+            inputPlaceholder: 'metodos de pago',
+          },
+          {
+            title: 'Ingrese el Monto a Cargar',
+            text: 'Monto'
+          },
+
+          
+        ]
+
+        swal.queue(steps).then(function (result) {
+          id_metodo_pago = parseFloat(result[0]);
+          id_monto       = parseFloat(result[1]);
+               swal.resetDefaults()
+                $.ajax({
+                    url: '/Caja/ajax/nuevo/ingreso/reserva/web',
+                    data: {
+                      'id_reserva':id_reserva,
+                      'id_metodo_pago': id_metodo_pago,
+                      'id_monto':id_monto,
+                  },
+                  dataType: 'json',
+                  success: function (status) {
+                     swal({
+                        title: 'Hemos Cargado de manera exitosa su pago !',
+                        confirmButtonText: 'Aceptar!'
+                      })
+                     location.reload(); 
+                }
+            });
+
+        }, function () {
+          swal.resetDefaults()
+        })
+  }
+
+  function PagarOnlineTurno(id_reserva) {
+    var myArrayOfThings = [];
+    {% for turnos in formas_de_pago  %}
+       myArrayOfThings.push( { id: {{turnos.id}}, name: '{{turnos.nameFormasDePago}}' });
+    {% endfor %}
+    var options = {};
+    $.map(myArrayOfThings,function(o,query) {options[o.id] = o.name;});
+      swal.setDefaults({
+          input: 'text',
+          confirmButtonText: 'Siguiente &rarr;',
+          showCancelButton: true,
+          progressSteps: ['1', '2',]
+        })
+        var steps = [
+        {
+            title: 'Seleccione un metodo de pago',
+            input: 'select',
+            inputOptions: options,
+            inputPlaceholder: 'metodos de pago',
+          },
+          {
+            title: 'Ingrese el Monto a Cargar',
+            text: 'Monto'
+          },
+
+          
+        ]
+
+        swal.queue(steps).then(function (result) {
+          id_metodo_pago = parseFloat(result[0]);
+          id_monto       = parseFloat(result[1]);
+               swal.resetDefaults()
+                $.ajax({
+                    url: '/Caja/ajax/nuevo/ingreso/turno/web',
+                    data: {
+                      'id_reserva':id_reserva,
+                      'id_metodo_pago': id_metodo_pago,
+                      'id_monto':id_monto,
+                  },
+                  dataType: 'json',
+                  success: function (status) {
+                     swal({
+                        title: 'Hemos Cargado de manera exitosa su pago !',
+                        confirmButtonText: 'Aceptar!'
+                      })
+                     location.reload(); 
+                }
+            });
+
+        }, function () {
+          swal.resetDefaults()
+        })
+  }
+  
+
+
+
   $(function () {
 
     /* initialize the external events
@@ -675,5 +790,11 @@ new Chart(document.getElementById("myChartweb"), {
       legend: { display: false }
     }
 });
+
+
+
+
+
+
 </script>
 {% endblock %}

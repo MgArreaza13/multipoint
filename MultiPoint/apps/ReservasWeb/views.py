@@ -262,6 +262,7 @@ def listReservas(request):
 	TurnEditar = -1 #para poder saber que turnos se le mostrara el formulario, verifico que ningun id coincida con -1
 	reservas = tb_reservasWeb.objects.all()
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
+	formas_de_pago = tb_formasDePago.objects.all()
 	perfil = result[0]
 	formulario = False
 	#queryset 
@@ -271,6 +272,7 @@ def listReservas(request):
 	ingresos_hoy = tb_ingreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	egresos_hoy  = tb_egreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	context = {
+	'formas_de_pago':formas_de_pago,
 	'perfil':perfil,
 	'reservas':reservas,
 	'turnos_hoy':turnos_hoy,

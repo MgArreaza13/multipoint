@@ -19,7 +19,7 @@ from apps.Caja.models import tb_egreso
 
 #script de validar el perfil
 from apps.ReservasWeb.models import tb_reservasWeb
-
+from apps.Configuracion.models import tb_formasDePago
 from apps.scripts.validatePerfil import validatePerfil
 
 
@@ -33,6 +33,7 @@ from apps.scripts.validatePerfil import validatePerfil
 # Create your views here.
 @login_required(login_url = 'Demo:login' )
 def inicio(request):
+	formas_de_pago = tb_formasDePago.objects.all()
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	turnos = tb_turn.objects.filter(statusTurn__nameStatus = "Confirmada")
 	ReservasWeb = tb_reservasWeb.objects.filter(statusTurn__nameStatus = "Confirmada")
@@ -90,6 +91,7 @@ def inicio(request):
 	ingresos_hoy = tb_ingreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	egresos_hoy  = tb_egreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	context = {
+	'formas_de_pago':formas_de_pago,
 	'turnosSinPagar':turnosSinPagar,
 	'ReservasSinPagar':ReservasSinPagar,
 	'turnos':turnos,
