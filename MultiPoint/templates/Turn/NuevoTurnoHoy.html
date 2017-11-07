@@ -155,7 +155,7 @@
 
                                         {% for servicios in servicios  %}
                                           <div class="item" data-slide-number="{{servicios.id}}">
-                                            <img src="http://multipoint.pythonanywhere.com/media/{{servicios.image}}">
+                                            <img src="{}/media/{{servicios.image}}">
                                           </div>
 
 
@@ -184,7 +184,7 @@
                                           
 
                                           <li class="col-sm-6">
-                                             <a class="thumbnail" id="carousel-selector-{{servicios.id}}"><img src="http://multipoint.pythonanywhere.com/media/{{servicios.image}}"></a>
+                                             <a class="thumbnail" id="carousel-selector-{{servicios.id}}"><img src="{}/media/{{servicios.image}}"></a>
                                              <div class="checkbox">
                                             <label>
                                               <input name="{{servicios.id}}" onclick=" Suma(this.checked,this.value); miguel(this.checked,this.name) " value="{{servicios.priceList}}" type="checkbox">
@@ -256,7 +256,7 @@
                   
                   
                 </div>
-                    <img src="http://multipoint.pythonanywhere.com/media/{{productos.image}}" alt="{{productos.nameProduct}}">
+                    <img src="{}/media/{{productos.image}}" alt="{{productos.nameProduct}}">
 
                     
                   </div>
@@ -475,7 +475,7 @@ function validateSelect(){
     var id_servicio = $("#servicio").val();
 
     $.ajax({
-        url: 'http://multipoint.pythonanywhere.com/reservas/ajax/validacion/',
+        url: '{{server}}/reservas/ajax/validacion/',
         data: {
           'id_servicio': id_servicio
       },

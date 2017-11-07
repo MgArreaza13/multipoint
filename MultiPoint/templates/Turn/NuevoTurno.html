@@ -202,7 +202,7 @@
                         <div class="col-xs-12">
                             <div class="col-item">
                                 <div class="photo">
-                                    <img src="http://multipoint.pythonanywhere.com/media/{{servicios.image}}" class="img-responsive" style="width:350px; height:260px;" alt="a" />
+                                    <img src="{{server}}/media/{{servicios.image}}" class="img-responsive" style="width:350px; height:260px;" alt="a" />
                                 </div>
                                 <div class="info">
                                     <div class="row">
@@ -295,7 +295,7 @@
                         <div class="col-xs-12">
                             <div class="col-item">
                                 <div class="photo">
-                                    <img src="http://multipoint.pythonanywhere.com/media/{{productos.image}}" style="width:350px; height:260px;" class="img-responsive" alt="a" />
+                                    <img src="{{server}}/media/{{productos.image}}" style="width:350px; height:260px;" class="img-responsive" alt="a" />
                                 </div>
                                 <div class="info">
                                     <div class="row">
@@ -649,7 +649,7 @@
    function query(val){
     var id_servicio =  val;
     $.ajax({
-        url: 'http://multipoint.pythonanywhere.com/servicios/consulta/detail',
+        url: '{{server}}/servicios/consulta/detail',
         data: {
           'id_servicio': id_servicio
       },
@@ -695,7 +695,7 @@
    function queryProducto(val){
     var id_producto =  val;
     $.ajax({
-        url: 'http://multipoint.pythonanywhere.com/productos/consulta/detail',
+        url: '{{server}}/productos/consulta/detail',
         data: {
           'id_producto': id_producto
       },
@@ -776,7 +776,7 @@ function validateSelect(){
     var id_servicio = $("#servicio").val();
 
     $.ajax({
-        url: 'http://multipoint.pythonanywhere.com/reservas/ajax/validacion/',
+        url: '{{server}}/reservas/ajax/validacion/',
         data: {
           'id_servicio': id_servicio
       },

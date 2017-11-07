@@ -271,7 +271,7 @@ function validateSelect(){
     var id_servicio = $("#servicio").val();
 
     $.ajax({
-        url: 'http://multipoint.pythonanywhere.com/reservas/ajax/validacion/',
+        url: '{{server}}/reservas/ajax/validacion/',
         data: {
           'id_servicio': id_servicio
       },

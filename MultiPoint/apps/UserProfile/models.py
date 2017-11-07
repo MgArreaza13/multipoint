@@ -17,3 +17,4 @@ class tb_profile (models.Model):
 	#StatusKf		= 	models.ForeignKey(tb_status_turn, on_delete=models.CASCADE, null=False, default='')
 	def __str__(self):
 		return self.nameUser
+		

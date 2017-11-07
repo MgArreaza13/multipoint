@@ -130,7 +130,7 @@
             </a>
             {% else %}
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="http://multipoint.pythonanywhere.com/media/{{perfil.image}}" class="user-image" alt="User Image">
+              <img src="{{server}}/media/{{perfil.image}}" class="user-image" alt="User Image">
               <span class="hidden-xs">{{request.user.username}}</span>
             </a>
             {% endif %}
@@ -146,7 +146,7 @@
                 
                 {% else %} 
                 <li class="user-header">
-                <img src="http://multipoint.pythonanywhere.com/media/{{perfil.image}}" class="img-circle" alt="User Image">
+                <img src="{{server}}/media/{{perfil.image}}" class="img-circle" alt="User Image">
 
                 <p>
                   {{request.user.username}} - {{perfil.tipoUser}}
@@ -198,7 +198,7 @@
         <p style="color:grey;">completa el perfil</p>
         {% else %}
         <div class="pull-left image">
-          <img style="height:40px; width:70px;" src="http://multipoint.pythonanywhere.com/media/{{perfil.image}}" class="img-circle" alt="User Image">
+          <img style="height:40px; width:70px;" src="{{server}}/media/{{perfil.image}}" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p>{{request.user.username}}</p>

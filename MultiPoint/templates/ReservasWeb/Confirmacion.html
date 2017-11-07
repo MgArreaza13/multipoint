@@ -94,7 +94,7 @@
       <div class="row">
         <div class="col-xs-12">
           <h2 class="page-header">
-            <img src="http://multipoint.pythonanywhere.com/media/{{logo.logo}}" style="height:100px; width:170px; " alt=""> <h3>LISTO!! Ya puedes confirmar tu reserva! elige el medio de pago!</h3>
+            <img src="{{server}}/media/{{logo.logo}}" style="height:100px; width:170px; " alt=""> <h3>LISTO!! Ya puedes confirmar tu reserva! elige el medio de pago!</h3>
             <small class="pull-right">Fecha: {{fecha}}</small>
           </h2>
         </div>
@@ -298,13 +298,13 @@
 
 
 function redirecciona(){
-  window.location.replace("http://multipoint.pythonanywhere.com/");
+  window.location.replace("{{server}}/");
 }
 
 
  function Correo(pk){
      $.ajax({
-        url: 'http://multipoint.pythonanywhere.com/reservas/Correo/Pago/Sucursal',
+        url: '{{server}}/reservas/Correo/Pago/Sucursal',
         data: {
           'pk': pk
          },
@@ -338,7 +338,7 @@ function redirecciona(){
 
   function validar(pk){
      $.ajax({
-        url: 'http://multipoint.pythonanywhere.com/reservas/Procesar/Pago/Status',
+        url: '{{server}}/reservas/Procesar/Pago/Status',
         data: {
           'pk': pk
          },
@@ -348,7 +348,7 @@ function redirecciona(){
             
            if (data.status== 'PAYMENT_CREATED') {
              $.ajax({
-                  url: 'http://multipoint.pythonanywhere.com/reservas/Procesar/Pago/Status/change',
+                  url: '{{server}}/reservas/Procesar/Pago/Status/change',
                   data: {
                     'pk': pk
                    },
@@ -359,7 +359,7 @@ function redirecciona(){
 
                 });
             alert('Gracias Por Realizar su pago');
-            window.location.replace("http://multipoint.pythonanywhere.com/");
+            window.location.replace("{{server}}/");
            }
 
            return data.status;

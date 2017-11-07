@@ -44,7 +44,7 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <img class="img-responsive pad" src="http://multipoint.pythonanywhere.com/media/{{productos.image}}" alt="Photo">
+              <img class="img-responsive pad" src="{{server}}/media/{{productos.image}}" alt="Photo">
 
               <p>{{productos.descriptionProduct}}</p>
               
@@ -82,7 +82,7 @@
                 
                 <li class="item">
                   <div class="product-img">
-                    <img src="http://multipoint.pythonanywhere.com/media/{{producto.image}}" alt="Product Image">
+                    <img src="{{server}}/media/{{producto.image}}" alt="Product Image">
                   </div>
                   <div class="product-info">
                     <a href="javascript:void(0)" class="product-title">{{producto.nameProduct}}

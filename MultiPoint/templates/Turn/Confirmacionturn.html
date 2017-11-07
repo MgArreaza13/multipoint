@@ -267,7 +267,7 @@
 
   function validar(pk){
      $.ajax({
-        url: 'http://multipoint.pythonanywhere.com/turnos/Procesar/Pago/Status',
+        url: '{{server}}/turnos/Procesar/Pago/Status',
         data: {
           'pk': pk
          },
@@ -277,7 +277,7 @@
             
            if (data.status== 'PAYMENT_CREATED') {
              $.ajax({
-                  url: 'http://multipoint.pythonanywhere.com/turnos/Procesar/Pago/Status/change',
+                  url: '{{server}}/turnos/Procesar/Pago/Status/change',
                   data: {
                     'pk': pk
                    },
