@@ -113,10 +113,10 @@ def DetallesWeb(request, id_reservas):
 	fecha = date.today()
 	admin = tb_profile.objects.filter(tipoUser='Administrador')
 	administrador = admin[0]
-	logo = tb_logo.objects.get(id=1)
+	
 
 	
-	return render(request, 'ReservasWeb/DetallesWeb.html', {'reserva':reserva,'logo':logo, 'administrador':administrador ,'fecha':fecha})
+	return render(request, 'ReservasWeb/DetallesWeb.html', {'reserva':reserva, 'administrador':administrador ,'fecha':fecha})
 
 def CorreoDePagoSucursal(request):
 	pk = request.GET.get('pk', None)
@@ -131,7 +131,7 @@ def CorreoDePagoSucursal(request):
 	email_body_Soporte = "se ha registrado  una  nueva reserva , nombre:%s . correo:%s, numero:%s , te invitamos a contactarla y luego a cambiar el status de la reserva luego que se complete el pago en la sucursal, revisa el status  en  http://multipoint.pythonanywhere.com/reservas/list/" %(reserva.nombre, reserva.mail, reserva.telefono)
 	message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com"])
 	#enviamos el correo
-	send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+	#send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
 	data = {
 		'status':'ok'
 	}
@@ -193,7 +193,7 @@ def StatusChange(request ):
 	email_body_Soporte = "se ha registrado un Pago de una  reserva , nombre:%s . correo:%s, numero:%s , para un servicio %s, y un monto de $%s te invitamos a revisarla en http://multipoint.pythonanywhere.com/reservas/list/" %(reserva.nombre, reserva.mail, reserva.telefono, reserva.servicioPrestar, reserva.montoAPagar)
 	message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com"])
 	#enviamos el correo
-	send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+	#send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
 	return HttpResponse('ok')
 
 
@@ -213,7 +213,6 @@ def Pago(request, id_reserva):
 
 @login_required(login_url = 'Demo:login' )
 def ReservaWebPorPagar(request, id_reserva):
-	logo = tb_logo.objects.get(id=1)
 	reserva = tb_reservasWeb.objects.get(id=id_reserva)
 	admin = tb_profile.objects.filter(tipoUser='Administrador')
 	administrador = admin[0]
@@ -243,7 +242,7 @@ def ReservaWebPorPagar(request, id_reserva):
 			email_body_Soporte = "se ha registrado un Pago de una  reserva , nombre:%s . correo:%s, numero:%s , te invitamos a contactarla y luego a cambiar el status de la reserva en  http://multipoint.pythonanywhere.com/reservas/list/" %(reserva.nombre, reserva.mail, reserva.telefono)
 			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com"])
 			#enviamos el correo
-			send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+			#send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
 			return render(request, 'ReservasWeb/FacturaPorPagar.html' , {'Form':Form, 'perfil':perfil, 'mensaje':mensaje, 'reserva':reserva,'administrador':administrador,'fecha':fecha,})
 		else: 
 			Form = WebReservasIngresoForm()
@@ -251,7 +250,6 @@ def ReservaWebPorPagar(request, id_reserva):
 			
 	return render(request , 'ReservasWeb/FacturaPorPagar.html' , {'fallido':fallido,
 			'Form':Form,
-			'logo':logo,
 			'reserva':reserva,
 			'administrador':administrador,
 			'fecha':fecha,})
@@ -319,7 +317,7 @@ def EditReservaList(request , id_reservas):
 				email_body_Soporte = "hola %s, hemos confirmado tu reserva web te invitamos a procesar tu pago en http://multipoint.pythonanywhere.com/reservas/list/" %(reserva.nombre)
 				message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', [mail])
 				#enviamos el correo
-				send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+				#send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
 			return redirect ('Reservas:listReservas')
 	return render (request, 'ReservasWeb/listaDeReservas.html', {'ReservaWebEditar':ReservaWebEditar,'reservas':reservas,'Form':Form , 'perfil':perfil})
 
@@ -382,7 +380,7 @@ def web(request):
 			email_body_Soporte = "se ha registrado una nueva reserva , nombre:%s . correo:%s, numero:%s , te invitamos a contactarla y luego a cambiar el status de la reserva en  http://multipoint.pythonanywhere.com/reservas/list/" %(turno.nombre, turno.mail, turno.telefono)
 			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com"])
 			#enviamos el correo
-			send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+			#send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
 			return redirect('Reservas:Factura', id_reservas=turno.id)
 		else:
 				fallido = "Errores en los datos Verifiquelos, y vuelva a intentarlo"
@@ -395,10 +393,9 @@ def Factura(request, id_reservas):
 	fecha = date.today()
 	admin = tb_profile.objects.filter(tipoUser='Administrador')
 	administrador = admin[0]
-	logo = tb_logo.objects.get(id=1)
 
 	
-	return render(request, 'ReservasWeb/Confirmacion.html', {'reserva':reserva,'logo':logo, 'administrador':administrador ,'fecha':fecha})
+	return render(request, 'ReservasWeb/Confirmacion.html', {'reserva':reserva, 'administrador':administrador ,'fecha':fecha})
 
 
 @login_required(login_url = 'Demo:login' )
