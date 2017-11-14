@@ -28,7 +28,9 @@
       <div class="row">
         <div class="col-xs-12">
           <h2 class="page-header">
-            <img src="{{server}}/media/{{logo.logo}}" style="height:100px; width:300px; " alt="">
+            {% if logo != None %}
+              <img src="{{server}}/media/{{logo.logo}}" style="height:100px; width:170px; " alt=""> 
+            {% endif %}
             <small class="pull-right">FECHA: {{fecha}}</small>
           </h2>
         </div>

@@ -213,7 +213,9 @@
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>Mp</b></span>
       <!-- logo for regular state and mobile devices -->
-      <span style="height:15px; width:70px;" class="logo-lg"><img style="margin-top:-0.3em; width:6.5em; height:3em;" src="{% static 'img/multipoint-logo.png' %}" alt=""></span>
+      <span style="height:15px; width:70px;" class="logo-lg">{% if logo != None %}
+              <img src="{{server}}/media/{{logo.logo}}" style="height:100px; width:170px; " alt=""> 
+            {% endif %}</span>
     </a>
         
       <!-- /.container-fluid -->
@@ -299,7 +301,7 @@
                 
               
                   <div style="margin-top: 2em;" class="box-footer" disable="">
-                <a id="siguientePaso" href="javascript:void(0)" class="btn btn-primary"> PASO 2</a>
+                <a id="siguientePaso" href="javascript:void(0)" class="btn btn-primary"> CONTINUAR</a>
                 
               </div>       
            </div>
@@ -368,7 +370,7 @@
                                     </div>
                                     <div class="separator clear-left col-md-12">
                                         <p class="btn-add col-sm-6">
-                                            <button type="button" name="{{servicios.id}}"  id="siguientePaso2" name="{{servicios.nameService}}"  value="{{servicios.priceList}}" class="btn btn-success btn-block" onclick="Suma(this.value); PASO2 (); Desabilitar(this); ServiceSelected(this.name);"><i class="fa fa-shopping-cart"></i>COTIZAR</button></p>
+                                            <button type="button" name="{{servicios.id}}"  id="siguientePaso2" name="{{servicios.nameService}}"  value="{{servicios.priceList}}" class="btn btn-success btn-block" onclick="Suma(this.value); PASO2 (); Desabilitar(this); ServiceSelected(this.name);"><i class="fa fa-shopping-cart"></i>CONTINUAR</button></p>
                                         <p style=""class="btn-details col-sm-6">
                                             <button type="button" class="btn btn-info btn-block" id="InfoServicio" value={{servicios.id}} onclick="query(this.value)"><i class="fa fa-list"></i>VER MAS</button></p>
                                     </div>
@@ -558,7 +560,7 @@
 
               
                    <div style="text-align:center;"  class="box-footer col-md-12">
-                <button type="button" onclick="PASO4();" class="btn btn-primary">SIGUIENTE</button>
+                <button type="button" onclick="PASO4(); ShowMessage();" class="btn btn-primary">COTIZAR</button>
                 <a id="regresar" href="javascript:void(0)" class="btn btn-danger">REGRESAR</a>
               </div>      
            </div>
@@ -800,6 +802,53 @@
 <!--<script src="{% static 'bootstrap/js/notificaciones.js'%}"></script>-->
 
 <script>
+
+
+    function ShowMessage() 
+    {
+        if ($('#INOCOFECHA').attr('class') == 'fa fa-close' || $('#ICONOTARJETA').attr('class') == 'fa fa-close')
+         {
+            swal({
+              type: 'warning',
+              title: 'Excelente!',
+              text: 'Hasta aqui todo marcha Bien, ahora selecciona el dia y el turno que este disponible',
+              timer: 6000,
+              onOpen: function () {
+                swal.showLoading()
+              }
+            }).then(
+              function () {},
+              // handling the promise rejection
+              function (dismiss) {
+                if (dismiss === 'timer') {
+                  console.log('I was closed by the timer')
+                }
+              }
+            )
+         }
+         else 
+         {
+          swal({
+              type: 'success',
+              title: 'Excelente!',
+              text: 'Has completado todos los datos necesarios para la reserva, presiona el boton de Guardar!',
+              timer: 6000,
+              onOpen: function () {
+                swal.showLoading()
+              }
+            }).then(
+              function () {},
+              // handling the promise rejection
+              function (dismiss) {
+                if (dismiss === 'timer') {
+                  console.log('I was closed by the timer')
+                }
+              }
+            )
+         }
+    }
+
+
     //desabhilito el boton de cada producto luego que es agregado 
 
     setInterval(function(){ validarBotonPaso1(); }, 300);

@@ -76,7 +76,9 @@
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>Mp</b></span>
       <!-- logo for regular state and mobile devices -->
-      <span style="height:15px; width:70px;" class="logo-lg"><img style="margin-top:-0.3em; width:6.5em; height:3em;" src="{% static 'img/multipoint-logo.png' %}" alt=""></span>
+      <span style="height:15px; width:70px;" class="logo-lg">{% if logo != None %}
+              <img src="{{server}}/media/{{logo.logo}}" style="height:100px; width:170px; " alt=""> 
+            {% endif %}</span>
     </a>
         
       <!-- /.container-fluid -->
@@ -94,7 +96,10 @@
       <div class="row">
         <div class="col-xs-12">
           <h2 class="page-header">
-            <img src="{{server}}/media/{{logo.logo}}" style="height:100px; width:170px; " alt=""> <h3>LISTO!! Ya puedes confirmar tu reserva! elige el medio de pago!</h3>
+            {% if logo != None %}
+              <img src="{{server}}/media/{{logo.logo}}" style="height:100px; width:170px; " alt=""> 
+            {% endif %}
+            <h3>LISTO!! Ya puedes confirmar tu reserva! elige el medio de pago!</h3>
             <small class="pull-right">Fecha: {{fecha}}</small>
           </h2>
         </div>

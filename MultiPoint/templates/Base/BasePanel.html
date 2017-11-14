@@ -86,7 +86,13 @@
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>Mp</b></span>
       <!-- logo for regular state and mobile devices -->
-      <span style="height:15px; width:70px;" class="logo-lg"><img style="margin-top:-0.2em; width:6.5em; height:3em;" src="{% static 'img/multipoint-logo.png' %}" alt=""></span>
+      <span style="height:15px; width:70px;" class="logo-lg">
+      {% if logo != None %}
+        
+        <img src="{{server}}/media/{{logo.logo}}" style="height:100px; width:170px; " alt=""> 
+        
+      {% endif %}
+      </span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
@@ -373,7 +379,7 @@
             <li><a href="{% url "Reservas:listReservas" %}"><i class="fa fa-calendar"></i> Reservas Online </a></li>
             <li><a href="{% url "Demo:calendario" %}"><i class="fa fa-calendar"></i> CALENDARIO DE RESERVAS </a></li>
            
-            <li><a href="{% url "Turnos:NuevoTurn" %}"><i class="fa fa-plus"></i> Nuevo Reserva </a></li>
+            <li><a href="{% url "Reservas:web" %}"><i class="fa fa-plus"></i> Nuevo Reserva </a></li>
             
             
           </ul>
@@ -489,7 +495,7 @@
             </span>
           </a>
           <ul class="treeview-menu" style="display: none;">
-            <li><a href="{% url "Turnos:NuevoTurnClient" request.user.id %}"><i class="fa fa-plus"></i> Nuevo Reserva </a></li>
+            <li><a href="{% url "Reservas:web" %}"><i class="fa fa-plus"></i> Nuevo Reserva </a></li>
            
             
             
