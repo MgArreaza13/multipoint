@@ -1365,7 +1365,7 @@ $('.clockpicker').clockpicker({
                       }
                       if(band == 1){
                         // aqui cargo la opcion para el select
-                       myArrayOfThings.push( { id: {{Tturno.id}}, name: '{{Tturno.nameturnsession}} . {{Tturno.HoraTurn}} - {{Tturno.HoraTurnEnd}}' });
+                       myArrayOfThings.push( { id: '{{Tturno.id}}', name: '{{Tturno.nameturnsession}} . {{Tturno.HoraTurn}} - {{Tturno.HoraTurnEnd}}' });
                         //console.log(' voy a cargarrrrrrrrrrrrrrrrrrrrrrrrrr cargare');
                       }
                       //console.log(myArrayOfThings);
@@ -1412,6 +1412,7 @@ $('.clockpicker').clockpicker({
                     type: 'success',
                     html: 'Has seleccionado el turno: ' + result
                   })
+                  $('#TurnSeleccionado').val(result);
               });
           }
           else{
@@ -1442,7 +1443,7 @@ $('.clockpicker').clockpicker({
                     return new Promise(function (resolve, reject) {
                           
                         if (value) {
-                          console.log(value);
+                          alert(value);
                           $('#TurnSeleccionado').val(value);
                         resolve('Has Seleccionado El turno Valido')
                                      
