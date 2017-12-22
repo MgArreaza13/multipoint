@@ -43,6 +43,44 @@ from apps.ingenico.MycheckoutSupport import statusDePago
 from apps.Configuracion.models import tb_logo
 
 from apps.Configuracion.models import tb_turn_sesion
+from apps.Turn.models import tb_turn
+from apps.Collaborator.models import tb_collaborator
+from apps.Turn.models import tb_turn
+from apps.Caja.models import tb_ingreso
+from apps.Caja.models import tb_egreso
+from apps.Service.models import tb_service
+from apps.Product.models import tb_product
+#FORMULARIOS
+from apps.ReservasWeb.forms import ReservasWebForm
+from apps.ReservasWeb.forms import EditReservaWebForm
+#datos para la vista principal arriba de las citas y los ingresos.
+from django.db.models import Count, Min, Sum, Avg
+from datetime import date 
+# Create your views here.
+from apps.UserProfile.models import tb_profile
+from apps.scripts.validatePerfil import validatePerfil
+from apps.Configuracion.models import tb_status
+# enviar correos
+from django.core.mail import send_mail
+from django.core.mail import send_mass_mail
+from datetime import date 
+from django.http import JsonResponse
+from apps.Notificaciones.models import Notificacion
+from apps.Caja.forms import WebReservasIngresoForm
+from ingenico.connect.sdk.factory import Factory
+from apps.ingenico.MycheckoutSupport import Pago_Online
+from apps.ingenico.MycheckoutSupport import statusDePago
+from django.contrib import auth
+from apps.Configuracion.models import tb_formasDePago
+from apps.Configuracion.models import tb_tipoIngreso
+
+from apps.scripts.SumarHora import sumar_hora
+from apps.Client.models import tb_client_WEB
+from apps.Configuracion.models import tb_logo
+from apps.Configuracion.models import tb_turn_sesion
+from django.core import serializers
+from apps.Configuracion.models import tb_turn_sesion
+
 
 
 
@@ -401,65 +439,70 @@ def listTurnos(request):
 #crea los turnos
 @login_required(login_url = 'Demo:login' )
 def NuevoTurn(request):
-	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	turnos = tb_turn.objects.filter(statusTurn__nameStatus="Confirmada")
 	ReservasWeb = tb_reservasWeb.objects.filter(statusTurn__nameStatus="Confirmada")
-	servicios = tb_service.objects.all()
 	productos = tb_product.objects.all()
-	tipe_turnos = tb_turn_sesion.objects.all()
-	perfil = result[0]
-	Form = TurnForm
-	mensaje1 = None
-	fallido = None
+	servicios = tb_service.objects.all()
+	Form = ReservasWebForm
 	notificacion = Notificacion()
+	tipe_turnos = tb_turn_sesion.objects.all()
+
+	user = tb_client_WEB()
+	fallido = None
 	if request.method == 'POST':
-		
-		Form = TurnForm(request.POST or None)
-		#ReservaWebOcupada = tb_turn.objects.filter(dateTurn=request.POST['FechaSeleccionada']).filter(statusTurn__nameStatus="Confirmada").filter(turn=request.POST['TurnSeleccionado'])	
-		#data = len(ReservaWebOcupada)
-		#print(data)
+		Form = ReservasWebForm(request.POST or None)
 		if Form.is_valid():
-			
+			print(request.POST)
 			turno = Form.save(commit=False)
-			turno.user = request.user
 			turno.dateTurn = request.POST['FechaSeleccionada']
 			turno.turn = tb_turn_sesion.objects.get(id=request.POST['TurnSeleccionado'])
 			turno.statusTurn = tb_status.objects.get(nameStatus="Sin Aprobar")
-			turno.extraInfoTurn = 'Sin Comentarios'
-			
-			turno.servicioPrestar = tb_service.objects.get(id= request.POST['ServicioSeleccionado'])
+			turno.servicioPrestar=tb_service.objects.get(id = request.POST['ServicioSeleccionado'])
 			turno.montoAPagar = float(request.POST['total'])  
+			if request.POST['ProductosSeleccionados'] != ' ':
+				turno.description = request.POST['ProductosSeleccionados']
+			else:
+				turno.description = 'Sin Descripcion'
+			print(turno.description)
 			turno.save()
-			notificacion.nombre = turno.client.user.nameUser
+			notificacion.nombre = turno.nombre
 			notificacion.dateTurn = turno.dateTurn
 			notificacion.save()
-				#Enviaremos los correos a el colaborador y al cliente 
-				#colaborador
-				#colaborador = tb_profile.objects.get(nameUser=turno.collaborator) #trato de traer el colaborador del formulario
-				#email_subject_Colaborador = 'Nuevo Turno Solicitado Por Cliente'
-				#email_body_Colaborador = "Hola %s, El presente mensaje es para informarle que ha recibido una nueva solicitud para un turno si desea revisarla y confirmarla ingrese aqui http://estiloonline.pythonanywhere.com" %(colaborador)
-				#email_colaborador = colaborador.mailUser
-				#message_colaborador = (email_subject_Colaborador, email_body_Colaborador , 'as.estiloonline@gmail.com', [email_colaborador])
-				#cliente
-			client = tb_profile.objects.get(user__username=turno.client) #trato de traer el colaborador del formulario
-			email_subject_client = 'Nuevo Turno Solicitado'
-			email_body_Client = "Hola %s, El presente mensaje es para informarle que se ha enviado una nueva solicitud para un turno si desea revisarla y confirmarla ingrese aqui http://estiloonline.pythonanywhere.com" %(client)
-			email_client = client.mailUser
-			message_client = (email_subject_client, email_body_Client, 'as.estiloonline@gmail.com', [email_client])
-				#mensaje para apreciasoft
-			email_subject_Soporte = 'Nuevo Turno Solicitado en Estilo Online'
-			email_body_Soporte = "Hola, soporte Apreciasoft, El presente mensaje es para informarle que el cliente  %s ha enviado una nueva solicitud para de reserva , si desea revisarla ingrese aqui http://estiloonline.pythonanywhere.com" %(client)
-			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com'])
+			#creo el cliente web , debo validar si ya existe y agregar un contador
+			query_set_user = tb_client_WEB.objects.filter(mail= turno.mail)
+			if (len(query_set_user) == 1):
+				print('entre en el condicional')
+				query_set_user[0].numeroReservasWeb += 1
+				query_set_user[0].save()
+			else:
+				user = tb_client_WEB()
+				user.nombre = turno.nombre
+				user.mail = turno.mail 
+				user.telefono = turno.telefono
+				user.save()
+
+			turno_enviar = tb_reservasWeb.objects.get(id=turno.id)
+			mensaje ="se ha registrado de forma correcta sus datos gracias por contactarnos"
+			#mandar mensaje de nuevo usuario
+			#Enviaremos los correos a el colaborador y al cliente 
+			#cliente
+			usuario = turno.mail #trato de traer el colaborador del formulario
+			email_subject_usuario = 'Multipoint - Nueva Reserva'
+			email_body_usuario = "Hola %s, gracias por solicitar una nueva reserva , para disfrutar de nuestros servicios te invitamos a resgistrarte aqui http://multipoint.pythonanywhere.com/" %(turno.nombre)
+			message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+			#mensaje para apreciasoft
+			email_subject_Soporte = 'Multipoint - Nueva Reserva'
+			email_body_Soporte = "se ha registrado una nueva reserva , nombre:%s . correo:%s, numero:%s , te invitamos a contactarla y luego a cambiar el status de la reserva en  http://multipoint.pythonanywhere.com/reservas/list/" %(turno.nombre, turno.mail, turno.telefono)
+			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com"])
 			#enviamos el correo
-			send_mass_mail(( message_client, message_Soporte), fail_silently=False)
-			mensaje = "Hemos Guardado sus datos de manera correcta"
-			return redirect('Turnos:FacturaTurn', id_turn=turno.id)
-			
+			#send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+			return redirect('Reservas:Factura', id_reservas=turno.id)
 		else:
-				mensaje1 = "Errores en los datos Verifiquelos, y vuelva a intentarlo"
-				Form = TurnForm()
-				fallido = "Tuvimos un error al cargar sus datos, verifiquelo e intente de nuevo"
-	return render(request, 'Turn/NuevoTurno.html' , {'Form':Form, 'tipe_turnos':tipe_turnos ,'servicios':servicios, 'productos':productos  ,'ReservasWeb':ReservasWeb ,'turnos':turnos ,'mensaje1':mensaje1, 'perfil':perfil, 'fallido':fallido})
+				fallido = "Errores en los datos Verifiquelos, y vuelva a intentarlo"
+				Form = ReservasWebForm()
+	return render(request, 'Turn/NuevoTurno.html' , {'Form':Form, 'tipe_turnos':tipe_turnos ,'servicios':servicios,'productos':productos ,'ReservasWeb':ReservasWeb ,'turnos':turnos ,'fallido':fallido,})
+
+	
 
 #edita los turnos en general
 @login_required(login_url = 'Demo:login' )

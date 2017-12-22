@@ -21,9 +21,45 @@ from apps.scripts.validatePerfil import validatePerfil
 from django.core.mail import send_mail
 from django.core.mail import send_mass_mail
 from apps.ReservasWeb.models import tb_reservasWeb
+from django.http import JsonResponse
+from django.http import HttpResponse
 
 
 # Create your views here.
+
+
+
+
+
+
+
+
+
+
+
+
+
+#############################FORMLARIO CLIENTE WEB#############################
+def newclientewebform(request):
+	data = 200
+	correo = request.GET.get('correo', None)
+	query = tb_client_WEB.objects.filter(mail=correo)
+	if len(query) == 0:
+		nuevo_cliente = tb_client_WEB()
+		nuevo_cliente.nombre = request.GET.get('nombre', None)
+		nuevo_cliente.mail = request.GET.get('correo', None)
+		nuevo_cliente.telefono =  request.GET.get('telefono', None)
+		nuevo_cliente.numeroReservasWeb = 0
+		nuevo_cliente.save()
+	else:
+		data = 400
+	return HttpResponse(data)
+
+
+def ClienteWebForm(request):
+	return render (request , 'Client/ClienteWebForm.html')
+
+
 
 #nuevo perfil de cliente
 @login_required(login_url = 'Demo:login' )

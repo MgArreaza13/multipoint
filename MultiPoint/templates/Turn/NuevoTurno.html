@@ -82,19 +82,16 @@
     <!-- Content Header (Page header) -->
      <section class="content-header">
       <h1>
-        NUEVA RESERVA WEB
+        NUEVA RESERVA 
         <small>Control panel</small>
       </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> INICIO</a></li>
-        <li class="active">CALENDARIO</li>
-      </ol>
+      
     </section>
 
     <!-- Main content -->
-    <section class="content">
+     <section class="content">
       <div class="row">
-        <div class="col-lg-4 col-sm-12 ">
+        <div class="col-lg-5 col-sm-12 ">
           <!-- general form elements -->
           <div class="box box-info">
             <div class="box-header with-border">
@@ -127,12 +124,25 @@
                     {{ field.errors }}
 
 
-                    {% if field.name == 'client' %}
-                      <div class="form-group ">
-                              <label>Seleccione Cliente</label>
-                             {{ field }}
-                      
-                          </div>
+                    {% if field.name == 'mail' %}
+                       <div class="form-group ">
+                    <label>Correo*</label>
+                    <input id='campo1' class="form-control" placeholder="{{field.label}}" autocomplete="off" 
+                      required autofocus maxlength="{{field.max_length}}" {{ field }}    
+                  </div>
+                    {% elif field.name == 'nombre' %}
+                       <div class="form-group ">
+                    <label>Nombre*</label>
+                    <input id="campo2" class="form-control" placeholder="{{field.label}}" autocomplete="off" 
+                      required autofocus maxlength="{{field.max_length}}" {{ field }}    
+                  </div>
+                    {% elif field.name == 'telefono' %}
+                       <div class="form-group ">
+                    <label>Telefono*</label>
+                    <input id='campo3' class="form-control" placeholder="{{field.label}}" autocomplete="off" 
+                      required autofocus maxlength="{{field.max_length}}" {{ field }}    
+                  </div>
+
                     
                       
                     {% endif %}
@@ -147,7 +157,7 @@
                 
               
                   <div style="margin-top: 2em;" class="box-footer" disable="">
-                <a id="siguientePaso" href="javascript:void(0)" class="btn btn-primary"> PASO 2</a>
+                <a id="siguientePaso" href="javascript:void(0)" class="btn btn-primary"> CONTINUAR</a>
                 
               </div>       
            </div>
@@ -171,7 +181,8 @@
               <div class="row">
             <div class="col-md-5">
                 <h3>
-                    SERVICIOS</h3>
+                    PROMOCIONES
+                    </h3>
             </div>
             <div class="col-md-6">
                 <!-- Controls -->
@@ -216,9 +227,9 @@
                                     </div>
                                     <div class="separator clear-left col-md-12">
                                         <p class="btn-add col-sm-6">
-                                            <button type="button" name="{{servicios.id}}"  id="siguientePaso2" name="{{servicios.nameService}}"  value="{{servicios.priceList}}" class="btn btn-success btn-block" onclick="Suma(this.value); PASO2 (); Desabilitar(this); ServiceSelected(this.name);"><i class="fa fa-shopping-cart"></i>COTIZAR</button></p>
+                                            <button type="button" name="{{servicios.id}}"  id="siguientePaso2" name="{{servicios.nameService}}"  value="{{servicios.priceList}}" class="btn btn-success btn-block" onclick="Suma(this.value); PASO2 (); Desabilitar(this); ServiceSelected(this.name);"><i class="fa fa-shopping-cart"></i>CONTINUAR</button></p>
                                         <p style=""class="btn-details col-sm-6">
-                                            <button class="btn btn-info btn-block" id="InfoServicio" value={{servicios.id}} onclick="query(this.value)"><i class="fa fa-list"></i>VER MAS</button></p>
+                                            <button type="button" class="btn btn-info btn-block" id="InfoServicio" value={{servicios.id}} onclick="query(this.value)"><i class="fa fa-list"></i>VER MAS</button></p>
                                     </div>
                                     <div class="clearfix">
                                     </div>
@@ -258,14 +269,14 @@
             <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-header with-border">
-              <h3 class="box-title">SELECCIONE PRODUCTOS ADICIONALES PARA TU EVENTO</h3>
+              <h3 class="box-title">SELECCIONE SERVICIO ADICIONALES PARA TU EVENTO</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
               <div class="row">
             <div class="col-md-5">
                 <h3>
-                    Productos</h3>
+                    SERVICIOS</h3>
             </div>
             <div class="col-md-6">
                 <!-- Controls -->
@@ -309,7 +320,7 @@
                                     </div>
                                     <div class="separator clear-left col-md-12">
                                         <p class="btn-add col-sm-6">
-                                            <button type="button" name="{{productos.nameProduct}}"  id="siguientePaso2" name="{{productos.nameProduct}}"  value="{{productos.priceList}}" class="btn btn-success btn-block" onclick=" Suma(this.value); Desabilitar(this); PASO4(); ProductSeleccionado(this.name); "><i class="fa fa-shopping-cart"></i>AGREGAR</button></p>
+                                            <button type="button" name="{{productos.nameProduct}}"  id="siguientePaso2" name="{{productos.nameProduct}}"  value="{{productos.priceList}}" class="btn btn-success btn-block" onclick=" Suma(this.value); Desabilitar(this);  ProductSeleccionado(this.name); "><i class="fa fa-shopping-cart"></i>AGREGAR</button></p>
                                         <p style=""class="btn-details col-sm-6">
                                             <button type="button" class="btn btn-info btn-block" id="InfoServicio" value={{productos.id}} onclick="queryProducto(this.value)"><i class="fa fa-list"></i>VER MAS</button></p>
                                     </div>
@@ -406,7 +417,7 @@
 
               
                    <div style="text-align:center;"  class="box-footer col-md-12">
-                <button type="button" onclick="PASO4();" class="btn btn-primary">SIGUIENTE</button>
+                <button type="button" onclick="PASO4(); ShowMessage();" class="btn btn-primary">COTIZAR</button>
                 <a id="regresar" href="javascript:void(0)" class="btn btn-danger">REGRESAR</a>
               </div>      
            </div>
@@ -447,8 +458,8 @@
                           SERVICIOS
                         </li>
                         <li>
-                          <div id="ICONOPRODUCTOS" class='fa fa-close''></div>
-                          PRODUCTOS
+                          <div id="ICONOPRODUCTOS" class='fa fa-close'></div>
+                          PROMOCIONES
                         </li>
 
                         <li>
@@ -572,8 +583,14 @@
           </div>
           <!-- /.box -->
         </div>
+        
         <!-- /.col -->
-        <div class="col-md-8">
+        
+        
+         
+
+        <!-- /.col -->
+        <div class="col-md-7">
           <div class="box box-primary">
             <div class="box-body no-padding">
               <!-- THE CALENDAR -->
@@ -584,17 +601,19 @@
           <!-- /. box -->
         </div>
          {% endif %}
+             
+            
         <!-- /.col -->
       </div>
       <!-- /.row -->
     </section>
+   
     <!-- /.content -->
   </div>
-
-<input type="hidden" id="displayMenu" value="0">
+  <input type="hidden" id="displayMenu" value="0">
   <input type="hidden" id="displayMenu2" value="0">
   <input type="hidden" id="displayMenu3" value="0">
-
+  <!-- /.content-wrapper -->
 {% endblock %}
 
 {% block scripts %}
@@ -617,6 +636,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
 <script src="{% static "plugins/fullcalendar/fullcalendar.min.js" %}"></script>
 <script src="{% static "plugins/fullcalendar/locale/es.js" %}"></script>
+<!-- Page specific script -->
 <script type="text/javascript" src="{% static "bootstrap/js/bootstrap-clockpicker.min.js" %}"></script>
   <script type="text/javascript" src="{% static "bootstrap/js/highlight.min.js" %}"></script>
 <!-- Page specific script -->
@@ -624,8 +644,54 @@
 <script type="text/javascript" src="{% static "bootstrap/js/bootstrap-datepicker.adminlte.min.js" %}"></script>
 <script src="{% static 'bootstrap/js/notificaciones.js'%}"></script>
 
-
 <script>
+
+
+    function ShowMessage() 
+    {
+        if ($('#INOCOFECHA').attr('class') == 'fa fa-close' || $('#ICONOTARJETA').attr('class') == 'fa fa-close')
+         {
+            swal({
+              type: 'warning',
+              title: 'Excelente!',
+              text: 'Hasta aqui todo marcha Bien, ahora selecciona el dia y el turno que este disponible',
+              timer: 6000,
+              onOpen: function () {
+                swal.showLoading()
+              }
+            }).then(
+              function () {},
+              // handling the promise rejection
+              function (dismiss) {
+                if (dismiss === 'timer') {
+                  console.log('I was closed by the timer')
+                }
+              }
+            )
+         }
+         else 
+         {
+          swal({
+              type: 'success',
+              title: 'Excelente!',
+              text: 'Has completado todos los datos necesarios para la reserva, presiona el boton de Guardar!',
+              timer: 6000,
+              onOpen: function () {
+                swal.showLoading()
+              }
+            }).then(
+              function () {},
+              // handling the promise rejection
+              function (dismiss) {
+                if (dismiss === 'timer') {
+                  console.log('I was closed by the timer')
+                }
+              }
+            )
+         }
+    }
+
+
     //desabhilito el boton de cada producto luego que es agregado 
 
     setInterval(function(){ validarBotonPaso1(); }, 300);
@@ -649,7 +715,7 @@
    function query(val){
     var id_servicio =  val;
     $.ajax({
-        url: '{{server}}/servicios/consulta/detail',
+        url: '/servicios/consulta/detail',
         data: {
           'id_servicio': id_servicio
       },
@@ -695,7 +761,7 @@
    function queryProducto(val){
     var id_producto =  val;
     $.ajax({
-        url: '{{server}}/productos/consulta/detail',
+        url: '/productos/consulta/detail',
         data: {
           'id_producto': id_producto
       },
@@ -776,7 +842,7 @@ function validateSelect(){
     var id_servicio = $("#servicio").val();
 
     $.ajax({
-        url: '{{server}}/reservas/ajax/validacion/',
+        url: '/reservas/ajax/validacion/',
         data: {
           'id_servicio': id_servicio
       },
@@ -1095,7 +1161,7 @@ $('.clockpicker').clockpicker({
 
 
       $.ajax({
-        url: 'http://localhost:8000/reservas/web/consulta/',
+        url: '/reservas/web/consulta/',
         data: {
           'date': fecha
       },
@@ -1141,7 +1207,7 @@ $('.clockpicker').clockpicker({
                       }
                       if(band == 1){
                         // aqui cargo la opcion para el select
-                       myArrayOfThings.push( { id: {{Tturno.id}}, name: '{{Tturno.nameturnsession}} . {{Tturno.HoraTurn}} - {{Tturno.HoraTurnEnd}}' });
+                       myArrayOfThings.push( { id: '{{Tturno.id}}', name: '{{Tturno.nameturnsession}} . {{Tturno.HoraTurn}} - {{Tturno.HoraTurnEnd}}' });
                         //console.log(' voy a cargarrrrrrrrrrrrrrrrrrrrrrrrrr cargare');
                       }
                       //console.log(myArrayOfThings);
@@ -1188,6 +1254,7 @@ $('.clockpicker').clockpicker({
                     type: 'success',
                     html: 'Has seleccionado el turno: ' + result
                   })
+                  $('#TurnSeleccionado').val(result);
               });
           }
           else{
@@ -1293,36 +1360,7 @@ $('.clockpicker').clockpicker({
         
        
 
-        // creo el modal  
-
-        var modal = '<div class="col-lg-12">'+
-          '<div  class="modal" id="myModal" role="dialog">'+
-            '<div class="modal-dialog">'+
-              '<div style="margin-left: 7em;" class="modal-content">'+
-                '<div class="modal-header">'+
-                  '<button type="button" class="close" data-dismiss="modal" aria-label="'+
-                  'Close">'+
-                    '<span aria-hidden="true">×</span></button>'+
-                  '<h4 class="modal-title">Reserva</h4>'+
-                '</div>'+
-                '<div class="modal-body">'+
-                  '<p>Reserva de '+ calEvent.titulo +' para la fecha '+calEvent.fecha_de_inicio +' solicitado por el cliente '+calEvent.cliente +' para la hora '+calEvent.hora_de_inicio +'</p>'+
-                '</div>'+
-               '<div class="modal-footer">'+
-                '<button type="button" class="btn btn-primary"'+
-                  'data-dismiss="'+
-                  'modal">Cerrar</button>'+
-                '</div>'+
-              '</div>'+
-              
-            '</div>'+
-            
-          '</div>'+
-           
-         '</div>';
-
-         $('#miguel').html(modal);
-          $("#myModal").modal("show");
+        
 
     },
       editable: false,
