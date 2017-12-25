@@ -161,115 +161,12 @@
                 
               </div>       
            </div>
-
-           <div class="box-body paso2">
-           <div class="box-header with-border">
-              <h3 class="box-title">SELECCIONE EL TIPO DE EVENTO QUE DESEA COTIZAR</h3>
-            </div>
-                  
-                 <div class="container col-md-12">
-    <div id="main_area">
-        <!-- Slider -->
-        <div class="row">
-
-        <div class="col-sm-12">
-              <div class="box box-solid">
-            
-
-            <!-- /.box-header -->
-            <div class="box-body">
-              <div class="row">
-            <div class="col-md-5">
-                <h3>
-                    PROMOCIONES
-                    </h3>
-            </div>
-            <div class="col-md-6">
-                <!-- Controls -->
-                <div class="controls pull-right ">
-                    <a class="left fa fa-chevron-left btn btn-primary" href="#carousel-example-generic"
-                        data-slide="prev"></a><a class="right fa fa-chevron-right btn btn-primary" href="#carousel-example-generic"
-                            data-slide="next"></a>
-
-                </div>
-            </div>
-        </div>
-        <div id="carousel-example-generic" class="carousel slide " data-ride="carousel">
-            <!-- Wrapper for slides -->
-            <div class="carousel-inner">
-                <div class="item active">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <img style="width:360px; height:320px;" class="img-responsive"  src="{% static "img/multipoint.png" %}" alt="Logo">
-                        </div>
-                       
-                        
-                       
-                    </div>
-                </div>
-        {% for servicios  in servicios  %}
-                <div class="item">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="col-item">
-                                <div class="photo">
-                                    <img src="{{server}}/media/{{servicios.image}}" class="img-responsive" style="width:350px; height:260px;" alt="a" />
-                                </div>
-                                <div class="info">
-                                    <div class="row">
-                                        <div class="price col-md-12">
-                                            <h3>
-                                                {{servicios.nameService}} </h3>
-                                            <h4 class="price-text-color">
-                                                Costo: ${{servicios.priceList}}</h4>
-                                        </div>
-                                        
-                                    </div>
-                                    <div class="separator clear-left col-md-12">
-                                        <p class="btn-add col-sm-6">
-                                            <button type="button" name="{{servicios.id}}"  id="siguientePaso2" name="{{servicios.nameService}}"  value="{{servicios.priceList}}" class="btn btn-success btn-block" onclick="Suma(this.value); PASO2 (); Desabilitar(this); ServiceSelected(this.name);"><i class="fa fa-shopping-cart"></i>CONTINUAR</button></p>
-                                        <p style=""class="btn-details col-sm-6">
-                                            <button type="button" class="btn btn-info btn-block" id="InfoServicio" value={{servicios.id}} onclick="query(this.value)"><i class="fa fa-list"></i>VER MAS</button></p>
-                                    </div>
-                                    <div class="clearfix">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                       
-                     
-                    </div>
-                </div>
-
-                {% endfor %}
-                <input type="hidden" id="ServicioSeleccionado" name="ServicioSeleccionado" value="None">
-            </div>
-        </div>
-            </div>
-            <!-- /.box-body -->
-          </div>  
-        </div>
-            <!--/Slider-->
-        </div>
-     
-        <div style="text-align:center;"  class="box-footer">
-                 <a id="regresar2" href="javascript:void(0)" class="btn btn-danger btn-block">REGRESAR</a>
-              
-                
-              </div> 
-
-    </div>
-</div> 
-              
-                        
-           </div>
-
-           <div class="box-body paso3">
+<div class="box-body paso2">
            
             <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-header with-border">
-              <h3 class="box-title">SELECCIONE SERVICIO ADICIONALES PARA TU EVENTO</h3>
+              <h3 class="box-title">SELECCIONE SERVICIO TU EVENTO</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -320,7 +217,7 @@
                                     </div>
                                     <div class="separator clear-left col-md-12">
                                         <p class="btn-add col-sm-6">
-                                            <button type="button" name="{{productos.nameProduct}}"  id="siguientePaso2" name="{{productos.nameProduct}}"  value="{{productos.priceList}}" class="btn btn-success btn-block" onclick=" Suma(this.value); Desabilitar(this);  ProductSeleccionado(this.name); "><i class="fa fa-shopping-cart"></i>AGREGAR</button></p>
+                                            <button type="button" name="{{productos.nameProduct}}"  id="siguientePaso2" name="{{productos.nameProduct}}"  value="{{productos.priceList}}" class="btn btn-success btn-block" onclick=" Suma(this.value); Desabilitar(this); PASO2 ();  ProductSeleccionado(this.name); "><i class="fa fa-shopping-cart"></i>CONTINUAR</button></p>
                                         <p style=""class="btn-details col-sm-6">
                                             <button type="button" class="btn btn-info btn-block" id="InfoServicio" value={{productos.id}} onclick="queryProducto(this.value)"><i class="fa fa-list"></i>VER MAS</button></p>
                                     </div>
@@ -341,6 +238,12 @@
             </div>
             <!-- /.box-body -->
           </div>
+
+          <div style="text-align:center;"  class="box-footer">
+                 <a id="regresar2" href="javascript:void(0)" class="btn btn-danger btn-block">REGRESAR</a>
+              
+                
+              </div> 
           <!-- /.box -->
         </div>
                   
@@ -414,13 +317,112 @@
           
       
                   
-
+  
               
-                   <div style="text-align:center;"  class="box-footer col-md-12">
+                         
+           </div>
+           <div class="box-body paso3">
+           <div class="box-header with-border">
+              <h3 class="box-title">SELECCIONE EL TIPO DE EVENTO QUE DESEA COTIZAR</h3>
+            </div>
+                  
+                 <div class="container col-md-12">
+    <div id="main_area">
+        <!-- Slider -->
+        <div class="row">
+
+        <div class="col-sm-12">
+              <div class="box box-solid">
+            
+
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="row">
+            <div class="col-md-5">
+                <h3>
+                    PROMOCIONES
+                    </h3>
+            </div>
+            <div class="col-md-6">
+                <!-- Controls -->
+                <div class="controls pull-right ">
+                    <a class="left fa fa-chevron-left btn btn-primary" href="#carousel-example-generic"
+                        data-slide="prev"></a><a class="right fa fa-chevron-right btn btn-primary" href="#carousel-example-generic"
+                            data-slide="next"></a>
+
+                </div>
+            </div>
+        </div>
+        <div id="carousel-example-generic" class="carousel slide " data-ride="carousel">
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <img style="width:360px; height:320px;" class="img-responsive"  src="{% static "img/multipoint.png" %}" alt="Logo">
+                        </div>
+                       
+                        
+                       
+                    </div>
+                </div>
+        {% for servicios  in servicios  %}
+                <div class="item">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-item">
+                                <div class="photo">
+                                    <img src="{{server}}/media/{{servicios.image}}" class="img-responsive" style="width:350px; height:260px;" alt="a" />
+                                </div>
+                                <div class="info">
+                                    <div class="row">
+                                        <div class="price col-md-12">
+                                            <h3>
+                                                {{servicios.nameService}} </h3>
+                                            <h4 class="price-text-color">
+                                                Costo: ${{servicios.priceList}}</h4>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="separator clear-left col-md-12">
+                                        <p class="btn-add col-sm-6">
+                                            <button type="button" name="{{servicios.id}}"  id="siguientePaso2" name="{{servicios.nameService}}"  value="{{servicios.priceList}}" class="btn btn-success btn-block" onclick="Suma(this.value);  Desabilitar(this); ServiceSelected(this.name);"><i class="fa fa-shopping-cart"></i>AGREGAR</button></p>
+                                        <p style=""class="btn-details col-sm-6">
+                                            <button type="button" class="btn btn-info btn-block" id="InfoServicio" value={{servicios.id}} onclick="query(this.value)"><i class="fa fa-list"></i>VER MAS</button></p>
+                                    </div>
+                                    <div class="clearfix">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                     
+                    </div>
+                </div>
+
+                {% endfor %}
+                <input type="hidden" id="ServicioSeleccionado" name="ServicioSeleccionado" value="None">
+            </div>
+        </div>
+            </div>
+            <!-- /.box-body -->
+          </div>  
+        </div>
+            <!--/Slider-->
+        </div>
+     
+        
+
+    </div>
+</div> 
+              <div style="text-align:center;"  class="box-footer col-md-12">
                 <button type="button" onclick="PASO4(); ShowMessage();" class="btn btn-primary">COTIZAR</button>
                 <a id="regresar" href="javascript:void(0)" class="btn btn-danger">REGRESAR</a>
-              </div>      
+              </div>
+                        
            </div>
+
+           
 
            <div class="box-body paso4">
            
@@ -700,6 +702,13 @@
       if ($('#campo1').val() != "" && $('#campo2').val() != "" && $('#campo3').val() != ""){
         
         $('#siguientePaso').attr("disabled", false);
+        $("#siguientePaso").click(function () {
+          $(".paso2").css("display", "block");
+          $(".paso1").css("display", "none");
+          $('#displayMenu').val(1);
+          $('#ICONODATOS').removeClass('fa-close');
+          $('#ICONODATOS').addClass('fa-check');
+      });
       }
       else{
         
@@ -923,26 +932,7 @@ else{
 </script>
 
 <script>
-if ($('#siguientePaso').attr("disabled") == undefined) {
-  $("#siguientePaso").click(function () {
-        if($('#displayMenu').val()==0){
-          $(".paso2").css("display", "block");
-          $(".paso1").css("display", "none");
-          $('#displayMenu').val(1);
-          $('#ICONODATOS').removeClass('fa-close');
-          $('#ICONODATOS').addClass('fa-check');
 
-
-
-        }else{
-          //$('.tipo_publicacion').removeClass('animated bounceInDown');
-          //$('.tipo_publicacion').addClass('animated bounceOutRight');
-          $(".tipo_publicacion").css("display", "none");
-          $('#displayMenu').val(0)
-        }
-        
-      });
-}
  
 
 
