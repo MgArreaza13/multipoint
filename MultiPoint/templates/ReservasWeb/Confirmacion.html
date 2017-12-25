@@ -303,7 +303,13 @@
 
 
 function redirecciona(){
-  window.location.replace("{{server}}/");
+  if('{{request.user}}' == 'AnonymousUser'){
+   window.location.replace("{{server}}/reservas/web");
+ }
+  else{
+    window.location.replace("{{server}}/");
+ }
+ //window.location.replace("{{server}}/");
 }
 
 
@@ -364,11 +370,12 @@ function redirecciona(){
 
                 });
             alert('Gracias Por Realizar su pago');
-            window.location.replace("{{server}}/");
-           }
-
-           return data.status;
-
+           if('{{request.user}}' == 'AnonymousUser'){
+-                window.location.replace("{{server}}/reservas/web");
+-              }
+-              else{
+-                window.location.replace("{{server}}/");
+-              }
            
            }
             
