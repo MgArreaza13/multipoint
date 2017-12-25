@@ -370,12 +370,16 @@ function redirecciona(){
 
                 });
             alert('Gracias Por Realizar su pago');
-           if('{{request.user}}' == 'AnonymousUser'){
--                window.location.replace("{{server}}/reservas/web");
--              }
--              else{
--                window.location.replace("{{server}}/");
--              }
+            if('{{request.user}}' == 'AnonymousUser'){
+               window.location.replace("{{server}}/reservas/web");
+             }
+              else{
+                window.location.replace("{{server}}/");
+             }
+           }
+
+           return data.status;
+
            
            }
             
