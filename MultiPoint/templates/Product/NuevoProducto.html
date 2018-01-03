@@ -7,13 +7,13 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Nuveo Producto
+        Nueva Promocion
         <small>detalles</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="index.html"><i class="fa fa-dashboard"></i>Inicio</a></li>
-        <li><a href="#">Productos </a></li>
-        <li class="active">Nuevo Producto</li>
+        <li><a href="#">Promociones </a></li>
+        <li class="active">Nueva Promocion</li>
       </ol>
     </section>
 
@@ -27,7 +27,7 @@
           
           <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title">Nuevo Producto</h3>
+              <h3 class="box-title">Nuevo Promocion</h3>
             </div>
             <!-- /.box-header -->
             <!-- form start -->
@@ -78,14 +78,14 @@
 
                     {% elif field.name == 'alertMinStock' %}
                       <div class="form-group ">
-                              <label>Alerta de Stock</label>
+                              <label>Cantidad de promociones disponibles</label>
                               <input class="form-control" placeholder="{{field.label}}" autocomplete="off" 
                               required autofocus maxlength="{{field.max_length}}" {{ field }}
                       
                           </div>
                       {% elif field.name == 'image' %}
                       <div class="form-group ">
-                              <label>Seleccione la imagen del producto</label>
+                              <label>Seleccione la imagen del Promocion</label>
                                {{ field }}
                       
                           </div>
@@ -100,7 +100,7 @@
 
                   {% elif field.name == 'tipoProducto' %}
                       <div class="form-group ">
-                              <label>Tipo de Producto</label>
+                              <label>Tipo de Promocion</label>
                              {{ field }}
                       
                           </div>          

@@ -16,6 +16,7 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
   <!-- Ionicons -->
+ 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="{% static 'dist/css/AdminLTEmultipoint.min.css'%}">
@@ -50,8 +51,13 @@
 
   <script type="text/javascript" src="{% static "bootstrap/js/jquery-1.8.0.min.js" %}"></script>
 
+<link rel="stylesheet" href="{% static "dist/js/css/alertify.min.css" %}">
+<link rel="stylesheet" href="{% static "dist/js/css/alertify.rtl.min.css" %}">
+<link rel="stylesheet" href="{% static "dist/js/css/themes/semantic.min.css" %}">
+<link rel="stylesheet" href="{% static "dist/js/css/themes/default.min.css" %}">
+<link rel="stylesheet" href="{% static "dist/js/css/themes/bootstrap.min.css" %}">
 
-
+<script src='{% static "dist/js/alertify.min.js" %}'></script>
 <link rel="stylesheet" type="text/css" href="{% static "bootstrap/css/bootstrap-clockpicker.min.css" %}">
   <link rel="stylesheet" type="text/css" href="{% static "bootstrap/css/github.min.css" %}">
   <link rel="stylesheet" type="text/css" href="{% static "bootstrap/css/bootstrap-datepicker.adminlte.min.css" %}">
@@ -268,8 +274,8 @@
           <ul class="treeview-menu" style="display: none;">
           
             
-            <li><a href="{% url "Clientes:ClientesWeb" %}"><i class="fa  fa-users"></i> LISTADO DE CLIENTES WEB </a></li>
-            <!--<li><a href="{% url "Clientes:NuevoCliente" %}"><i class="fa fa-plus"></i> NUEVO CLIENTE  </a></li>-->
+            <li><a href="{% url "Clientes:ClientesWeb" %}"><i class="fa  fa-users"></i>CLIENTES </a></li>
+            <li><a href="{% url "Clientes:ClienteWebForm" %}"><i class="fa fa-plus"></i> NUEVO CLIENTE  </a></li>
          
           </ul>
         </li>
@@ -883,6 +889,18 @@
 <script>
   $.widget.bridge('uibutton', $.ui.button);
 </script>
+<!-- JavaScript -->
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/alertify.min.js"></script>
+
+<!-- CSS -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/css/alertify.min.css"/>
+<!-- Default theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/css/themes/default.min.css"/>
+<!-- Semantic UI theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/css/themes/semantic.min.css"/>
+<!-- Bootstrap theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/css/themes/bootstrap.min.css"/>
+
 <!-- Bootstrap 3.3.6 -->
 <script src="{% static 'bootstrap/js/bootstrap.min.js'%}"></script>
 <!-- Morris.js charts -->
@@ -913,16 +931,18 @@
 <script src="{% static 'dist/js/demo.js'%}"></script>
 <script type="text/javascript" src="{% static "bootstrap/js/bootstrap-clockpicker.min.js" %}"></script>
 <script type="text/javascript" src="{% static "bootstrap/js/bootstrap-datepicker.adminlte.min.js" %}"></script>
-fullcalendar.min.js" %}"></script>
+
 <script type="text/javascript" src="{% static "bootstrap/js/bootstrap-clockpicker.min.js" %}"></script>
   <script type="text/javascript" src="{% static "bootstrap/js/highlight.min.js" %}"></script>
 <!-- Page specific script -->
 <script type="text/javascript" src="{% static "bootstrap/js/bootstrap-clockpicker.min.js" %}"></script>
 <script type="text/javascript" src="{% static "bootstrap/js/bootstrap-datepicker.adminlte.min.js" %}"></script>
 <script type="text/javascript" src="{% static "dist/js/nuevocliente.js" %}"></script>
-<!--<script src="{% static 'bootstrap/js/notificaciones.js'%}"></script>-->
+<script type="text/javascript" src="{% static "dist/js/notify.js" %}"></script>
+<script src="{% static 'bootstrap/js/notificaciones.js'%}"></script>
 
 <script>
+
 
 $('.clockpicker').clockpicker({
   placement: 'top',

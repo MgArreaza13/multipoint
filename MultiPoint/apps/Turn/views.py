@@ -341,6 +341,7 @@ def NuevoTurnParaHoy(request):
 			turno.turn = tb_turn_sesion.objects.get(id=request.POST['TurnSeleccionado'])
 			turno.statusTurn = tb_status.objects.get(nameStatus="Sin Aprobar")
 			turno.extraInfoTurn = 'Sin Comentarios'
+			turno.TipoReservas = "RESERVA"
 				#Envio de mensajes 
 				#colaborador = tb_profile.objects.get(nameUser=turno.collaborator) #trato de traer el colaborador del formulario
 				#email_subject_Colaborador = 'Nuevo Turno Solicitado Por Cliente'
@@ -348,7 +349,8 @@ def NuevoTurnParaHoy(request):
 				#email_colaborador = colaborador.mailUser
 				#message_colaborador = (email_subject_Colaborador, email_body_Colaborador , 'as.estiloonline@gmail.com', [email_colaborador])
 				#cliente
-			turno.servicioPrestar = tb_service.objects.get(id= request.POST['ServicioSeleccionado'])
+			if request.POST['ServicioSeleccionado'] != 'None':
+				turno.servicioPrestar=tb_service.objects.get(id = request.POST['ServicioSeleccionado'])
 			turno.montoAPagar = float(request.POST['total'])  
 			turno.save()
 			notificacion.nombre = turno.client.user.nameUser
@@ -457,8 +459,10 @@ def NuevoTurn(request):
 			turno.dateTurn = request.POST['FechaSeleccionada']
 			turno.turn = tb_turn_sesion.objects.get(id=request.POST['TurnSeleccionado'])
 			turno.statusTurn = tb_status.objects.get(nameStatus="Sin Aprobar")
-			turno.servicioPrestar=tb_service.objects.get(id = request.POST['ServicioSeleccionado'])
+			if request.POST['ServicioSeleccionado'] != 'None':
+				turno.servicioPrestar=tb_service.objects.get(id = request.POST['ServicioSeleccionado'])
 			turno.montoAPagar = float(request.POST['total'])  
+			turno.TipoReservas = "RESERVA"
 			if request.POST['ProductosSeleccionados'] != ' ':
 				turno.description = request.POST['ProductosSeleccionados']
 			else:
@@ -477,7 +481,8 @@ def NuevoTurn(request):
 			else:
 				user = tb_client_WEB()
 				user.nombre = turno.nombre
-				user.mail = turno.mail 
+				user.mail = turno.mail
+				user.FormaDeRegistro = 'Registro Web' 
 				user.telefono = turno.telefono
 				user.save()
 

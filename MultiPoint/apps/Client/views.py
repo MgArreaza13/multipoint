@@ -50,6 +50,7 @@ def newclientewebform(request):
 		nuevo_cliente.mail = request.GET.get('correo', None)
 		nuevo_cliente.telefono =  request.GET.get('telefono', None)
 		nuevo_cliente.numeroReservasWeb = 0
+		nuevo_cliente.FormaDeRegistro = 'Registro por Sistema'
 		nuevo_cliente.save()
 	else:
 		data = 400

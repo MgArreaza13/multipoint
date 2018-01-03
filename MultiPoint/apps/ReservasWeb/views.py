@@ -342,8 +342,10 @@ def web(request):
 			turno.dateTurn = request.POST['FechaSeleccionada']
 			turno.turn = tb_turn_sesion.objects.get(id=request.POST['TurnSeleccionado'])
 			turno.statusTurn = tb_status.objects.get(nameStatus="Sin Aprobar")
-			turno.servicioPrestar=tb_service.objects.get(id = request.POST['ServicioSeleccionado'])
-			turno.montoAPagar = float(request.POST['total'])  
+			if request.POST['ServicioSeleccionado'] != 'None':
+				turno.servicioPrestar=tb_service.objects.get(id = request.POST['ServicioSeleccionado'])
+			turno.montoAPagar = float(request.POST['total']) 
+			turno.TipoReservas = "RESERVA WEB" 
 			if request.POST['ProductosSeleccionados'] != ' ':
 				turno.description = request.POST['ProductosSeleccionados']
 			else:
@@ -364,6 +366,7 @@ def web(request):
 				user.nombre = turno.nombre
 				user.mail = turno.mail 
 				user.telefono = turno.telefono
+				user.FormaDeRegistro = 'Registro Web'
 				user.save()
 
 			turno_enviar = tb_reservasWeb.objects.get(id=turno.id)

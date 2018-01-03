@@ -51,7 +51,7 @@
   <div class="login-box-body" style="margin-top:-1.8em;">
     <p class="login-box-msg">Inicia Sesion</p>
 
-    <form action="" method="POST">
+    <form action="" method="POST" style="padding-bottom:3em;">
      {% csrf_token %}
      {% if mensaje %}
         <div class="alert alert-danger alert-dismissible">
@@ -85,20 +85,12 @@
     </form>
     
 
-    <div class="social-auth-links text-center">
-      <p>- O -</p>
-      <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}  " class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Entra usando
-        Facebook</a>
-      <a href="{% url 'social:begin' 'twitter' %}?next={% url "Demo:inicio" %}" class="btn btn-block btn-social btn-twitter">
-                <i class="fa fa-twitter"></i>Entra usando Twitter
-              </a>
-    </div>
     
     
     <!-- /.social-auth-links -->
 
     <a href="#">olvide mi contraseña</a><br>
-    <a href="{% url "Usuarios:Registro" %}" class="text-center">Registrate Aqui.!</a>
+    
 
   </div>
   <!-- /.login-box-body -->

@@ -123,7 +123,9 @@ def NuevoUsuario(request):
 	if request.method == 'POST':
 		Form	= UsuarioForm(request.POST , request.FILES  or None)
 		Form2	= ProfileForm(request.POST, request.FILES  or None)
+		print(request.POST)
 		if Form.is_valid() and Form2.is_valid:
+
 			Form.save()
 			usuario = request.POST['username']
 			clave 	= request.POST['password1']
@@ -131,7 +133,7 @@ def NuevoUsuario(request):
 			if user is not None and user.is_active:
 				perfil = Form2.save(commit=False)
 				perfil.user = user
-				perfil.tipoUser = "Sin Definir"
+				perfil.tipoUser = request.POST['TipoUser']
 				perfil.birthdayDate = request.POST['birthdayDate'] 
 				perfil.save()
 				#mandar mensaje de nuevo usuario
@@ -146,7 +148,7 @@ def NuevoUsuario(request):
 				email_body_Soporte = "se ha registrado un nuevo usuario de nombre %spara verificar ingrese aqui http://estiloonline.pythonanywhere.com" %(perfil.nameUser)
 				message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com'])
 				#enviamos el correo
-				send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+				#send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
 				mensaje = "Hemos guardado correctamente tus datos"
 
 				return render(request, 'UserProfile/NuevoUsuario.html' , {'Form2':Form2 ,'Form':Form , 'perfil':perfil, 'mensaje':mensaje})
@@ -154,7 +156,7 @@ def NuevoUsuario(request):
 	else:
 		Form	= UsuarioForm
 		Form2	= ProfileForm
-		fallido = "No pudimos guardar sus datos, intentalo de nuevo luego de verificarlos"
+		
 	return render(request, 'UserProfile/NuevoUsuario.html' , {'Form2':Form2 ,'Form':Form , 'perfil':perfil, 'fallido':fallido})
 
 

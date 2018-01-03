@@ -141,7 +141,7 @@
             <thead>
             <tr>
               
-              <th>SERVICIO</th>
+              <th>PROMOCION</th>
               <th>FECHA</th>
               <th>HORA</th>
               <th>Subtotal</th>
@@ -150,9 +150,9 @@
             <tbody>
             <tr>
               
-              <td>{{reserva.servicioPrestar}} 
-              {% if reserva.description != 'Sin Descripcion' %} <br>
-                Con los siguientes productos :   <br>{{reserva.description |safe}}  
+              <td>{{reserva.description |safe}}  
+              {% if reserva.servicioPrestar != None %} <br>
+                Con los siguientes servicios :   <br>{{reserva.servicioPrestar |safe}}  
               {% endif %}
               </td>
               <td>{{reserva.dateTurn}}</td>
