@@ -38,21 +38,14 @@
               <div class="box-body">
                   
                   {% for field in Form %}
-                     {% if Form.subject.errors %}
-                         <ol>
-                          {% for error in Form.subject.errors %}
-                              <li><strong>{{ error|escape }}</strong></li>
-                          {% endfor %}
-                        </ol>
-                    {% endif %}
+                     
                     
-                    {{ field.errors }}
 
                     {% if field.name == 'razonSocial' %}
                       <div class="form-group ">
                               <label>Razon Social</label>
                               <input class="form-control" placeholder="{{field.label}}" autocomplete="off" 
-                              required autofocus maxlength="{{field.max_length}}" {{ field }}
+                              maxlength="{{field.max_length}}" {{ field }}
                       
                           </div>
 
@@ -60,35 +53,35 @@
                           <div class="form-group ">
                             <label>Correo Electronico</label>
                             <input class="form-control" placeholder="{{field.label}}" autocomplete="off" 
-                            required autofocus maxlength="{{field.max_length}}" {{ field }}
+                            maxlength="{{field.max_length}}" {{ field }}
                     
                         </div>
                     {% elif field.name == 'personaACargo' %}
                           <div class="form-group ">
                             <label>Nombre de la persona a cargo</label>
                             <input class="form-control" placeholder="{{field.label}}" autocomplete="off" 
-                            required autofocus maxlength="{{field.max_length}}" {{ field }}
+                            maxlength="{{field.max_length}}" {{ field }}
                     
                         </div>
                     {% elif field.name == 'paginaWeb' %}
                           <div class="form-group ">
                             <label>Pagina Web</label>
                             <input class="form-control" placeholder="{{field.label}}" autocomplete="off" 
-                            required autofocus maxlength="{{field.max_length}}" {{ field }}
+                            maxlength="{{field.max_length}}" {{ field }}
                     
                         </div>
                     {% elif  field.name == 'urlPhoto' %}
                           <div class="form-group ">
                             <label>Foto de logo</label>
                             <input class="form-control" placeholder="{{field.label}}" autocomplete="off" 
-                            required autofocus maxlength="{{field.max_length}}" {{ field }}
+                            maxlength="{{field.max_length}}" {{ field }}
                     
                         </div>
                     {% elif field.name == 'nameProveedor' %}
                           <div class="form-group ">
                             <label>Nombre</label>
                             <input class="form-control" placeholder="{{field.label}}" autocomplete="off" 
-                            required autofocus maxlength="{{field.max_length}}" {{ field }}
+                            maxlength="{{field.max_length}}" {{ field }}
                     
                         </div>
 
@@ -99,21 +92,21 @@
                       <div class="form-group ">
                               <label>Cuit</label>
                               <input class="form-control" placeholder="{{field.label}}" autocomplete="off" 
-                              required autofocus maxlength="{{field.max_length}}" {{ field }}
+                              maxlength="{{field.max_length}}" {{ field }}
                       
                           </div>
                      {% elif field.name == 'nameProveedor' %}
                       <div class="form-group ">
                               <label>Nombre</label>
                               <input class="form-control" placeholder="{{field.label}}" autocomplete="off" 
-                              required autofocus maxlength="{{field.max_length}}" {{ field }}
+                              maxlength="{{field.max_length}}" {{ field }}
                       
                           </div>
                     {% elif field.name == 'phoneNumberProveedor' %}
                       <div class="form-group ">
                               <label>Numero Principal</label>
                               <input class="form-control" placeholder="{{field.label}}" autocomplete="off" 
-                              required autofocus maxlength="{{field.max_length}}" {{ field }}
+                              maxlength="{{field.max_length}}" {{ field }}
                       
                           </div>
 
@@ -121,7 +114,7 @@
                       <div class="form-group ">
                               <label>Numero Secundario</label>
                               <input class="form-control" placeholder="{{field.label}}" autocomplete="off" 
-                              required autofocus maxlength="{{field.max_length}}" {{ field }}
+                              maxlength="{{field.max_length}}" {{ field }}
                       
                           </div>
 
@@ -150,9 +143,7 @@
 
           
       
-                  {% if field.help_text %}
-                    <script> console.log('{{ field.help_text|safe }}')</script>
-                  {% endif %}
+                 
                {% endfor %}
 
                

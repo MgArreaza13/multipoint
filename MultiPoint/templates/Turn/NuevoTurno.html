@@ -1102,7 +1102,7 @@ $('.clockpicker').clockpicker({
       {% endfor %}
       {% for ReservasWeb in ReservasWeb %}
         {
-          title: 'RESERVADO',
+          title: 'RESERVADO \n {{ReservasWeb.turn.HoraTurn}} a {{ReservasWeb.turn.HoraTurnEnd}} hs',
           start: '{{ ReservasWeb.dateTurn|date:"Y-m-d" }} {{ReservasWeb.turn.HoraTurn}}',
           end:'{{ ReservasWeb.dateTurn|date:"Y-m-d" }} {{ReservasWeb.turn.HoraTurnEnd}}',
           backgroundColor: "#f56954", //red

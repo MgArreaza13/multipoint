@@ -144,7 +144,9 @@
                   <th>COD</th>
                   <th>USER</th>
                   <th>SERVICIO</th>
+                  <th>TIPO DE INGRESO</th>
                   <th>FORMA DE PAGO</th>
+                  <th>CLIENTE</th>
                   <th>FECHA</th>
                   <th>MONTO</th>
                   <th>COMENTARIO <br> ADICIONALES</th>
@@ -158,7 +160,9 @@
                       <td>{{ingreso.id}}</td>
                       <td>{{ingreso.user.username}}</td>
                       <td>{{ingreso.service}}</td>
+                      <td>{{ingreso.tipoIngreso}}</td>
                       <td>{{ingreso.tipoPago}}</td>
+                      <td>{{ingreso.reserva.nombre}}</td>
                       <td>{{ingreso.dateCreate}}</td>
                       <td>{{ingreso.monto}}<strong>$</strong></td>
                       <td>{{ingreso.descripcion}}</td>
@@ -177,14 +181,7 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                   <th>COD</th>
-                  <th>USER</th>
-                  <th>SERVICIO</th>
-                  <th>FORMA DE PAGO</th>
-                  <th>FECHA</th>
-                  <th>MONTO</th>
-                  <th>COMENTARIO <br> ADICIONALES</th>
-                  <th>TIPO</th>
+                   
                 </tr>
                 </tfoot>
               </table>

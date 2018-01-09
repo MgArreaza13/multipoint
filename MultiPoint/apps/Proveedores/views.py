@@ -50,28 +50,68 @@ def NuevoProveedor(request):
 	fallido = None
 	if request.method == 'POST':
 		Form = ProveedorForm(request.POST or None)
-		if Form.is_valid():
-			proveedor = Form.save(commit=False)
-			proveedor.user = request.user
-			proveedor.save()
+
+		proveedor = tb_proveedor()
+		proveedor.user = request.user
+		if request.POST['email'] == '':
+			proveedor.email = 'sin@descripcion.com'
+		if request.POST['email'] != '':
+			proveedor.email = request.POST['email']
+		if request.POST['nameProveedor'] == '':
+			proveedor.nameProveedor = 'Sin Descripcion'
+		if request.POST['nameProveedor'] != '':
+			proveedor.nameProveedor = request.POST['nameProveedor']
+		if request.POST['cuit'] == '':
+			proveedor.cuit = 000000
+		if request.POST['cuit'] != '':
+			proveedor.cuit = int(request.POST['cuit'])
+		if request.POST['personaACargo'] == '':
+			proveedor.personaACargo = 'Sin Descripcion'
+		if request.POST['personaACargo'] != '':
+			proveedor.personaACargo = request.POST['personaACargo'] 
+		if request.POST['phoneNumberProveedor'] == '':
+			proveedor.phoneNumberProveedor = 'Sin Descripcion'
+		if request.POST['phoneNumberProveedor'] != '':
+			proveedor.phoneNumberProveedor = request.POST['phoneNumberProveedor'] 
+		if request.POST['paginaWeb'] == '':
+			proveedor.paginaWeb = 'http://www.sindescripcion.com/'
+		if request.POST['paginaWeb'] != '':
+			proveedor.paginaWeb = request.POST['paginaWeb']
+		if request.POST['phoneNumberProveedorTwo'] == '':
+			proveedor.phoneNumberProveedorTwo = 'Sin descripcion'
+		if request.POST['phoneNumberProveedorTwo'] != '':
+			proveedor.phoneNumberProveedorTwo = request.POST['phoneNumberProveedorTwo']	
+		if request.POST['razonSocial'] == '':
+			proveedor.razonSocial = 'Sin descripcion'
+		if request.POST['razonSocial'] != '':
+			proveedor.razonSocial = request.POST['razonSocial']	
+		if request.POST['urlPhoto'] == '':
+			proveedor.urlPhoto = 'http://www.sindescripcion.com/'
+		if request.POST['urlPhoto'] != '':
+			proveedor.urlPhoto = request.POST['urlPhoto']	
+		if request.POST['addressProveedor'] == '':
+			proveedor.addressProveedor = 'Sin descripcion'	
+		if request.POST['addressProveedor'] != '':
+			proveedor.addressProveedor = request.POST['addressProveedor']				
+		proveedor.save()
 			#mandar mensaje de nuevo usuario
 			#Enviaremos los correos a el colaborador y al cliente 
 			#cliente
-			usuario = proveedor.email #trato de traer el colaborador del formulario
-			email_subject_usuario = 'Estilo Online Nuevo Proveedor'
-			email_body_usuario = "Hola %s, gracias por formar parte de nuestra familia como proveedor, toda tu informacion esta disponible aqui http://estiloonline.pythonanywhere.com" %(proveedor.nameProveedor)
-			message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+		usuario = proveedor.email #trato de traer el colaborador del formulario
+		email_subject_usuario = 'Estilo Online Nuevo Proveedor'
+		email_body_usuario = "Hola %s, gracias por formar parte de nuestra familia como proveedor, toda tu informacion esta disponible aqui http://estiloonline.pythonanywhere.com" %(proveedor.nameProveedor)
+		message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
 			#mensaje para apreciasoft
-			email_subject_Soporte = 'Nuevo Proveedor Registrado'
-			email_body_Soporte = "se ha registrado un nuevo proveedor satisfactoriamente con nombre %s para verificar ingrese aqui http://estiloonline.pythonanywhere.com" %(proveedor.nameProveedor)
-			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com'])
-			#enviamos el correo
-			send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
-			mensaje = "Hemos Guardado de manera exitosa su nuevo proveedor"
-			return render(request, 'Proveedores/NuevoProveedor.html' , {'Form':Form, 'perfil':perfil, 'mensaje':mensaje})		
-		else:
-			Form = ProveedorForm()
-			fallido = "No hemos podido guardar su nuevo proveedor, verifiquelo e intente de nuevo"
+		email_subject_Soporte = 'Nuevo Proveedor Registrado'
+		email_body_Soporte = "se ha registrado un nuevo proveedor satisfactoriamente con nombre %s para verificar ingrese aqui http://estiloonline.pythonanywhere.com" %(proveedor.nameProveedor)
+		message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com'])
+		#enviamos el correo
+		#send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+		mensaje = "Hemos Guardado de manera exitosa su nuevo proveedor"
+		return render(request, 'Proveedores/NuevoProveedor.html' , {'Form':Form, 'perfil':perfil, 'mensaje':mensaje})		
+	else:
+		Form = ProveedorForm()
+		
 	return render(request, 'Proveedores/NuevoProveedor.html' , {'Form':Form, 'perfil':perfil, 'fallido':fallido})
 
 
@@ -86,12 +126,50 @@ def EditarProveedor(request, id_proveedor):
 		Form= ProveedorForm(instance = proveedorEditar)
 	else:
 		Form = ProveedorForm(request.POST, instance = proveedorEditar)
-		if Form.is_valid():
-			proveedor = Form.save(commit=False)
-			proveedor.user = request.user
-			proveedor.save()
-			mensaje = 'hemos guardado de manera exitosa tus nuevos datos'
-			return render (request, 'Proveedores/NuevoProveedor.html' , {'Form':Form, 'perfil':perfil, 'mensaje':mensaje})
+		proveedorEditar.user = request.user
+		if request.POST['email'] == '':
+			proveedorEditar.email = 'sin@descripcion.com'
+		if request.POST['email'] != '':
+			proveedorEditar.email = request.POST['email']
+		if request.POST['nameProveedor'] == '':
+			proveedorEditar.nameProveedor = 'Sin Descripcion'
+		if request.POST['nameProveedor'] != '':
+			proveedorEditar.nameProveedor = request.POST['nameProveedor']
+		if request.POST['cuit'] == '':
+			proveedorEditar.cuit = 000000
+		if request.POST['cuit'] != '':
+			proveedorEditar.cuit = int(request.POST['cuit'])
+		if request.POST['personaACargo'] == '':
+			proveedorEditar.personaACargo = 'Sin Descripcion'
+		if request.POST['personaACargo'] != '':
+			proveedorEditar.personaACargo = request.POST['personaACargo'] 
+		if request.POST['phoneNumberProveedor'] == '':
+			proveedorEditar.phoneNumberProveedor = 'Sin Descripcion'
+		if request.POST['phoneNumberProveedor'] != '':
+			proveedorEditar.phoneNumberProveedor = request.POST['phoneNumberProveedor'] 
+		if request.POST['paginaWeb'] == '':
+			proveedorEditar.paginaWeb = 'http://www.sindescripcion.com/'
+		if request.POST['paginaWeb'] != '':
+			proveedorEditar.paginaWeb = request.POST['paginaWeb']
+		if request.POST['phoneNumberProveedorTwo'] == '':
+			proveedorEditar.phoneNumberProveedorTwo = 'Sin descripcion'
+		if request.POST['phoneNumberProveedorTwo'] != '':
+			proveedorEditar.phoneNumberProveedorTwo = request.POST['phoneNumberProveedorTwo']	
+		if request.POST['razonSocial'] == '':
+			proveedorEditar.razonSocial = 'Sin descripcion'
+		if request.POST['razonSocial'] != '':
+			proveedorEditar.razonSocial = request.POST['razonSocial']	
+		if request.POST['urlPhoto'] == '':
+			proveedorEditar.urlPhoto = 'http://www.sindescripcion.com/'
+		if request.POST['urlPhoto'] != '':
+			proveedorEditar.urlPhoto = request.POST['urlPhoto']	
+		if request.POST['addressProveedor'] == '':
+			proveedorEditar.addressProveedor = 'Sin descripcion'	
+		if request.POST['addressProveedor'] != '':
+			proveedorEditar.addressProveedor = request.POST['addressProveedor']				
+		proveedorEditar.save()
+		mensaje = 'hemos guardado de manera exitosa tus nuevos datos'
+		return render (request, 'Proveedores/NuevoProveedor.html' , {'Form':Form, 'perfil':perfil, 'mensaje':mensaje})
 	return render (request, 'Proveedores/NuevoProveedor.html' , {'Form':Form, 'perfil':perfil, 'fallido':fallido})
 
 

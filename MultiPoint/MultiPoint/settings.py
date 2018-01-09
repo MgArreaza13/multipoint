@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'apps.Caja',
     'apps.ReservasWeb',
     'apps.Notificaciones',
+    'apps.Inflacion',
     'social_django',
 ]
 

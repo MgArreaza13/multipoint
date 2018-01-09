@@ -1,7 +1,7 @@
 {% extends "../Base/BasePanel.html" %}
 {% load staticfiles %}
 {% block title %}
-  listado de Productos
+  Tipos de Eventos
 {% endblock title %}
 
 
@@ -11,12 +11,12 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Listado De Productos
+        Tipos de Eventos
         <small>Detalles </small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i>Inicio</a></li>
-        <li><a href="#">Listado De Productos  </a></li>
+        <li><a href="#">Tipos de Eventos  </a></li>
         <li class="active">Detalles </li>
       </ol>
     </section>
@@ -103,7 +103,7 @@
 
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title">Lista de Productos </h3>
+              <h3 class="box-title">Tipos de Eventos </h3>
             </div>
             <div style="background-color: rgba(154, 153, 158, 0.09);" class="box-body">
             <h5 class="box-title">Filtrar por Fecha </h5>
@@ -114,6 +114,10 @@
                 <div class="form-group col-md-6">
                     <label for="exampleInputEmail1">HASTA</label>
                     <input type="text" id="datepicker_to" class="form-control" id="exampleInputEmail1" placeholder="SELECCIONE LA FECHA FINAL">
+                </div>
+                <div class="form-group col-md-12">
+                    <label for="exampleInputEmail1">Reajustar los precios </label>
+                    <button type="button" onclick="reajusteProductos();" type="button" class="btn btn-block btn-info">Reajuste </button>
                 </div>
               
             </div>
@@ -189,17 +193,7 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                  <th>COD</th>
-                  <th>NOMBRE</th>
-                  <th>FOTO</th>
-                  <th>DESCRICPCION</th>
-                  <th>FECHA <br> CREADA</th>
-                  <th>PROVEEDOR</th>
-                  <th>PRECIO <br> LIST</th>
-                  <th>PRECIO <br> COST</th>
-                  <th>ALERT <br> STOCK</th>
-                  <th>USUARIO <br> CREADO</th>
-                  <th>ACCIONES</th>
+                  
                 </tr>
                 </tfoot>
               </table>
@@ -263,6 +257,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/jquery.dataTables.js" data-semver="1.9.4" data-require="datatables@*"></script>
 <script src="{% static "bootstrap/js/filtrado.js" %}"></script>
 <script src="{% static 'bootstrap/js/notificaciones.js'%}"></script>
+<script src="{% static 'bootstrap/js/reajuste.js'%}"></script>
 
 <!-- page script -->
 

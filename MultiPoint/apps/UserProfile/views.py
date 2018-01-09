@@ -57,7 +57,10 @@ def EditUserProfile(request , id_UserProfile):
 		if  Form2.is_valid():
 			UserProfile.user = UserProfile.user
 			UserProfile.nameUser = request.POST['nameUser']
-			UserProfile.image = request.FILES['image'] 
+			if request.FILES['image'] == '':
+				UserProfile.image = UserProfile.image
+			else :
+				UserProfile.image = request.FILES['image'] 
 			UserProfile.birthdayDate = request.POST['birthdayDate']
 			UserProfile.save()
 			mensaje ="Hemos guardado de manera exitosa todos sus datos" 

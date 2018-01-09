@@ -32,6 +32,20 @@
 
 
 
+//cambia el status de los turnos ya pasados 
+ setInterval(function (){
+    $.ajax({
+        url: '/reservas/finalizacion/turnos',
+        dataType: 'json',
+        success: function (data) {
+          
+        }
+      });
+},36000)
+
+
+
+
 setInterval(function () {
          $.ajax({
         url: '/api/notificaciones/',

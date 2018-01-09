@@ -342,19 +342,51 @@
             <div class="box-header">
               <h3 class="box-title">Listado de Reservas CONFIRMADAS </h3>
             </div>
-            <!--
+            
             <div style="background-color: rgba(154, 153, 158, 0.09);" class="box-body">
             <h5 class="box-title">Filtrar por Fecha </h5>
-              <div class="form-group col-md-6">
-                    <label for="exampleInputEmail1">DESDE</label>
-                    <input type="text" id="datepicker_from" class="form-control" id="exampleInputEmail1" placeholder="SELECCIONE LA FECHA DE INICIO ">
+            <form action="/reservas/filtro" method="POST">
+            {% csrf_token %}
+              <div class="form-group col-md-5">
+                    <label for="exampleInputEmail1">Mes</label>
+                    <select class="form-control" name="mes" id="mes">
+                      <option value="1">Enero</option>
+                      <option value="2">Febrero</option>
+                      <option value="3">Marzo</option>
+                      <option value="4">Abril</option>
+                      <option value="5">Mayo</option>
+                      <option value="6">Junio</option>
+                      <option value="7">Julio</option>
+                      <option value="8">Agosto</option>
+                      <option value="9">Septiembre</option>
+                      <option value="10">Octubre</option>
+                      <option value="11">Noviembre</option>
+                      <option value="12">Diciembre</option>
+                    </select>
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="exampleInputEmail1">HASTA</label>
-                    <input type="text" id="datepicker_to" class="form-control" id="exampleInputEmail1" placeholder="SELECCIONE LA FECHA FINAL">
+                <div class="form-group col-md-5">
+                    <label for="exampleInputEmail1">Año</label>
+                    <select class="form-control" name="year" id="year">
+                      <option value="2017">2017</option>
+                      <option value="2018">2018</option>
+                      <option value="2019">2019</option>
+                      <option value="2020">2020</option>
+                      <option value="2021">2021</option>
+                      <option value="2022">2022</option>
+                      <option value="2023">2023</option>
+                      <option value="2024">2024</option>
+                      <option value="2025">2025</option>
+                      
+                    </select>
                 </div>
+                <div class="form-group col-md-2">
+                    <label for="exampleInputEmail1">Buscar</label><br>
+                     <button type="submit" class="btn btn-sm btn-info btn-flat pull-left">BUSCAR</button>
+                </div>
+            </form>
               
-            </div> -->
+              
+            </div> 
            
             <!-- /.box-header -->
             <div class="box-body">
@@ -410,15 +442,7 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                  <th>COD</th>
-                  <th>NOMBRE </th>
-                  <th>MAIL</th>
-                  <th>TELEFONO</th>
-                  <th>FECHA</th>
-                  <th>HORA</th>
-                  <th>FORMA DE PAGO</th>
-                  <th>MONTO A PAGAR</th>
-                  <th>MONTO PAGADO</th>
+                  
 
                 </tr>
                 </tfoot>

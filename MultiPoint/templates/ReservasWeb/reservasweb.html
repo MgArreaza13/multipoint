@@ -616,6 +616,7 @@
                           <div id="ICONOTARJETA" class='fa fa-close'></div>
                           TURNO: <p class="pull-right" id="TURNOTARJETA"></p>
                         </li>
+                        
                         <!--
                         <li>
                           <div class='fa fa-check'></div>
@@ -759,6 +760,8 @@
   <input type="hidden" id="displayMenu" value="0">
   <input type="hidden" id="displayMenu2" value="0">
   <input type="hidden" id="displayMenu3" value="0">
+  <input type="hidden" id="inflacion" value="0">
+  <input type="hidden" id="sin_inflacion" value="0">
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="pull-right hidden-xs">
@@ -814,7 +817,7 @@
             swal({
               type: 'warning',
               title: 'Excelente!',
-              text: 'Hasta aqui todo marcha Bien, ahora selecciona el dia y el turno que este disponible',
+              text: 'Hasta aqui todo marcha Bien, ahora selecciona el dia y el turno que este disponible, considere que el precio final puede sufir algunos cargos adicionales debido a la inflacion del pais',
               timer: 6000,
               onOpen: function () {
                 swal.showLoading()
@@ -834,7 +837,7 @@
           swal({
               type: 'success',
               title: 'Excelente!',
-              text: 'Has completado todos los datos necesarios para la reserva, presiona el boton de Guardar!',
+              text: 'Has completado todos los datos necesarios para la reserva, presiona el boton de Guardar, considere que el precio final puede sufir algunos cargos adicionales debido a la inflacion del pais!',
               timer: 6000,
               onOpen: function () {
                 swal.showLoading()
@@ -1071,6 +1074,7 @@ myValue = parseFloat(myValue);
 
  document.form1.total.value = tot + myValue; 
  $('#Monto').html(tot + myValue)
+ $('#sin_inflacion').val(tot + myValue)
 
 /*
 else{
@@ -1079,6 +1083,8 @@ else{
 } 
 */
 }
+
+
 </script>
 <script>
 
@@ -1260,7 +1266,7 @@ $('.clockpicker').clockpicker({
       {% endfor %}
       {% for ReservasWeb in ReservasWeb %}
         {
-          title: 'RESERVADO',
+          title: 'RESERVADO \n {{ReservasWeb.turn.HoraTurn}} a {{ReservasWeb.turn.HoraTurnEnd}} hs',
           start: '{{ ReservasWeb.dateTurn|date:"Y-m-d" }} {{ReservasWeb.turn.HoraTurn}}',
           end:'{{ ReservasWeb.dateTurn|date:"Y-m-d" }} {{ReservasWeb.turn.HoraTurnEnd}}',
           backgroundColor: "#f56954", //red
@@ -1290,10 +1296,64 @@ $('.clockpicker').clockpicker({
         $('#calendar').fullCalendar('unselect');
       */
 
+
+
+     
+
+
+
+      $('#inflacion').val(0)
+
       date = new Date(start);
       year = date.getFullYear();
       month = date.getMonth()+1;
       dt = date.getDate()+1;
+
+
+
+       
+
+      
+
+
+      
+
+
+      $.ajax({
+        url: '/inflacion/Registro/consulta/inflacion/',
+        data: {
+          'mes': month
+      },
+        dataType: 'json',
+        success: function (data) {
+          if (data) {
+
+
+            
+            var inflacion_mes = parseFloat (data.value / 100);
+           // console.log(inflacion_mes);
+            var monto_sin_inflacion = parseFloat($('#sin_inflacion').val());
+           // console.log(monto_sin_inflacion);
+            var monto_inflacion = monto_sin_inflacion * inflacion_mes;
+           /// console.log(monto_inflacion);
+            var monto_total = monto_inflacion + monto_sin_inflacion;
+           // console.log(monto_total);
+
+            $('#Monto').html(String(monto_total));
+             document.form1.total.value = String(monto_total);
+             //alert(document.form1.total.value);
+
+            
+
+           
+            
+            
+          }
+        }
+      });
+
+
+
 
       if (dt < 10) {
         dt = '0' + dt;

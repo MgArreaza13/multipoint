@@ -8,6 +8,7 @@ from apps.Service.views import listService
 from apps.Service.views import clientesServicios
 from apps.Service.views import ServiceDetail
 
+
 urlpatterns = [
 
 	url(r'^$', Servicios , name='Servicios'  ),

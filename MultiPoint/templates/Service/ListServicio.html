@@ -117,6 +117,10 @@
                     <label for="exampleInputEmail1">HASTA</label>
                     <input type="text" id="datepicker_to" class="form-control" id="exampleInputEmail1" placeholder="SELECCIONE LA FECHA FINAL">
                 </div>
+                <div class="form-group col-md-12">
+                    <label for="exampleInputEmail1">Reajustar los precios </label>
+                    <button type="button" onclick="reajusteServicio();" type="button" class="btn btn-block btn-info">Reajuste </button>
+                </div>
               
             </div>
             <!-- /.box-header -->
@@ -178,13 +182,7 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                  <th>COD</th>
-                  <th>FOTO</th>
-                  <th>NOMBRE</th>
-                  <th>DESCRIPCION</th>
-                  <th>LIST PRECIO</th>
-                  <th>CREADO POR:</th>
-                  <th>ACCIONES</th>
+                 
                 </tr>
                 </tfoot>
               </table>
@@ -247,6 +245,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/jquery.dataTables.js" data-semver="1.9.4" data-require="datatables@*"></script>
 <script src="{% static "bootstrap/js/filtrado.js" %}"></script>
 <script src="{% static 'bootstrap/js/notificaciones.js'%}"></script>
+<script src="{% static 'bootstrap/js/reajuste.js'%}"></script>
 
 <!-- page script -->
 

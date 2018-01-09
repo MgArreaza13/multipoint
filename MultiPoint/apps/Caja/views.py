@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from apps.Caja.models import tb_ingreso
 from apps.Caja.models import tb_egreso
+from apps.Caja.models import tb_ingreso_manual
 from django.db.models import Count, Min, Sum, Avg
 from apps.Caja.forms import IngresoForm
 from apps.Caja.forms import EgresoForm
+from apps.Caja.forms import IngresoManualForm
 from django.http import HttpResponse
 from apps.ReservasWeb.models import tb_reservasWeb
 from apps.Configuracion.models import tb_formasDePago
@@ -14,6 +16,31 @@ from apps.Turn.models import tb_turn
 from apps.scripts.validatePerfil import validatePerfil
 
 from apps.UserProfile.models import tb_profile
+
+
+def NuevoIngresoManual(request):
+	Form = IngresoManualForm
+	result = validatePerfil(tb_profile.objects.filter(user=request.user))
+	perfil = result[0]
+	fallido = None
+	if request.method == 'POST':
+		Form = IngresoManualForm(request.POST or None)
+		if Form.is_valid():
+			ingreso = Form.save(commit=False)
+			ingreso.user = request.user
+			if request.POST['descripcion'] == "":
+				ingreso.descripcion = 'Sin Comentarios'
+			else:
+				ingreso.descripcion = request.POST['descripcion']
+			ingreso.save()
+			mensaje = 'Hemos Cargado Su ingreso de manera exitosa'
+			return render(request, 'Caja/NuevoIngreso.html' , {'Form':Form, 'perfil':perfil, 'mensaje':mensaje})
+		else:
+			Form = IngresoManualForm()
+			fallido = "Hemos tenido algun problema con sus datos, por eso no hemos procesado su ingreso, verifiquelo e intentelo de nuevo"
+	return render(request, 'Caja/NuevoIngresoManual.html' , {'Form':Form, 'perfil':perfil, 'fallido':fallido})
+
+
 
 
 

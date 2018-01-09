@@ -29,6 +29,8 @@ from apps.Configuracion.forms import formasDePagoForm
 from apps.Configuracion.forms import logoForm
 from apps.Configuracion.forms import turnSesionForm
 
+from apps.Inflacion.models import tb_inflacion
+
 from apps.ReservasWeb.models import tb_reservasWeb
 
 
@@ -58,6 +60,7 @@ def Configuracion(request):
 	formasdepago 		= 	tb_formasDePago.objects.all()
 	logo 				=   tb_logo.objects.all()
 	TipoTurn 			=	tb_turn_sesion.objects.all()
+	registroInflacion	=   tb_inflacion.objects.all()
 
 	#queryset 
 	reservas_hoy = tb_reservasWeb.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
@@ -84,6 +87,7 @@ def Configuracion(request):
 	'turnos_hoy':turnos_hoy,
 	'ingresos_hoy':ingresos_hoy,
 	'egresos_hoy':egresos_hoy,
+	'registrodeinlacion':registroInflacion
 	}
 	return render(request, 'Configuracion/configuracion.html', contexto)
 

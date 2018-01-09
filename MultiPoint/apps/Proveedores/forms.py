@@ -41,8 +41,13 @@ class ProveedorForm(forms.ModelForm):
 		widgets = {
 
 		'addressProveedor': Textarea(attrs={'class':'form-control', 
-			'required':True ,
-			 'autofocus':True,
+			
+			  'autocomplete':'off,'
+			   ,'placeholder':'Direccion Principal Del Nuevo Proveedor',
+			   'cols': 2, 
+			   'rows': 6}),
+		'razonSocial':Textarea(attrs={'class':'form-control', 
+			
 			  'autocomplete':'off,'
 			   ,'placeholder':'Direccion Principal Del Nuevo Proveedor',
 			   'cols': 2, 

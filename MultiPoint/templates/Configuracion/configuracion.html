@@ -637,7 +637,7 @@
       </div>
 
       <div class="row">
-         <div class="col-md-6">
+         <div class="col-md-12">
           <!-- MAP & BOX PANE -->
           
           
@@ -700,7 +700,89 @@
           <!-- /.box -->
         </div>
       </div>
-      
+       <div class="row">
+         <div class="col-md-12">
+          <!-- MAP & BOX PANE -->
+          
+          
+
+          <!-- TABLE: LATEST ORDERS -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">Ajuste por Inflacion de Precios</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="table-responsive">
+                <table class="table no-margin">
+                  <thead>
+                  <tr>
+                    
+                    <th>Enero</th>
+                    <th>Febrero</th>
+                    <th>Marzo</th>
+                    <th>Abril</th>
+                    <th>Mayo</th>
+                    <th>Junio</th>
+                    <th>Julio</th>
+                    <th>Agosto</th>
+                    <th>Septiembre</th>
+                    <th>Octubre</th>
+                    <th>Noviembre</th>
+                    <th>Diciembre</th>
+                    <th>ACCIONES </th>
+                    
+                  </tr>
+                  </thead>
+                  <tbody>
+                   {% for registro in registrodeinlacion %}
+                    <tr>
+                      
+                      <td>{{registro.Enero}}%</td>
+                      <td>{{registro.Febrero}}%</td>
+                      <td>{{registro.Marzo}}%</td>
+                      <td>{{registro.Abril}}%</td>
+                      <td>{{registro.Mayo}}%</td>
+                      <td>{{registro.Junio}}%</td>
+                      <td>{{registro.Julio}}%</td>
+                      <td>{{registro.Agosto}}%</td>
+                      <td>{{registro.Septiembre}}%</td>
+                      <td>{{registro.Octubre}}%</td>
+                      <td>{{registro.Noviembre}}%</td>
+                      <td>{{registro.Diciembre}}%</td>
+                      
+                      <td>
+                        <a href="{% url "Inflacion:EditarReistroDeInflacion" registro.id %}" class="label label-success">EDITAR</a>
+                        <a href="{% url "Inflacion:EliminarRegistroDeInflacion" registro.id %}" class="label label-danger">ELIMINAR</a>
+                      </td>
+                      
+                    </tr>
+                    
+                  {% endfor %}
+                  
+                  
+                  
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+              <a href="{% url "Inflacion:NuevoRegistroDeInflacion" %}" class="btn btn-sm btn-info btn-flat pull-left">REGISTRO</a>
+              
+            </div>
+            <!-- /.box-footer -->
+          </div>
+          <!-- /.box -->
+        </div>
+      </div>
     </section>
     <!-- /.content -->
   </div>

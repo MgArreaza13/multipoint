@@ -306,6 +306,7 @@
             <!--<li><a href="{% url "Demo:ingresoegresos" %}"><i class="fa fa-balance-scale"></i> RESUMEN </a></li>-->
             <li><a href="{% url "Caja:IngresoList" %}"><i class="fa fa-balance-scale"></i> Resumen Ingreso </a></li>
             <li><a href="{% url "Caja:EgresoList" %}"><i class="fa fa-balance-scale"></i> Resumen Egreso </a></li>
+            <li><a href="{% url "Caja:NuevoIngresoManual" %}"><i class="fa fa-plus"></i> Nuevo Ingreso </a></li>
             <li><a href="{% url "Caja:NuevoEgreso" %}"><i class="fa fa-plus"></i> Nuevo Egreso </a></li>
     
           </ul>
@@ -371,7 +372,7 @@
           </a>
           <ul class="treeview-menu" style="display: none;">
             <li><a href="{% url "Turnos:index" %}"><i class="fa fa-calendar"></i> Resumen </a></li>
-            <li><a href="{% url "Turnos:listTurnos" %}"><i class="fa fa-calendar"></i> Listado Reservas </a></li>
+            <li><a href="{% url "Turnos:listTurnos" %}"><i class="fa fa-calendar"></i>Reservas Web </a></li>
             <li><a href="{% url "Reservas:listReservas" %}"><i class="fa fa-calendar"></i> Reservas Online </a></li>
             <li><a href="{% url "Demo:calendario" %}"><i class="fa fa-calendar"></i> CALENDARIO DE RESERVAS </a></li>
            
@@ -940,6 +941,8 @@
 <script type="text/javascript" src="{% static "dist/js/nuevocliente.js" %}"></script>
 <script type="text/javascript" src="{% static "dist/js/notify.js" %}"></script>
 <script src="{% static 'bootstrap/js/notificaciones.js'%}"></script>
+<script src="{% static 'bootstrap/js/reajuste.js'%}"></script>
+<script src="{% static 'bootstrap/js/proveedor.js'%}"></script>
 
 <script>
 

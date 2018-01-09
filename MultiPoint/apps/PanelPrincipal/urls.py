@@ -2,9 +2,10 @@ from django.conf.urls import url
 from django.contrib import admin
 from apps.PanelPrincipal.views import inicio
 
-
-
-
+from apps.PanelPrincipal.views import filtoPorFecha
+from apps.PanelPrincipal.views import FinalizacionTurno
+from apps.PanelPrincipal.views import reajusteservicio
+from apps.PanelPrincipal.views import reajusteproductos
 
 from apps.PanelPrincipal.views import calendario 
 from apps.PanelPrincipal.views import login
@@ -25,11 +26,11 @@ urlpatterns = [
 	url(r'^$', inicio, name='inicio' ),
 	url(r'^entrar/$', login, name='login' ),
 	url(r'^salir/$', logout, name='logout' ),
+	url(r'^reservas/filtro$', filtoPorFecha, name='filtoPorFecha' ),
+	url(r'^reservas/finalizacion/turnos$', FinalizacionTurno, name='FinalizacionTurno' ),
 	
-	
-	
-	
-	
+	url(r'^servicios/reajuste/precio$', reajusteservicio, name='reajusteservicio' ),
+	url(r'^promociones/reajuste/precio$', reajusteproductos, name='reajusteproductos' ),
 	
 	
 	

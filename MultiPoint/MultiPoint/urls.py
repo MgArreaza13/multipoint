@@ -98,6 +98,7 @@ urlpatterns = [
     url(r'^Caja/', include('apps.Caja.urls', namespace='Caja')),
     url(r'^reservas/', include('apps.ReservasWeb.urls', namespace='Reservas')),
     url(r'^notificaciones/', include('apps.Notificaciones.urls', namespace='Notificaciones')),
+    url(r'^inflacion/', include('apps.Inflacion.urls', namespace='Inflacion')),
     url(r'^admin/', admin.site.urls),
     #url(r'^static/(?P<path>.*)$', 'django.views.static.serve' , settings.STATIC_ROOT),
     #url(r'^media/(?P<path>.*)$', 'django.views.static.serve', settings.MEDIA_ROOT), 
