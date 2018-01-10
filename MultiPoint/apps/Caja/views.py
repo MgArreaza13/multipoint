@@ -12,6 +12,7 @@ from apps.ReservasWeb.models import tb_reservasWeb
 from apps.Configuracion.models import tb_formasDePago
 from apps.Configuracion.models import tb_tipoIngreso
 from apps.Turn.models import tb_turn
+
 # Create your views here.
 from apps.scripts.validatePerfil import validatePerfil
 
@@ -110,6 +111,7 @@ def NuevoPagoTurno(request):
 @login_required(login_url = 'Demo:login' )
 def IngresoList(request):
 	ingresos = tb_ingreso.objects.all().order_by('id') # query para todo los ingresos
+	ingresos_manual = tb_ingreso_manual.objects.all().order_by('id')
 	total_ingresos = tb_ingreso.objects.all().aggregate(total=Sum('monto'))
 	total_egresos  = tb_egreso.objects.all().aggregate(total=Sum('monto'))
 	total_efectivo_caja = []
@@ -126,6 +128,7 @@ def IngresoList(request):
 	perfil = result[0]
 	context = {
 	'perfil':perfil,
+	'ingresos_manual':ingresos_manual,
 	'ingresos':ingresos,
 	'total_efectivo_caja':total_efectivo_caja,
 	'total_ingresos':total_ingresos,

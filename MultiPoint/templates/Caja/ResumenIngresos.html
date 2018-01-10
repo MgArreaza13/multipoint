@@ -171,7 +171,22 @@
                     </tr>
                       
                 {% endfor %}
-
+                {% for ingreso in ingresos_manual  %}
+                    <tr>
+                      <td>{{ingreso.id}}</td>
+                      <td>{{ingreso.user.username}}</td>
+                      <td>Otro Ingreso</td>
+                      <td>{{ingreso.tipoIngreso}}</td>
+                      <td>{{ingreso.tipoPago}}</td>
+                      <td>{{ingreso.cliente}}</td>
+                      <td>{{ingreso.dateCreate}}</td>
+                      <td>{{ingreso.monto}}<strong>$</strong></td>
+                      <td>{{ingreso.descripcion}}</td>
+                      <td><span class="badge bg-green">Ingreso</span></td>
+                      
+                    </tr>
+                      
+                {% endfor %}
   
                 
 

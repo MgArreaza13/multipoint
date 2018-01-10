@@ -218,7 +218,7 @@
                     <th>FECHA </th>
                     <th>MONTO</th>
                     <th>MONTO PAGADO</th>
-                    <th>FECHA </th>
+                    
 
 
                     
@@ -228,7 +228,7 @@
                   {% for turno in turnosSinPagar  %}
                     <tr>
                     <td>TURNO-{{turno.id}}</td>
-                    <td>{{turno.servicioPrestar}}</td>
+                    
                     <td>{{turno.dateTurn}}</td>
                     <td><span class="label label-warning">${{turno.montoAPagar}}</span></td>
                     <td><span class="label label-warning">${{turno.montoPagado}}</span></td>
@@ -241,7 +241,7 @@
                   {% for turno in ReservasSinPagar  %}
                     <tr>
                     <td>RESERVA-{{turno.id}}</td>
-                    <td>{{turno.servicioPrestar}}</td>
+                    
                     <td>{{turno.dateTurn}}</td>
                     <td><span class="label label-warning">${{turno.montoAPagar}}</span></td>
                     <td><span class="label label-warning">${{turno.montoPagado}}</span></td>
