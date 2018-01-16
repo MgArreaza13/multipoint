@@ -150,9 +150,9 @@
             <tbody>
             <tr>
               
-              <td>{{reserva.description |safe}}  
-              {% if reserva.servicioPrestar != None %} <br>
-                Con los siguientes servicios :   <br>{{reserva.servicioPrestar |safe}}  
+              <td>{{reserva.servicioPrestar |safe}}  
+              {% if reserva.description != 'Sin Descripcion' %} <br>
+                Con los siguientes servicios :   <br>{{reserva.description |safe}}  
               {% endif %}
               </td>
               <td>{{reserva.dateTurn}}</td>

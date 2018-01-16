@@ -460,7 +460,7 @@ def NuevoTurn(request):
 			turno.turn = tb_turn_sesion.objects.get(id=request.POST['TurnSeleccionado'])
 			turno.statusTurn = tb_status.objects.get(nameStatus="Sin Aprobar")
 			if request.POST['ServicioSeleccionado'] != 'None':
-				turno.servicioPrestar=tb_service.objects.get(id = request.POST['ServicioSeleccionado'])
+				turno.servicioPrestar=tb_product.objects.get(id = request.POST['ServicioSeleccionado'])
 			turno.montoAPagar = float(request.POST['total'])  
 			turno.TipoReservas = "RESERVA"
 			if request.POST['ProductosSeleccionados'] != ' ':

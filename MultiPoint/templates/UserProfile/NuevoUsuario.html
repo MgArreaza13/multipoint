@@ -136,7 +136,7 @@
 
       <div class="form-group ">
               <label >  Fecha de Nacimiento</label>
-              <input class="form-control" name="birthdayDate" value="birthdayDate" type="date" placeholder="Fecha de Cumpleaño" autocomplete="off" 
+              <input id="fechadecumpleamos" class="form-control" name="birthdayDate" value="birthdayDate" type="date" placeholder="Fecha de Cumpleaño" autocomplete="off" 
                         required autofocus max="2000-12-31" >
               
       </div>
@@ -159,7 +159,7 @@
        
     
       <div class="box-footer">
-                <button type="submit" class="btn btn-primary">GUARDAR</button>
+                <button id="EnviarDatos" type="submit" class="btn btn-primary">GUARDAR</button>
                 <a href="{% url "Usuarios:List" %}" class="btn btn-danger">REGRESAR</a>
               </div>
     </form>

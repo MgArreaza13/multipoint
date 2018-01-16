@@ -2,10 +2,11 @@ from django.db import models
 from apps.Configuracion.models import tb_status
 from apps.Service.models import tb_service
 from apps.Configuracion.models import tb_turn_sesion
+from apps.Product.models import tb_product
 
 # Create your models here.
 class tb_reservasWeb (models.Model):
-	servicioPrestar			= 	models.ForeignKey(tb_service,on_delete=models.CASCADE, null=True, default='')
+	servicioPrestar			= 	models.ForeignKey(tb_product,on_delete=models.CASCADE, null=True, default='')
 	dateTurn				=	models.DateField(auto_now=False, auto_now_add=False, null=False, default='' , blank=True)
 	turn 					=   models.ForeignKey(tb_turn_sesion, on_delete=models.CASCADE, default='', blank=True)
 	mail					=  	models.EmailField(default='', null=False, max_length=30)

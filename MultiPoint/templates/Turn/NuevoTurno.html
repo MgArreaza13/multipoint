@@ -217,7 +217,7 @@
                                     </div>
                                     <div class="separator clear-left col-md-12">
                                         <p class="btn-add col-sm-6">
-                                            <button type="button" name="{{productos.nameProduct}}"  id="siguientePaso2" name="{{productos.nameProduct}}"  value="{{productos.priceList}}" class="btn btn-success btn-block" onclick=" Suma(this.value); Desabilitar(this); PASO2 ();  ProductSeleccionado(this.name); "><i class="fa fa-shopping-cart"></i>CONTINUAR</button></p>
+                                            <button type="button" name="{{productos.id}}"  id="siguientePaso2"  value="{{productos.priceList}}" class="btn btn-success btn-block" onclick=" Suma(this.value); Desabilitar(this); PASO2 ();   ServiceSelected(this.name); "><i class="fa fa-shopping-cart"></i>CONTINUAR</button></p>
                                         <p style=""class="btn-details col-sm-6">
                                             <button type="button" class="btn btn-info btn-block" id="InfoServicio" value={{productos.id}} onclick="queryProducto(this.value)"><i class="fa fa-list"></i>VER MAS</button></p>
                                     </div>
@@ -386,7 +386,7 @@
                                     </div>
                                     <div class="separator clear-left col-md-12">
                                         <p class="btn-add col-sm-6">
-                                            <button type="button" name="{{servicios.id}}"  id="siguientePaso2" name="{{servicios.nameService}}"  value="{{servicios.priceList}}" class="btn btn-success btn-block" onclick="Suma(this.value);  Desabilitar(this); ServiceSelected(this.name);"><i class="fa fa-shopping-cart"></i>AGREGAR</button></p>
+                                            <button type="button"   id="siguientePaso2" name="{{servicios.nameService}}"  value="{{servicios.priceList}}" class="btn btn-success btn-block" onclick="Suma(this.value);  Desabilitar(this); ProductSeleccionado(this.name, this.value);"><i class="fa fa-shopping-cart"></i>AGREGAR</button></p>
                                         <p style=""class="btn-details col-sm-6">
                                             <button type="button" class="btn btn-info btn-block" id="InfoServicio" value={{servicios.id}} onclick="query(this.value)"><i class="fa fa-list"></i>VER MAS</button></p>
                                     </div>
@@ -456,15 +456,20 @@
                           DATOS DE USUARIO
                         </li>
                         <li>
-                          <div id="ICONOSSERVICIOS" class='fa fa-close'></div>
-                          SERVICIOS
-                        </li>
-                        <li>
                           <div id="ICONOPRODUCTOS" class='fa fa-close'></div>
                           PROMOCIONES
+                          <br><br>
+                          <div class="pull-right" id="PROMOCIONESSELECCIONADOS"></div>
+                        </li>
+                        <li>
+                          <div id="ICONOSSERVICIOS" class='fa fa-close'></div>
+                          SERVICIOS
+
+                          <div class="pull-right" id="SERVICESELECCIONADO" ></div>
                         </li>
 
-                        <li>
+                        <li style="margin-top:2em;">
+                        <br>
                           <div id="INOCOFECHA" class='fa fa-close'></div>
                           FECHA: <p class="pull-right" id="FECHATARJETA"></p>
                         </li>
@@ -658,7 +663,7 @@
             swal({
               type: 'warning',
               title: 'Excelente!',
-              text: 'Hasta aqui todo marcha Bien, ahora selecciona el dia y el turno que este disponible, considere que el precio final puede sufir algunos cargos adicionales debido a la inflacion del pais',
+              text: '¡Excelente! De acuerdo a la disponibilidad, seleccione día y hora para su evento. Tenga en cuenta que el precio total, puede sufrir cargos adicionales producto de la inflación.',
               timer: 6000,
               onOpen: function () {
                 swal.showLoading()
@@ -882,6 +887,22 @@ function ServiceSelected(myValue) {
     
     
     $('#ServicioSeleccionado').val(myValue);
+
+
+
+    $.ajax({
+        url: '/productos/consulta/detail',
+        data: {
+          'id_producto': myValue
+      },
+      dataType: 'json',
+      success: function (data) {
+           var html = data.nombre + ' - ' + data.value;
+           $('#PROMOCIONESSELECCIONADOS').html(html);
+        
+    }
+});
+    
   }
   else{
 
@@ -890,13 +911,14 @@ function ServiceSelected(myValue) {
   }
 }
 
-function ProductSeleccionado(product) {
+function ProductSeleccionado(product, precio) {
       if(product){
        
        var  html = $('#ProductosSeleccionados').val();
-        html +=   '<li style="list-style:none;">'+ product +'</li>'  ;
+        html +=   '<li style="list-style:none;">'+ product + ' - ' +'$'+precio +'</li>'  ;
         
         $('#ProductosSeleccionados').val(html);
+        $('#SERVICESELECCIONADO').html(html);
       }
       else{
          $('#ProductosSeleccionados').val(' ');
