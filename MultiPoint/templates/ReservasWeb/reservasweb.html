@@ -1305,6 +1305,15 @@ $('.clockpicker').clockpicker({
       selectable: true,
       selectHelper: true,
       select: function(start, end) {
+
+
+
+        
+
+
+
+
+
         /*
         var title = prompt('Event Title:');
         var eventData;
@@ -1408,6 +1417,7 @@ $('.clockpicker').clockpicker({
            var cont = 0;
            var arreglo_dos = [];
            var band = 1;
+           var validacion = 0; // 0 no esta ocupado, 1 ocupado
             function cargarOpciones(query) {
               //esta  funcion lo que esta hacioendo es validando 
               //lo que traigo del query que en este momentos son todos los turnos que estan
@@ -1424,7 +1434,7 @@ $('.clockpicker').clockpicker({
                         // si es asi sale 0 que es false 
                         // de lo contrario ban es igual a 1 
                         //y se cargara el turno
-                        if({{Tturno.id}} != query[i].fields.turn ){
+                        if({{Tturno.id}} != query[i].fields.turn && {{Tturno.id}} != 4 ){
                           //console.log('valor del id es ' + {{Tturno.id}} + ' valor del turno desocupado ' +query[i].fields.turn )
                           //console.log('Cargare');
                           band = 1;
@@ -1447,10 +1457,17 @@ $('.clockpicker').clockpicker({
 
              //console.log(myArrayOfThings);
             }
+
+
+            for(var i = 0; i<query.length; i++){
+              if (query[i].fields.turn == 4) {
+                validacion = 1;
+              }
+            }
+
+            if (validacion != 1) { 
               cargarOpciones(query);
-
-
-                var options = {};
+              var options = {};
                 $.map(myArrayOfThings,
                     function(o,query) {
                       
@@ -1462,7 +1479,7 @@ $('.clockpicker').clockpicker({
                   title: 'Seleccione el turno para cargar su cotizacion',
                   input: 'select',
                   inputOptions: options,
-                  inputPlaceholder: 'Seleccione El turno que desea cotizar',
+                  inputPlaceholder: 'Seleccione El Turno dispobible a cotizar,',
                   showCancelButton: true,
                   inputValidator: function (value ) {
                     return new Promise(function (resolve, reject) {
@@ -1487,6 +1504,34 @@ $('.clockpicker').clockpicker({
                   })
                   $('#TurnSeleccionado').val(result);
               });
+
+
+            }
+            else{
+
+              swal({
+              type: 'warning',
+              title: 'Ups!',
+              text: '¡El Dia ha Sido reselvado Completamente , intente con otro dia, Gracias',
+              timer: 8000,
+              onOpen: function () {
+                swal.showLoading()
+              }
+            }).then(
+              function () {},
+              // handling the promise rejection
+              function (dismiss) {
+                if (dismiss === 'timer') {
+                  console.log('I was closed by the timer')
+                }
+              }
+            )
+
+            }
+             
+
+
+                
           }
           else{
             var myArrayOfThings = [
