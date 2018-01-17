@@ -537,9 +537,9 @@
         
       </ul>
        <!-- ..................... MENU PARA COLABORADORES.............................. -->
-          {% elif  perfil.tipoUser == "Colaborador"  %}
+          {% elif  perfil.tipoUser == "Usuario"  %}
         <ul class="sidebar-menu">
-        <li class="header">Menu-Colaborador</li>
+        <li class="header">Menu-Usuario</li>
         
         <li class="treeview">
           <a href="{% url "Demo:inicio" %}">
@@ -558,11 +558,14 @@
             </span>
           </a>
           <ul class="treeview-menu" style="display: none;">
-          <li><a href="{% url "Clientes:ClientesHome" %}"><i class="fa  fa-users"></i> RESUMEN</a></li>
+          
+            
+            <li><a href="{% url "Clientes:ClientesWeb" %}"><i class="fa  fa-users"></i>CLIENTES </a></li>
+            <li><a href="{% url "Clientes:ClienteWebForm" %}"><i class="fa fa-plus"></i> NUEVO CLIENTE  </a></li>
          
           </ul>
         </li>
-       <!--
+        <!--
         <li class="treeview">
           <a href="#">
             <i class="fa fa-odnoklassniki"></i> <span>COLABORADORES</span>
@@ -571,59 +574,107 @@
             </span>
           </a>
           <ul class="treeview-menu" style="display: none;">
-            <li><a href="#"><i class="fa  fa-odnoklassniki-square"></i> LISTADO DE COLABORADORES </a></li>
+            <li><a href="{% url "Colaboradores:ListColaboradores" %}"><i class="fa  fa-odnoklassniki-square"></i> LISTADO DE COLABORADORES </a></li>
             
-           
+            <li><a href="{% url "Colaboradores:NuevoColaborador" %}"><i class="fa fa-plus"></i> Nuevo  </a></li>
              
           </ul>
         </li>
-        -->
+      -->
+        
+
         <li class="treeview">
-          <a href="{% url "Colaboradores:ColaboradorProfile" request.user.id %}">
-            <i class="fa fa-odnoklassniki"></i>
-            <span>PERFIL</span>
-            <span class="pull-right-container">
+          <a href="#">
+            <i class="fa fa-truck"></i>
+            <span>PROVEEDORES</span>
+              <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
+          <ul class="treeview-menu" style="display: none;">
+            <li><a href="{% url "Proveedores:ListProveedores" %}"><i class="fa  fa-unsorted"></i> Listado de Proveedores </a></li>
+   
+            <li><a href="{% url "Proveedores:NuevoProveedor" %}"><i class="fa fa-plus"></i> Nuevo Proveedor </a></li>
+          
+          </ul>
         </li>
+
         <li class="treeview">
-          <a href="{% url "Colaboradores:turnos" request.user.id %}">
+          <a href="#">
+            <i class="fa fa-shopping-cart"></i>
+            <span>PROMOCIONES</span>
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+
+          <ul class="treeview-menu" style="display: none;">
+            <li><a href="{% url "Productos:ListProductos" %}"><i class="fa  fa-opencart"></i> Listado de PROMOCIONES </a></li>
+            <li><a href="{% url "Productos:pructosCliente" %}"><i class="fa  fa-opencart"></i> Resumen de PROMOCIONES </a></li>
+     
+            <li><a href="{% url "Productos:NuevoProducto" %}"><i class="fa fa-plus"></i> Nueva PROMOCION
+
+             </a></li>
+          
+          </ul>
+        </li>
+
+       <li class="treeview">
+          <a href="#">
+            <i class="fa fa-gift"></i>
+            <span>SERVICIOS</span>
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu" style="display: none;">
+            <li><a href="{% url "Servicios:clientesServicios" %}"><i class="fa fa-star-o"></i> Resumen de Servicios </a></li>
+            <li><a href="{% url "Servicios:listService" %}"><i class="fa fa-star-o"></i> Listado Servicios </a></li>
+           
+            <li><a href="{% url "Servicios:NuevoServicio" %}"><i class="fa fa-plus"></i> Nuevo Servicio </a></li>
+            
+          </ul>
+        </li>
+
+
+        <li class="treeview">
+          <a href="#">
             <i class="fa fa-calendar"></i>
             <span>RESERVAS</span>
-            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
+          <ul class="treeview-menu" style="display: none;">
+            <li><a href="{% url "Turnos:index" %}"><i class="fa fa-calendar"></i> Resumen </a></li>
+            <li><a href="{% url "Turnos:listTurnos" %}"><i class="fa fa-calendar"></i>Reservas Web </a></li>
+            <li><a href="{% url "Reservas:listReservas" %}"><i class="fa fa-calendar"></i> Reservas Online </a></li>
+            <li><a href="{% url "Demo:calendario" %}"><i class="fa fa-calendar"></i> CALENDARIO DE RESERVAS </a></li>
+           
+            <li><a href="{% url "Turnos:NuevoTurn" %}"><i class="fa fa-plus"></i> Nuevo Reserva </a></li>
+            
+            
+          </ul>
         </li>
-      <li class="treeview">
-          <a href="{% url "Colaboradores:agenda" request.user.id %}">
-            <i class="fa fa-calendar"></i>
-            <span>AGENDA</span>
-            <span class="pull-right-container">
-            </span>
-          </a>
-        </li>
+        
        
-
         
 
         
-
     
-
-
-      
         
-       <!--
+            <li class="treeview">
+                <a href="{% url "Usuarios:List" %}">
+                <i class="fa fa-users"></i>
+                  <span>LISTA DE USUARIOS</span>
+                  <span class="pull-right-container">
+                  </span>
+                </a>
+            </li>
         <li class="treeview">
-          <a href="{% url "Demo:calendario" %}">
-            <i class="fa fa-calendar"></i>
-            <span>CALENDARIO</span>
+          <a href="{% url 'Configuracion:Configuracion' %}">
+            <i class="fa fa-gears"></i>
+            <span>CONFIGURACION</span>
             <span class="pull-right-container">
             </span>
           </a>
         </li>
-    -->
-      
 
         <li class="treeview">
           <a href="{% url 'Panel:bloqueado' %}">
