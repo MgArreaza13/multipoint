@@ -1251,7 +1251,7 @@ $('.clockpicker').clockpicker({
                         // si es asi sale 0 que es false 
                         // de lo contrario ban es igual a 1 
                         //y se cargara el turno
-                        if({{Tturno.id}} != query[i].fields.turn && {{Tturno.id}} != 4 ){
+                        if({{Tturno.id}} != query[i].fields.turn && {{Tturno.id}} != 5 ){
                           //console.log('valor del id es ' + {{Tturno.id}} + ' valor del turno desocupado ' +query[i].fields.turn )
                           //console.log('Cargare');
                           band = 1;
@@ -1275,7 +1275,7 @@ $('.clockpicker').clockpicker({
              //console.log(myArrayOfThings);
             }
              for(var i = 0; i<query.length; i++){
-              if (query[i].fields.turn == 4) {
+              if (query[i].fields.turn == 5) {
                 validacion = 1;
               }
             }
