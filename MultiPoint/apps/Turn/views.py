@@ -419,6 +419,7 @@ def listTurnos(request):
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	perfil = result[0]
 	formulario = False
+	status = tb_status.objects.all()
 	#queryset 
 	reservas_hoy = tb_reservasWeb.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
 	turnos__hoy =  tb_turn.objects.filter(dateTurn=date.today()).filter(statusTurn__nameStatus='Confirmada').count()
@@ -426,6 +427,7 @@ def listTurnos(request):
 	ingresos_hoy = tb_ingreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	egresos_hoy  = tb_egreso.objects.filter(dateCreate=date.today()).aggregate(total=Sum('monto'))
 	context = {
+	'status':status,
 	'formas_de_pago':formas_de_pago,
 	'Reservas':Reservas,
 	'perfil':perfil,
@@ -441,6 +443,7 @@ def listTurnos(request):
 #crea los turnos
 @login_required(login_url = 'Demo:login' )
 def NuevoTurn(request):
+	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	turnos = tb_turn.objects.filter(statusTurn__nameStatus="Confirmada")
 	ReservasWeb = tb_reservasWeb.objects.filter(statusTurn__nameStatus="Confirmada")
 	productos = tb_product.objects.all()
@@ -448,6 +451,7 @@ def NuevoTurn(request):
 	Form = ReservasWebForm
 	notificacion = Notificacion()
 	tipe_turnos = tb_turn_sesion.objects.all()
+	perfil = result[0]
 
 	user = tb_client_WEB()
 	fallido = None
@@ -463,6 +467,8 @@ def NuevoTurn(request):
 				turno.servicioPrestar=tb_product.objects.get(id = request.POST['ServicioSeleccionado'])
 			turno.montoAPagar = float(request.POST['total'])  
 			turno.TipoReservas = "RESERVA"
+			if request.POST['observaciones'] != '':
+				turno.observaciones = request.POST['observaciones']
 			if request.POST['ProductosSeleccionados'] != ' ':
 				turno.description = request.POST['ProductosSeleccionados']
 			else:
@@ -505,7 +511,7 @@ def NuevoTurn(request):
 		else:
 				fallido = "Errores en los datos Verifiquelos, y vuelva a intentarlo"
 				Form = ReservasWebForm()
-	return render(request, 'Turn/NuevoTurno.html' , {'Form':Form, 'tipe_turnos':tipe_turnos ,'servicios':servicios,'productos':productos ,'ReservasWeb':ReservasWeb ,'turnos':turnos ,'fallido':fallido,})
+	return render(request, 'Turn/NuevoTurno.html' , {'Form':Form, 'tipe_turnos':tipe_turnos ,'servicios':servicios,'productos':productos ,'ReservasWeb':ReservasWeb ,'turnos':turnos ,'fallido':fallido, 'perfil':perfil})
 
 	
 

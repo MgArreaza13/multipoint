@@ -15,12 +15,12 @@ class IngresoManualForm(forms.ModelForm):
 		'tipoPago',
 		'tipoIngreso',
 		'monto',
-		'cliente',
+		
 		'descripcion',
 
 		
 		]
-		exclude = ['user', 'dateCreate',]
+		exclude = ['user', 'dateCreate', 'cliente',]
 
 		labels = {
 		'monto':'Ingrese el monto a pagar', 

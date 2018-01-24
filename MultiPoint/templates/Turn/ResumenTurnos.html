@@ -271,7 +271,7 @@
                         {% endif %}
                         
 
-                        {% if user.is_authenticated and user.is_staff == True and user.is_superuser == True  or request.user.id == turno.collaborator.user.id%}
+                        {% if perfil.tipoUser == "Administrador"   or request.user.id == turno.collaborator.user.id%}
                         <td>
                             <a href="{% url "Turnos:EditTurnStatus" turno.id %}"  style="background-color:#001F3F;" class="label">EDITAR STATUS</a>
                         </td>
@@ -438,7 +438,7 @@
                         {% endif %}
                         
 
-                        {% if user.is_authenticated and user.is_staff == True and user.is_superuser == True  or request.user.id == turno.collaborator.user.id%}
+                        {% if perfil.tipoUser == "Administrador"  or request.user.id == turno.collaborator.user.id%}
                         <td>
                             <a href="{% url "Reservas:EditReservaWebStatus" turno.id %}" style="background-color:#001F3F;" class="label">EDITAR STATUS</a>
                         </td>

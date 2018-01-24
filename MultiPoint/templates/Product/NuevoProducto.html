@@ -3,7 +3,7 @@
 {% block content %}
 
   <div class="content-wrapper">
-  {% if user.is_authenticated and user.is_staff == True and user.is_superuser == True%}
+  {% if perfil.tipoUser == "Administrador"  %}
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>

@@ -478,6 +478,16 @@
                           <div id="ICONOTARJETA" class='fa fa-close'></div>
                           TURNO: <p class="pull-right" id="TURNOTARJETA"></p>
                         </li>
+
+                        <li style="padding: 2em;">
+                          
+                          OBSERVACIONES ADICIONALES 
+
+                          <div class="form-group">
+                            
+                            <textarea name="observaciones" id="observaciones" class="form-control" rows="5" placeholder="Observacion"></textarea>
+                          </div>
+                        </li>
                         <!--
                         <li>
                           <div class='fa fa-check'></div>
@@ -936,7 +946,8 @@ tot = parseFloat(document.form1.total.value);
 myValue = parseFloat(myValue);
 
  document.form1.total.value = tot + myValue; 
- $('#Monto').html(tot + myValue)
+ $('#Monto').html(tot + myValue);
+ $('#sin_inflacion').val(tot + myValue);
 
 /*
 else{
@@ -1181,16 +1192,19 @@ $('.clockpicker').clockpicker({
         success: function (data) {
           if (data) {
 
+            //console.log(data.value);
+
 
             
             var inflacion_mes = parseFloat (data.value / 100);
-           // console.log(inflacion_mes);
+
+            //console.log(inflacion_mes);
             var monto_sin_inflacion = parseFloat($('#sin_inflacion').val());
-           // console.log(monto_sin_inflacion);
+            //console.log(monto_sin_inflacion);
             var monto_inflacion = monto_sin_inflacion * inflacion_mes;
-           /// console.log(monto_inflacion);
+           //console.log(monto_inflacion);
             var monto_total = monto_inflacion + monto_sin_inflacion;
-           // console.log(monto_total);
+            //console.log(monto_total);
 
             $('#Monto').html(String(monto_total));
              document.form1.total.value = String(monto_total);
@@ -1235,6 +1249,7 @@ $('.clockpicker').clockpicker({
            var cont = 0;
            var arreglo_dos = [];
            var band = 1;
+           var validacion = 0; // 0 no esta ocupado, 1 ocupado
             function cargarOpciones(query) {
               //esta  funcion lo que esta hacioendo es validando 
               //lo que traigo del query que en este momentos son todos los turnos que estan
@@ -1251,7 +1266,7 @@ $('.clockpicker').clockpicker({
                         // si es asi sale 0 que es false 
                         // de lo contrario ban es igual a 1 
                         //y se cargara el turno
-                        if({{Tturno.id}} != query[i].fields.turn && {{Tturno.id}} != 5 ){
+                        if({{Tturno.id}} != query[i].fields.turn && {{Tturno.id}} != 8 ){
                           //console.log('valor del id es ' + {{Tturno.id}} + ' valor del turno desocupado ' +query[i].fields.turn )
                           //console.log('Cargare');
                           band = 1;
@@ -1275,7 +1290,7 @@ $('.clockpicker').clockpicker({
              //console.log(myArrayOfThings);
             }
              for(var i = 0; i<query.length; i++){
-              if (query[i].fields.turn == 5) {
+              if (query[i].fields.turn == 8) {
                 validacion = 1;
               }
             }
@@ -1290,7 +1305,7 @@ $('.clockpicker').clockpicker({
                         
                     });  
               swal({
-                  title: 'Seleccione el turno para cargar su cotizacion',
+                  title: '<h1>Seleccione el turno para cargar su cotizacion </h1>  <h3 style="color:#3b60be;"> El horario es flexible, si desea realizar algun horario especial comuniquese telefonicamente </h3>',
                   input: 'select',
                   inputOptions: options,
                   inputPlaceholder: 'Seleccione El turno que desea cotizar',
@@ -1364,7 +1379,7 @@ $('.clockpicker').clockpicker({
             
            
               swal({
-                  title: 'Seleccione el turno para cargar su cotizacion',
+                  title: '<h1>Seleccione el turno para cargar su cotizacion </h1> <h3 style="color:#3b60be;"> El horario es flexible, si desea realizar algun horario especial comuniquese telefonicamente </h3>',
                   input: 'select',
                   inputOptions: options,
                   inputPlaceholder: 'Seleccione El turno que desea cotizar',

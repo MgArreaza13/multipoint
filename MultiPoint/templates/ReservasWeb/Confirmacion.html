@@ -154,11 +154,20 @@
               {% if reserva.description != 'Sin Descripcion' %} <br>
                 Con los siguientes servicios :   <br>{{reserva.description |safe}}  
               {% endif %}
+              <br><br>
+              {% if reserva.observaciones != 'Sin Obsevaciones' %}
+                  OBSEVACIONES DEL CLIENTE:
+                  <br><br>
+                  {{reserva.observaciones |safe}}
+                {% endif %}
               </td>
               <td>{{reserva.dateTurn}}</td>
               <td>{{reserva.HoraTurn}}</td>
               
               <td>${{reserva.montoAPagar}}</td>
+
+
+              
             </tr>
             
             </tbody>

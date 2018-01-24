@@ -6,7 +6,7 @@
 
 
 {% block content %}
-{% if user.is_authenticated and user.is_staff == True and user.is_superuser == True%}
+{% if perfil.tipoUser == "Administrador"  %}
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -180,7 +180,7 @@
     </section>
 
 
-        {% if user.is_authenticated and user.is_staff == True and user.is_superuser == True %}
+        {% if perfil.tipoUser == "Administrador"  %}
             <div class="box-body" >         
                 <div class="col-sm-12">
                   <a href="{% url "Usuarios:NuevoUsuario" %}" type="button" class="btn btn-block btn-info">Nuevo Usuario</a>

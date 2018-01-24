@@ -190,7 +190,7 @@
 
 
     <div class="box-body" >
-          {% if user.is_authenticated and user.is_staff == True and user.is_superuser == True%}
+          {% if perfil.tipoUser == "Administrador"  %}
             <div class="col-sm-12">
               <a href="{% url "Proveedores:NuevoProveedor" %}" type="button" class="btn btn-block btn-info">Nuevo Proveedor</a>
             </div>

@@ -173,7 +173,7 @@
     </section>
 
     <div class="box-body" >
-          {% if user.is_authenticated and user.is_staff == True and user.is_superuser == True%}
+          {% if perfil.tipoUser == "Administrador"  %}
             <div class="col-sm-12">
               <a href="{% url "Clientes:ClienteWebForm" %}" type="button" class="btn btn-block btn-info">Nuevo Cliente</a>
             </div>

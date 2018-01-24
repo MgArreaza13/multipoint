@@ -511,7 +511,7 @@
                     </div>
                 </div>
         {% for servicios  in servicios  %}
-                <div class="item">
+                <div class="item" >
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="col-item">
@@ -621,6 +621,16 @@
                         <li style="padding: 2em;">
                           <div id="ICONOTARJETA" class='fa fa-close'></div>
                           TURNO: <p class="pull-right" id="TURNOTARJETA"></p>
+                        </li>
+
+                        <li style="padding: 2em;">
+                          
+                          OBSERVACIONES ADICIONALES 
+
+                          <div class="form-group">
+                            
+                            <textarea name="observaciones" id="observaciones" class="form-control" rows="5" placeholder="Observacion"></textarea>
+                          </div>
                         </li>
                         
                         <!--
@@ -1434,7 +1444,7 @@ $('.clockpicker').clockpicker({
                         // si es asi sale 0 que es false 
                         // de lo contrario ban es igual a 1 
                         //y se cargara el turno
-                        if({{Tturno.id}} != query[i].fields.turn && {{Tturno.id}} != 5 ){
+                        if({{Tturno.id}} != query[i].fields.turn && {{Tturno.id}} != 8 ){
                           //console.log('valor del id es ' + {{Tturno.id}} + ' valor del turno desocupado ' +query[i].fields.turn )
                           //console.log('Cargare');
                           band = 1;
@@ -1460,7 +1470,7 @@ $('.clockpicker').clockpicker({
 
 
             for(var i = 0; i<query.length; i++){
-              if (query[i].fields.turn == 5) {
+              if (query[i].fields.turn == 8) {
                 validacion = 1;
               }
             }
@@ -1476,7 +1486,7 @@ $('.clockpicker').clockpicker({
                         
                     });  
               swal({
-                  title: 'Seleccione el turno para cargar su cotizacion',
+                  title: '<h1>Seleccione el turno para cargar su cotizacion </h1> <h3 style="color:#3b60be;" > El horario es flexible, si desea realizar algun horario especial comuniquese telefonicamente </h3>',
                   input: 'select',
                   inputOptions: options,
                   inputPlaceholder: 'Seleccione El Turno dispobible a cotizar,',
@@ -1552,7 +1562,7 @@ $('.clockpicker').clockpicker({
             
            
               swal({
-                  title: 'Seleccione el turno para cargar su cotizacion',
+                  title: '<h1>Seleccione el turno para cargar su cotizacion </h1>  <h3 style="color:#3b60be;"> El horario es flexible, si desea realizar algun horario especial comuniquese telefonicamente </h3>',
                   input: 'select',
                   inputOptions: options,
                   inputPlaceholder: 'Seleccione El turno que desea cotizar',

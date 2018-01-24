@@ -46,6 +46,7 @@ def ListUserProfile(request):
 #Funcion para editar un usuario en especifico 
 @login_required(login_url = 'Demo:login' )
 def EditUserProfile(request , id_UserProfile):
+	print(request.POST)
 	UserProfile = tb_profile.objects.get(id = id_UserProfile)
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	perfil = result[0]
@@ -56,6 +57,7 @@ def EditUserProfile(request , id_UserProfile):
 		Form2= ProfileForm(request.POST, request.FILES ,instance=UserProfile)
 		if  Form2.is_valid():
 			UserProfile.user = UserProfile.user
+			UserProfile.tipoUser = request.POST['TipoUser']
 			UserProfile.nameUser = request.POST['nameUser']
 			if request.FILES['image'] == '':
 				UserProfile.image = UserProfile.image

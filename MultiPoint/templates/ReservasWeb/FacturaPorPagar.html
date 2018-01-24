@@ -6,7 +6,7 @@
 
 
 {% block content %}
-{% if user.is_authenticated and user.is_staff == True and user.is_superuser == True%}
+{% if perfil.tipoUser == "Administrador"  %}
 <div class="content-wrapper" style="min-height: 1126px;">
     <!-- Content Header (Page header) -->
     <section class="content-header">

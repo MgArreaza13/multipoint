@@ -20,7 +20,7 @@ class ReservasWebForm(forms.ModelForm):
 		
 		
 		]
-		exclude = ['dateTurn', 'HoraTurn',"statusTurn", 'montoAPagar', 'description','servicioPrestar', 'isPay']
+		exclude = ['dateTurn', 'HoraTurn',"statusTurn", 'montoAPagar', 'description','servicioPrestar', 'isPay' , 'observaciones']
 
 		labels = {
 		'mail':'ingrese su correo', 

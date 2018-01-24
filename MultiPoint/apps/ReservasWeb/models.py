@@ -20,5 +20,6 @@ class tb_reservasWeb (models.Model):
 	ingenico_id             =  	models.TextField(default='None', null=False, max_length=3000)
 	PagoOnline			 	=	models.BooleanField(null=False, blank=True , default=False)
 	TipoReservas			=   models.CharField(default='Reserva Web', null=True, max_length=30)
+	observaciones           =  	models.TextField(default='Sin Obsevaciones', null=False, max_length=3000)
 	def __str__(self):
 		return self.mail

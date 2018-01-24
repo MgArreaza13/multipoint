@@ -12,34 +12,38 @@ from apps.ReservasWeb.models import tb_reservasWeb
 from apps.Configuracion.models import tb_formasDePago
 from apps.Configuracion.models import tb_tipoIngreso
 from apps.Turn.models import tb_turn
+from apps.Client.models import tb_client_WEB
 
 # Create your views here.
 from apps.scripts.validatePerfil import validatePerfil
 
 from apps.UserProfile.models import tb_profile
 
-
+@login_required(login_url = 'Demo:login' )
 def NuevoIngresoManual(request):
 	Form = IngresoManualForm
 	result = validatePerfil(tb_profile.objects.filter(user=request.user))
 	perfil = result[0]
 	fallido = None
+	clientes = tb_client_WEB.objects.all()
+
 	if request.method == 'POST':
 		Form = IngresoManualForm(request.POST or None)
 		if Form.is_valid():
 			ingreso = Form.save(commit=False)
 			ingreso.user = request.user
+			ingreso.cliente = request.POST['Clientes']
 			if request.POST['descripcion'] == "":
 				ingreso.descripcion = 'Sin Comentarios'
 			else:
 				ingreso.descripcion = request.POST['descripcion']
 			ingreso.save()
 			mensaje = 'Hemos Cargado Su ingreso de manera exitosa'
-			return render(request, 'Caja/NuevoIngreso.html' , {'Form':Form, 'perfil':perfil, 'mensaje':mensaje})
+			return render(request, 'Caja/NuevoIngreso.html' , {'Form':Form, 'perfil':perfil, 'clientes':clientes ,'mensaje':mensaje})
 		else:
 			Form = IngresoManualForm()
 			fallido = "Hemos tenido algun problema con sus datos, por eso no hemos procesado su ingreso, verifiquelo e intentelo de nuevo"
-	return render(request, 'Caja/NuevoIngresoManual.html' , {'Form':Form, 'perfil':perfil, 'fallido':fallido})
+	return render(request, 'Caja/NuevoIngresoManual.html' , {'Form':Form, 'perfil':perfil, 'clientes':clientes ,'fallido':fallido})
 
 
 

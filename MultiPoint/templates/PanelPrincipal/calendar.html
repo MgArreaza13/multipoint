@@ -119,7 +119,7 @@
               <!-- THE CALENDAR -->
               <div id="calendar"></div>
               <div class="box-body" >
-          {% if user.is_authenticated and user.is_staff == True and user.is_superuser == True%}
+          {% if perfil.tipoUser == "Administrador"  %}
             <div class="col-sm-12">
               <a href="{% url "Turnos:NuevoTurn" %}" type="button" class="btn btn-block btn-info">Nuevo Turno </a>
             </div>

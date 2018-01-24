@@ -111,7 +111,7 @@
         <ul class="nav navbar-nav">
           <!-- Messages: style can be found in dropdown.less-->
           
-          {%  if user.is_authenticated and user.is_staff == True and user.is_superuser == True%}
+          {%  if perfil.tipoUser == "Administrador"  %}
 
           <!-- Notifications: style can be found in dropdown.less -->
           <li class="dropdown messages-menu">
@@ -251,7 +251,7 @@
         </li>
       </ul>
       <!-- ..................... MENU PARA ADMINISTRADORES.............................. -->
-       {% elif user.is_authenticated and user.is_staff == True and user.is_superuser == True%}
+       {% elif  perfil.tipoUser == "Administrador"  %}
           <ul class="sidebar-menu">
         <li class="header">Menu-Administrador</li>
         
@@ -995,6 +995,7 @@
 <script src="{% static 'bootstrap/js/reajuste.js'%}"></script>
 <script src="{% static 'bootstrap/js/proveedor.js'%}"></script>
 <script src="{% static 'bootstrap/js/nuevoUsuario.js'%}"></script>
+<script src="{% static 'bootstrap/js/changestatus.js'%}"></script>
 
 <script>
 
