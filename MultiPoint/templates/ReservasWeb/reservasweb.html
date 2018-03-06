@@ -36,6 +36,9 @@
   <link rel="stylesheet" href="{% static 'plugins/daterangepicker/daterangepicker.css'%}">
   <!-- bootstrap wysihtml5 - text editor -->
   <link rel="stylesheet" href="{% static 'plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'%}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
+  <link rel="stylesheet" href="{% static 'plugins/sweetalert.mg.js'%}">
+  <link rel="stylesheet" href="{% static 'plugins/seetalert.mg2.js'%}">
    <link rel="stylesheet" href="{% static "plugins/fullcalendar/fullcalendar.min.css" %}">
   <link rel="stylesheet" href="{% static "plugins/fullcalendar/fullcalendar.print.css" %}" media="print">
 
@@ -656,7 +659,7 @@
                       </a> -->
                     </div>
                      <div style="text-align:center;"  class="box-footer col-md-12">
-                <button type="submit" class="btn btn-primary">GUARDAR</button>
+                <button id="BotonDeEnviar" disabled="" type="submit" class="btn btn-primary">GUARDAR</button>
                 <a onclick="REGRESARPASO3();"  href="javascript:void(0)" class="btn btn-danger">REGRESAR</a>
               </div>
           
@@ -1212,6 +1215,44 @@ function REGRESARPASO3 () {
         
       }
 
+
+
+      function MensajeDeConfirmacion(monto) {
+       swal({
+  title: 'Felicidades!',
+  html: '<h3> Hemos cargado perfectamente todos los datos de su reserva y tiene un monto total de: $' +monto+' desea concretar si reselva?',
+  type: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Si, Deseo Concretar Mi reselva!',
+  cancelButtonText: 'No, Solo Estaba consulando precio',
+}).then(function(result) {
+  if (result) {
+    swal(
+      'Gracias Por contretar!',
+      'Hemos Cargado sus datos , preciona enviar y recibe tu comprobante',
+      'success'
+    )
+    $('#BotonDeEnviar').removeAttr('disabled')
+  }
+}, function(dismiss) {
+  swal({
+  type: 'error',
+  title: 'Cancelacion de Reserva',
+  text: 'Hemos Cancelado su reserva de manera exitosa , gracias por visitar nuestro portal!',
+  
+})
+  $('#BotonDeEnviar').attr('disabled', 'disabled');
+  cierra()
+});
+      }
+
+
+
+function cierra(){
+location.reload();
+}
 </script>
 
 <script>
@@ -1493,26 +1534,28 @@ $('.clockpicker').clockpicker({
                   showCancelButton: true,
                   inputValidator: function (value ) {
                     return new Promise(function (resolve, reject) {
-                      console.log(query[0].fields.turn);
+                      if(value){
+                        console.log(query[0].fields.turn);
                       for (var i = 0; i < query.length; i++) {
                         if (value != query[i].fields.turn) {
                           console.log(value);
                         resolve('Has Seleccionado El turno Valido')
-                      } else {
-                        reject('Turno Ocupado')
+                        
+                      } 
+                      }
+                    }
+                      else {
+                        reject('Seleccion Invalida')
                       }
                       }
-                    })
+                    )
                   }
                 }).then(function (result) {
                   $('#TURNOTARJETA').html(result);
                   $('#ICONOTARJETA').removeClass('fa-close');
                   $('#ICONOTARJETA').addClass('fa-check');
-                  swal({
-                    type: 'success',
-                    html: 'Has seleccionado el turno: ' + result
-                  })
-                  $('#TurnSeleccionado').val(result);
+                  MensajeDeConfirmacion($('#Monto').html());
+                  
               });
 
 
@@ -1574,10 +1617,10 @@ $('.clockpicker').clockpicker({
                           console.log(value);
                           $('#TurnSeleccionado').val(value);
                         resolve('Has Seleccionado El turno Valido')
-                                     
+                                
                       }
                       else{
-                        reject('ha ocurrido un error')
+                        reject('Seleccion Invalida')
                       }
                     })
                   }
@@ -1585,10 +1628,9 @@ $('.clockpicker').clockpicker({
                   $('#TURNOTARJETA').html(result);
                   $('#ICONOTARJETA').removeClass('fa-close');
                   $('#ICONOTARJETA').addClass('fa-check');
-                  swal({
-                    type: 'success',
-                    html: 'Hemos Cargado perfectamente tu turno '
-                  })
+                  MensajeDeConfirmacion($('#Monto').html());
+
+
               });
           }
         },
@@ -1602,6 +1644,8 @@ $('.clockpicker').clockpicker({
 
    
 });
+
+
 
 
 
