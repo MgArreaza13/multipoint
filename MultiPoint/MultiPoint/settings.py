@@ -27,12 +27,7 @@ SECRET_KEY = '6(jfopljqepu@w)y!zew)hd5smycvptk^6$#95mg2%b_3ng*pd'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    'multipoint.pythonanywhere.com',
-    'localhost',
-    'http://127.0.0.1:8000'
-    '127.0.0.1:8000',
-    ]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -59,6 +54,7 @@ INSTALLED_APPS = [
     'apps.ReservasWeb',
     'apps.Notificaciones',
     'apps.Inflacion',
+    'apps.Marketing',
     'social_django',
 ]
 
@@ -204,9 +200,9 @@ SOCIAL_AUTH_FACEBOOK_SECRET = 'eb5ee7f19bad1431f28d1684727c2cc9'
 
 
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'as.estiloonline@gmail.com'
-EMAIL_HOST_PASSWORD = 'asadmin123'
+EMAIL_HOST = 'b7000615.ferozo.com'
+EMAIL_HOST_USER = 'eventos@b7000615.ferozo.com'
+EMAIL_HOST_PASSWORD = 'Adolf5454@'
 EMAIL_PORT = 587
 
 REST_FRAMEWORK = {

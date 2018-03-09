@@ -100,13 +100,13 @@ def NuevoClient(request):
 				#Enviaremos los correos a el colaborador y al cliente 
 				#cliente
 				usuario = perfil.mailUser #trato de traer el colaborador del formulario
-				email_subject_usuario = 'Estilo Online Nuevo Cliente'
-				email_body_usuario = "Hola %s, gracias por crearte un nuevo perfil de cliente, ya puedes crear nuevos turnos y muchas cosas mas para mas informacion ingrese aqui http://estiloonline.pythonanywhere.com" %(perfil.nameUser)
-				message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+				email_subject_usuario = 'Multipoint Nuevo Cliente'
+				email_body_usuario = "Hola %s, gracias por crearte un nuevo perfil de cliente, ya puedes crear nuevos turnos y muchas cosas mas para mas informacion ingrese aqui http://179.43.123.41:8000/reservas/web/" %(perfil.nameUser)
+				message_usuario = (email_subject_usuario, email_body_usuario , 'eventos@b7000615.ferozo.com', [usuario])
 				#mensaje para apreciasoft
 				email_subject_Soporte = 'Nuevo cliente Registrado'
-				email_body_Soporte = "se ha registrado un nuevo perfil de cliente con nombre %s para verificar ingrese aqui http://estiloonline.pythonanywhere.com" %(perfil.nameUser)
-				message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com'])
+				email_body_Soporte = "se ha registrado un nuevo perfil de cliente con nombre %s para verificar ingrese aqui http://179.43.123.41:8000/" %(perfil.nameUser)
+				message_Soporte = (email_subject_Soporte, email_body_Soporte , 'eventos@b7000615.ferozo.com', ['soporte@apreciasoft.com', 'mg.arreaza.13@gmail.com', 'reservas@boomeventos.com'])
 				#enviamos el correo
 				send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
 				mensaje = "Gracias, hemos registrado de manera exitosa todos los datos, su nuevo cliente se regristro de manera exitosa"
@@ -144,12 +144,12 @@ def NuevoClientProfile(request):
 			#cliente
 			usuario = perfil.mailUser #trato de traer el colaborador del formulario
 			email_subject_usuario = 'Estilo Online Nuevo Cliente'
-			email_body_usuario = "Hola %s, gracias por crearte un nuevo perfil de cliente, ya puedes crear nuevos turnos y muchas cosas mas para mas informacion ingrese aqui http://estiloonline.pythonanywhere.com" %(perfil.nameUser)
-			message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+			email_body_usuario = "Hola %s, gracias por crearte un nuevo perfil de cliente, ya puedes crear nuevos turnos y muchas cosas mas para mas informacion ingrese aqui http://179.43.123.41:8000/reservas/web/" %(perfil.nameUser)
+			message_usuario = (email_subject_usuario, email_body_usuario , 'eventos@b7000615.ferozo.com', [usuario])
 			#mensaje para apreciasoft
 			email_subject_Soporte = 'Nuevo cliente Registrado'
-			email_body_Soporte = "se ha registrado un nuevo perfil de cliente con nombre %s para verificar ingrese aqui http://estiloonline.pythonanywhere.com" %(perfil.nameUser)
-			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com'])
+			email_body_Soporte = "se ha registrado un nuevo perfil de cliente con nombre %s para verificar ingrese aqui http://179.43.123.41:8000/" %(perfil.nameUser)
+			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'eventos@b7000615.ferozo.com', ['soporte@apreciasoft.com', 'reservas@boomeventos.com', 'mg.arreaza.13@gmail.com'])
 			#enviamos el correo
 			send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
 			mensaje = "Gracias, hemos creado su nuevo perfil de manera exitosa"

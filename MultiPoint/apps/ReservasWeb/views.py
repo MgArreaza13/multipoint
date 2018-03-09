@@ -47,6 +47,30 @@ from apps.Configuracion.models import tb_turn_sesion
 
 
 
+def EnviarInformacionDeCotizacion(request):
+	correo = request.GET.get('correo', None)
+	nombre = request.GET.get('nombre', None)
+	numero = request.GET.get('numero', None)
+	monto = request.GET.get('monto', None)
+	evento = request.GET.get('evento', None)
+	servicios = request.GET.get('servicios', None)
+	email_subject_usuario = 'Multipoint - Gracias Por Visitar Nuestra Pagina'
+	email_body_usuario = "Hola %s, estamos muy agredecidos que visitaras nuestro portal y consultaras la cotizacion es muy importante para nosotros saber el motivo por el cual no contretaste tu cotizacion para mas informacion puedes escribir a reservas@boomeventos.com nuestro equipo estara esperando por ti, saludos y gracias" %(nombre)
+	message_usuario = (email_subject_usuario, email_body_usuario , 'eventos@b7000615.ferozo.com', [correo])
+	#mensaje para apreciasoft
+	email_subject_Soporte = 'Multipoint - Nueva Cotizacion NO CONCRETADA'
+	email_body_Soporte = "se ha registrado  una  visita de un cliente y no concreto la reserva sus datos son  , nombre:%s . correo:%s, numero:%s habia solicitado un evento de %s y servicios de %s con un monto total de $%s " %(nombre, correo, numero, evento, servicios, monto)
+	message_Soporte = (email_subject_Soporte, email_body_Soporte , 'eventos@b7000615.ferozo.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com", 'reservas@boomeventos.com'])
+	#enviamos el correo
+	send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+	return HttpResponse(200)
+
+
+
+
+
+
+
 def reserva_update(request):
 	id_reserva = request.GET.get('id_reserva', None)
 	status_name = request.GET.get('status', None)
@@ -56,11 +80,8 @@ def reserva_update(request):
 	return HttpResponse(200)
 
 def ReservaWebQueryset(request):
-	print('funciono entro')
 	date = request.GET.get('date', None)
-	print(date)
 	query = serializers.serialize("json", tb_reservasWeb.objects.filter(dateTurn = date).filter(statusTurn__nameStatus='Confirmada'))
-	print(query)
 	return HttpResponse(query)
 
 
@@ -131,13 +152,13 @@ def CorreoDePagoSucursal(request):
 	usuario = reserva.mail #trato de traer el colaborador del formulario
 	email_subject_usuario = 'Multipoint - Gracias Por Registrar su Reserva'
 	email_body_usuario = "Hola %s, gracias por hacer tu reserva con nosotros te recordamos que debes concretar el pago en nuestra sucursal en las proxima 24 horas para camniar el status de tu reserva, muchas gracias " %(reserva.nombre)
-	message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+	message_usuario = (email_subject_usuario, email_body_usuario , 'eventos@b7000615.ferozo.com', [usuario])
 	#mensaje para apreciasoft
 	email_subject_Soporte = 'Multipoint - Nueva Reserva WEB Completada Y Proximamente pagada en sucursal'
-	email_body_Soporte = "se ha registrado  una  nueva reserva , nombre:%s . correo:%s, numero:%s , te invitamos a contactarla y luego a cambiar el status de la reserva luego que se complete el pago en la sucursal, revisa el status  en  http://multipoint.pythonanywhere.com/reservas/list/" %(reserva.nombre, reserva.mail, reserva.telefono)
-	message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com"])
+	email_body_Soporte = "se ha registrado  una  nueva reserva , nombre:%s . correo:%s, numero:%s , te invitamos a contactarla y luego a cambiar el status de la reserva luego que se complete el pago en la sucursal, revisa el status  en  http://179.43.123.41:8000/reservas/list/" %(reserva.nombre, reserva.mail, reserva.telefono)
+	message_Soporte = (email_subject_Soporte, email_body_Soporte , 'eventos@b7000615.ferozo.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com", 'reservas@boomeventos.com'])
 	#enviamos el correo
-	#send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+	send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
 	data = {
 		'status':'ok'
 	}
@@ -193,13 +214,13 @@ def StatusChange(request ):
 	usuario = reserva.mail #trato de traer el colaborador del formulario
 	email_subject_usuario = 'Multipoint - Gracias Por su Pago'
 	email_body_usuario = "Hola %s, gracias por completar su pago de manera exitosa, hemos aprobado su solicitud ya de servicio , esperemos disfrute nuestros servicios" %(reserva.nombre)
-	message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+	message_usuario = (email_subject_usuario, email_body_usuario , 'eventos@b7000615.ferozo.com', [usuario])
 	#mensaje para apreciasoft
 	email_subject_Soporte = 'Multipoint - Nueva Reserva WEB PAGADA'
-	email_body_Soporte = "se ha registrado un Pago de una  reserva , nombre:%s . correo:%s, numero:%s , para un servicio %s, y un monto de $%s te invitamos a revisarla en http://multipoint.pythonanywhere.com/reservas/list/" %(reserva.nombre, reserva.mail, reserva.telefono, reserva.servicioPrestar, reserva.montoAPagar)
-	message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com"])
+	email_body_Soporte = "se ha registrado un Pago de una  reserva , nombre:%s . correo:%s, numero:%s , para un servicio %s, y un monto de $%s te invitamos a revisarla en http://179.43.123.41:8000/reservas/list/" %(reserva.nombre, reserva.mail, reserva.telefono, reserva.servicioPrestar, reserva.montoAPagar)
+	message_Soporte = (email_subject_Soporte, email_body_Soporte , 'eventos@b7000615.ferozo.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com", 'reservas@boomeventos.com'])
 	#enviamos el correo
-	#send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+	send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
 	return HttpResponse('ok')
 
 
@@ -242,13 +263,13 @@ def ReservaWebPorPagar(request, id_reserva):
 			usuario = reserva.mail #trato de traer el colaborador del formulario
 			email_subject_usuario = 'Multipoint - Gracias Por su Pago'
 			email_body_usuario = "Hola %s, gracias por completar su pago de manera exitosa, esperemos disfrute nuestros servicios" %(reserva.nombre)
-			message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+			message_usuario = (email_subject_usuario, email_body_usuario , 'eventos@b7000615.ferozo.com', [usuario])
 			#mensaje para apreciasoft
 			email_subject_Soporte = 'Multipoint - Nueva Reserva WEB PAGADA'
-			email_body_Soporte = "se ha registrado un Pago de una  reserva , nombre:%s . correo:%s, numero:%s , te invitamos a contactarla y luego a cambiar el status de la reserva en  http://multipoint.pythonanywhere.com/reservas/list/" %(reserva.nombre, reserva.mail, reserva.telefono)
-			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com"])
+			email_body_Soporte = "se ha registrado un Pago de una  reserva , nombre:%s . correo:%s, numero:%s , te invitamos a contactarla y luego a cambiar el status de la reserva en  http://179.43.123.41:8000/reservas/list/" %(reserva.nombre, reserva.mail, reserva.telefono)
+			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'eventos@b7000615.ferozo.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com", 'reservas@boomeventos.com'])
 			#enviamos el correo
-			#send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+			send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
 			return render(request, 'ReservasWeb/FacturaPorPagar.html' , {'Form':Form, 'perfil':perfil, 'mensaje':mensaje, 'reserva':reserva,'administrador':administrador,'fecha':fecha,})
 		else: 
 			Form = WebReservasIngresoForm()
@@ -318,14 +339,14 @@ def EditReservaList(request , id_reservas):
 			if reserva.statusTurn.nameStatus == 'Confirmada':
 				print('reserva confirmada email')
 				email_subject_usuario = 'Reserva confirmada, motor de pago enviado'
-				email_body_usuario = "Hola ha confirmado la reserva sera enviado el motor de pago mas informacion http://multipoint.pythonanywhere.com/" 
-				message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com"])
+				email_body_usuario = "Hola ha confirmado la reserva sera enviado el motor de pago mas informacion http://179.43.123.41:8000/" 
+				message_usuario = (email_subject_usuario, email_body_usuario , 'eventos@b7000615.ferozo.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com", 'reservas@boomeventos.com'])
 				mail = reserva.mail
 				email_subject_Soporte = 'Multipoint - Reserva Confirmada'
-				email_body_Soporte = "hola %s, hemos confirmado tu reserva web te invitamos a procesar tu pago en http://multipoint.pythonanywhere.com/reservas/list/" %(reserva.nombre)
-				message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', [mail])
+				email_body_Soporte = "hola %s, hemos confirmado tu reserva web te invitamos a procesar tu pago gracias" %(reserva.nombre)
+				message_Soporte = (email_subject_Soporte, email_body_Soporte , 'eventos@b7000615.ferozo.com', [mail])
 				#enviamos el correo
-				#send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+				send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
 			return redirect ('Reservas:listReservas')
 	return render (request, 'ReservasWeb/listaDeReservas.html', {'ReservaWebEditar':ReservaWebEditar,'reservas':reservas,'Form':Form , 'perfil':perfil})
 
@@ -386,14 +407,14 @@ def web(request):
 			#cliente
 			usuario = turno.mail #trato de traer el colaborador del formulario
 			email_subject_usuario = 'Multipoint - Nueva Reserva'
-			email_body_usuario = "Hola %s, gracias por solicitar una nueva reserva , para disfrutar de nuestros servicios te invitamos a resgistrarte aqui http://multipoint.pythonanywhere.com/" %(turno.nombre)
-			message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+			email_body_usuario = "Hola %s, gracias por solicitar una nueva reserva, te informaremos cuando verifiquemos tus datos" %(turno.nombre)
+			message_usuario = (email_subject_usuario, email_body_usuario , 'eventos@b7000615.ferozo.com', [usuario])
 			#mensaje para apreciasoft
 			email_subject_Soporte = 'Multipoint - Nueva Reserva'
-			email_body_Soporte = "se ha registrado una nueva reserva , nombre:%s . correo:%s, numero:%s , te invitamos a contactarla y luego a cambiar el status de la reserva en  http://multipoint.pythonanywhere.com/reservas/list/" %(turno.nombre, turno.mail, turno.telefono)
-			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com"])
+			email_body_Soporte = "se ha registrado una nueva reserva , nombre:%s . correo:%s, numero:%s , te invitamos a contactarla y luego a cambiar el status de la reserva en  http://179.43.123.41:8000/reservas/list/" %(turno.nombre, turno.mail, turno.telefono)
+			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'eventos@b7000615.ferozo.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com", 'reservas@boomeventos.com'])
 			#enviamos el correo
-			#send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+			send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
 			return redirect('Reservas:Factura', id_reservas=turno.id)
 		else:
 				fallido = "Errores en los datos Verifiquelos, y vuelva a intentarlo"

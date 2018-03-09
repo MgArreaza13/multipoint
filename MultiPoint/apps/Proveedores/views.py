@@ -98,15 +98,15 @@ def NuevoProveedor(request):
 			#Enviaremos los correos a el colaborador y al cliente 
 			#cliente
 		usuario = proveedor.email #trato de traer el colaborador del formulario
-		email_subject_usuario = 'Estilo Online Nuevo Proveedor'
-		email_body_usuario = "Hola %s, gracias por formar parte de nuestra familia como proveedor, toda tu informacion esta disponible aqui http://estiloonline.pythonanywhere.com" %(proveedor.nameProveedor)
-		message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+		email_subject_usuario = 'Multipoint Nuevo Proveedor'
+		email_body_usuario = "Hola %s, gracias por formar parte de nuestra familia como proveedor" %(proveedor.nameProveedor)
+		message_usuario = (email_subject_usuario, email_body_usuario , 'eventos@b7000615.ferozo.com', [usuario])
 			#mensaje para apreciasoft
 		email_subject_Soporte = 'Nuevo Proveedor Registrado'
-		email_body_Soporte = "se ha registrado un nuevo proveedor satisfactoriamente con nombre %s para verificar ingrese aqui http://estiloonline.pythonanywhere.com" %(proveedor.nameProveedor)
-		message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com'])
+		email_body_Soporte = "se ha registrado un nuevo proveedor satisfactoriamente con nombre %s para verificar ingrese aqui http://179.43.123.41:8000" %(proveedor.nameProveedor)
+		message_Soporte = (email_subject_Soporte, email_body_Soporte , 'eventos@b7000615.ferozo.com', ['soporte@apreciasoft.com', 'reservas@boomeventos.com', 'mg.arreaza.13@gmail.com'])
 		#enviamos el correo
-		#send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+		send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
 		mensaje = "Hemos Guardado de manera exitosa su nuevo proveedor"
 		return render(request, 'Proveedores/NuevoProveedor.html' , {'Form':Form, 'perfil':perfil, 'mensaje':mensaje})		
 	else:

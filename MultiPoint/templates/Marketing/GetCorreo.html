@@ -1,0 +1,108 @@
+{% extends "../Base/BasePanel.html" %}
+{% load staticfiles %}
+
+{% block title %}
+  Marketing
+{% endblock title %}
+
+{% block content %}
+{% if perfil.tipoUser == "Administrador"  %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Mensaje enviado 
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> INICIO	</a></li>
+        <li class="active">Leer Mensaje</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-md-3">
+          <a href="{% url "Marketing:VistaPrincipal" %}" class="btn btn-primary btn-block margin-bottom">Volver</a>
+
+          <div class="box box-solid">
+            <div class="box-header with-border">
+              <h3 class="box-title">Registros </h3>
+
+              <div class="box-tools">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="box-body no-padding">
+              <ul class="nav nav-pills nav-stacked">
+                <li><a href="{% url "Marketing:VistaPrincipal" %}"><i class="fa fa-inbox"></i> Enviados
+                </li>
+                
+              </ul>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /. box -->
+          
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-9">
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Listado de Correo</h3>
+
+              <div class="box-tools pull-right">
+                <a href="#" class="btn btn-box-tool" data-toggle="tooltip" title="Previous"><i class="fa fa-chevron-left"></i></a>
+                <a href="#" class="btn btn-box-tool" data-toggle="tooltip" title="Next"><i class="fa fa-chevron-right"></i></a>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+              <div class="mailbox-read-info">
+                <h3>Cuerpo del Correo </h3>
+                <h4>{{correo.Asunto}}</h4>
+                <h5>eventos@b7000615.ferozo.com
+                  <span class="mailbox-read-time pull-right">{{correo.dateCreate}}</span></h5>
+              </div>
+              <!-- /.mailbox-read-info -->
+              <div class="mailbox-controls with-border text-center">
+                
+                <!-- /.btn-group -->
+                
+              </div>
+              <!-- /.mailbox-controls -->
+              <div class="mailbox-read-message">
+                {{correo.Mailbody |safe}}
+              </div>
+              <!-- /.mailbox-read-message -->
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+              <ul class="mailbox-attachments clearfix">
+                
+                
+                
+                
+              </ul>
+            </div>
+            <!-- /.box-footer -->
+            
+            <!-- /.box-footer -->
+          </div>
+          <!-- /. box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+  </div>
+
+
+{% else %}
+
+{% include "../Base/404.html" %}
+{%endif%}
+{%endblock content%}

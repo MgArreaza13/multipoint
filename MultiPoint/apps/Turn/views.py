@@ -150,11 +150,11 @@ def TurnStatusChange(request ):
 	usuario = reserva.client.user.mailUser #trato de traer el colaborador del formulario
 	email_subject_usuario = 'Multipoint - Gracias Por su Pago'
 	email_body_usuario = "Hola %s, gracias por completar su pago de manera exitosa, hemos aprobado su solicitud ya de servicio , esperemos disfrute nuestros servicios" %(reserva.client)
-	message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+	message_usuario = (email_subject_usuario, email_body_usuario , 'eventos@b7000615.ferozo.com', [usuario])
 	#mensaje para apreciasoft
 	email_subject_Soporte = 'Multipoint - Nueva Reserva WEB PAGADA'
-	email_body_Soporte = "se ha registrado un Pago de una  reserva , nombre:%s . correo:%s, numero:%s , para un servicio %s, y un monto de $%s te invitamos a revisarla en http://multipoint.pythonanywhere.com/reservas/list/" %(reserva.client, reserva.client.user.mailUser, reserva.client.phoneNumberClient, reserva.servicioPrestar, reserva.montoAPagar)
-	message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com"])
+	email_body_Soporte = "se ha registrado un Pago de una  reserva , nombre:%s . correo:%s, numero:%s , para un servicio %s, y un monto de $%s te invitamos a revisarla en http://179.43.123.41:8000/reservas/list/" %(reserva.client, reserva.client.user.mailUser, reserva.client.phoneNumberClient, reserva.servicioPrestar, reserva.montoAPagar)
+	message_Soporte = (email_subject_Soporte, email_body_Soporte , 'eventos@b7000615.ferozo.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com", 'reservas@boomeventos.com', ])
 	#enviamos el correo
 	send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
 	
@@ -225,11 +225,11 @@ def ReservaWebPanelPorPagar(request, id_reserva):
 			usuario = reserva.client.user.mailUser #trato de traer el colaborador del formulario
 			email_subject_usuario = 'Multipoint - Gracias Por su Pago'
 			email_body_usuario = "Hola %s, gracias por completar su pago de manera exitosa, esperemos disfrute nuestros servicios" %(reserva.client)
-			message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+			message_usuario = (email_subject_usuario, email_body_usuario , 'eventos@b7000615.ferozo.com', [usuario])
 			#mensaje para apreciasoft
 			email_subject_Soporte = 'Multipoint - Nueva Reserva WEB PAGADA'
-			email_body_Soporte = "se ha registrado un Pago de una  reserva , nombre:%s . correo:%s, numero:%s , te invitamos a contactarla y luego a cambiar el status de la reserva en  http://multipoint.pythonanywhere.com/reservas/list/" %(reserva.client, reserva.client.user.mailUser, reserva.client.phoneNumberClient)
-			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com"])
+			email_body_Soporte = "se ha registrado un Pago de una  reserva , nombre:%s . correo:%s, numero:%s , te invitamos a contactarla y luego a cambiar el status de la reserva en  http://179.43.123.41:8000/reservas/list/" %(reserva.client, reserva.client.user.mailUser, reserva.client.phoneNumberClient)
+			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'eventos@b7000615.ferozo.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com", 'reservas@boomeventos.com', ])
 			#enviamos el correo
 			send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
 			return render(request, 'Turn/FacturaPorPagarPanel.html' , {'Form':Form, 'perfil':perfil, 'mensaje':mensaje, 'reserva':reserva,'administrador':administrador,'fecha':fecha,})
@@ -285,19 +285,19 @@ def NuevoTurnClient(request , id_client):
 				#colaborador
 				#colaborador = tb_profile.objects.get(nameUser=turno.collaborator) #trato de traer el colaborador del formulario
 				#email_subject_Colaborador = 'Nuevo Turno Solicitado Por Cliente'
-				#email_body_Colaborador = "Hola %s, El presente mensaje es para informarle que ha recibido una nueva solicitud para un turno si desea revisarla y confirmarla ingrese aqui http://estiloonline.pythonanywhere.com" %(colaborador)
+				#email_body_Colaborador = "Hola %s, El presente mensaje es para informarle que ha recibido una nueva solicitud para un turno si desea revisarla y confirmarla ingrese aqui http://179.43.123.41:8000/" %(colaborador)
 				#email_colaborador = colaborador.mailUser
-				#message_colaborador = (email_subject_Colaborador, email_body_Colaborador , 'as.estiloonline@gmail.com', [email_colaborador])
+				#message_colaborador = (email_subject_Colaborador, email_body_Colaborador , 'eventos@b7000615.ferozo.com', [email_colaborador])
 				#cliente
 			client = tb_profile.objects.get(user__username=turno.client) #trato de traer el colaborador del formulario
 			email_subject_client = 'Nuevo Turno Solicitado'
-			email_body_Client = "Hola %s, El presente mensaje es para informarle que se ha enviado una nueva solicitud para un turno si desea revisarla y confirmarla ingrese aqui http://multipoint.pythonanywhere.com" %(client)
+			email_body_Client = "Hola %s, El presente mensaje es para informarle que se ha enviado una nueva solicitud para un turno ya nos pondremos en contacto con usted" %(client)
 			email_client = client.mailUser
-			message_client = (email_subject_client, email_body_Client, 'as.estiloonline@gmail.com', [email_client])
+			message_client = (email_subject_client, email_body_Client, 'eventos@b7000615.ferozo.com', [email_client])
 				#mensaje para apreciasoft
 			email_subject_Soporte = 'Nuevo Turno Solicitado en Estilo Online'
-			email_body_Soporte = "Hola, El presente mensaje es para informarle que el cliente  %s ha enviado una nueva solicitud para de reserva , si desea revisarla ingrese aqui http://multipoint.pythonanywhere.com" %(client)
-			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', 'mg.arreaza.13@gmail.com'])
+			email_body_Soporte = "Hola, El presente mensaje es para informarle que el cliente  %s ha enviado una nueva solicitud para de reserva , si desea revisarla ingrese aqui http://179.43.123.41:8000/" %(client)
+			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'eventos@b7000615.ferozo.com', ['soporte@apreciasoft.com', 'mg.arreaza.13@gmail.com', 'reservas@boomeventos.com', ])
 				#enviamos el correo
 			send_mass_mail(( message_client, message_Soporte), fail_silently=False)
 			mensaje = "Hemos Guardado sus datos de manera correcta"
@@ -345,9 +345,9 @@ def NuevoTurnParaHoy(request):
 				#Envio de mensajes 
 				#colaborador = tb_profile.objects.get(nameUser=turno.collaborator) #trato de traer el colaborador del formulario
 				#email_subject_Colaborador = 'Nuevo Turno Solicitado Por Cliente'
-				#email_body_Colaborador = "Hola %s, El presente mensaje es para informarle que ha recibido una nueva solicitud para un turno si desea revisarla y confirmarla ingrese aqui http://estiloonline.pythonanywhere.com" %(colaborador)
+				#email_body_Colaborador = "Hola %s, El presente mensaje es para informarle que ha recibido una nueva solicitud para un turno si desea revisarla y confirmarla ingrese aqui http://179.43.123.41:8000/" %(colaborador)
 				#email_colaborador = colaborador.mailUser
-				#message_colaborador = (email_subject_Colaborador, email_body_Colaborador , 'as.estiloonline@gmail.com', [email_colaborador])
+				#message_colaborador = (email_subject_Colaborador, email_body_Colaborador , 'eventos@b7000615.ferozo.com', [email_colaborador])
 				#cliente
 			if request.POST['ServicioSeleccionado'] != 'None':
 				turno.servicioPrestar=tb_service.objects.get(id = request.POST['ServicioSeleccionado'])
@@ -358,13 +358,13 @@ def NuevoTurnParaHoy(request):
 			notificacion.save()
 			client = tb_profile.objects.get(user__username=turno.client) #trato de traer el colaborador del formulario
 			email_subject_client = 'Nuevo Turno Solicitado'
-			email_body_Client = "Hola %s, El presente mensaje es para informarle que se ha enviado una nueva solicitud para un turno si desea revisarla y confirmarla ingrese aqui http://estiloonline.pythonanywhere.com" %(client)
+			email_body_Client = "Hola %s, El presente mensaje es para informarle que se ha enviado una nueva solicitud para un turno ya nos pondremos en contacto con usted , gracias" %(client)
 			email_client = client.mailUser
-			message_client = (email_subject_client, email_body_Client, 'as.estiloonline@gmail.com', [email_client])
+			message_client = (email_subject_client, email_body_Client, 'eventos@b7000615.ferozo.com', [email_client])
 				#mensaje para apreciasoft
 			email_subject_Soporte = 'Nuevo Turno Solicitado en Estilo Online'
-			email_body_Soporte = "Hola, soporte Apreciasoftit, El presente mensaje es para informarle que el cliente  %s ha enviado una nueva solicitud de Reservas , si desea revisarla ingrese aqui http://estiloonline.pythonanywhere.com" %(client)
-			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com'])
+			email_body_Soporte = "Hola, soporte Apreciasoftit, El presente mensaje es para informarle que el cliente  %s ha enviado una nueva solicitud de Reservas , si desea revisarla ingrese aqui http://179.43.123.41:8000/" %(client)
+			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'eventos@b7000615.ferozo.com', ['soporte@apreciasoft.com', 'reservas@boomeventos.com', 'mg.arreaza.13@gmail.com'])
 				#enviamos el correo
 			send_mass_mail((message_client, message_Soporte), fail_silently=False)
 				
@@ -499,12 +499,12 @@ def NuevoTurn(request):
 			#cliente
 			usuario = turno.mail #trato de traer el colaborador del formulario
 			email_subject_usuario = 'Multipoint - Nueva Reserva'
-			email_body_usuario = "Hola %s, gracias por solicitar una nueva reserva , para disfrutar de nuestros servicios te invitamos a resgistrarte aqui http://multipoint.pythonanywhere.com/" %(turno.nombre)
-			message_usuario = (email_subject_usuario, email_body_usuario , 'as.estiloonline@gmail.com', [usuario])
+			email_body_usuario = "Hola %s, gracias por solicitar una nueva reserva ya nos pondremos en contacto con usted , gracias" %(turno.nombre)
+			message_usuario = (email_subject_usuario, email_body_usuario , 'eventos@b7000615.ferozo.com', [usuario])
 			#mensaje para apreciasoft
 			email_subject_Soporte = 'Multipoint - Nueva Reserva'
-			email_body_Soporte = "se ha registrado una nueva reserva , nombre:%s . correo:%s, numero:%s , te invitamos a contactarla y luego a cambiar el status de la reserva en  http://multipoint.pythonanywhere.com/reservas/list/" %(turno.nombre, turno.mail, turno.telefono)
-			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'as.estiloonline@gmail.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com"])
+			email_body_Soporte = "se ha registrado una nueva reserva , nombre:%s . correo:%s, numero:%s , te invitamos a contactarla y luego a cambiar el status de la reserva en  http://179.43.123.41:8000/reservas/list/" %(turno.nombre, turno.mail, turno.telefono)
+			message_Soporte = (email_subject_Soporte, email_body_Soporte , 'eventos@b7000615.ferozo.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com", 'reservas@boomeventos.com',])
 			#enviamos el correo
 			#send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
 			return redirect('Reservas:Factura', id_reservas=turno.id)

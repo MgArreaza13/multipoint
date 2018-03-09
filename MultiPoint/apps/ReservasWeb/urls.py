@@ -19,6 +19,7 @@ from apps.ReservasWeb.views import EditReservaList2
 from apps.ReservasWeb.views import EditReservaWebStatus
 from apps.ReservasWeb.views import ReservaWebQueryset
 from apps.ReservasWeb.views import reserva_update
+from apps.ReservasWeb.views import EnviarInformacionDeCotizacion
 
 urlpatterns = [
 
@@ -43,6 +44,6 @@ urlpatterns = [
 	url(r'^Procesar/Pago/Status/change$', StatusChange, name='StatusChange'  ),
 	url(r'^Procesar/Pago/Status/Retorno$', returnPago, name='returnPago'  ),
 	url(r'^Correo/Pago/Sucursal$', CorreoDePagoSucursal, name='CorreoDePagoSucursal'  ),
-
+	url(r'^cotizacion/no/concretada$', EnviarInformacionDeCotizacion, name='EnviarInformacionDeCotizacion'  ),
 	url(r'^actualizacion/de/status$', reserva_update, name='reserva_update'  ),
 ]

@@ -1218,6 +1218,9 @@ function REGRESARPASO3 () {
 
 
       function MensajeDeConfirmacion(monto) {
+        
+
+
        swal({
   title: 'Felicidades!',
   html: '<h3> Hemos cargado perfectamente todos los datos de su reserva y tiene un monto total de: $' +monto+' desea concretar si reselva?',
@@ -1243,12 +1246,43 @@ function REGRESARPASO3 () {
   text: 'Hemos Cancelado su reserva de manera exitosa , gracias por visitar nuestro portal!',
   
 })
+
+
+        
+
+
+
   $('#BotonDeEnviar').attr('disabled', 'disabled');
-  cierra()
-});
+  EnviarCorreo();
+  cierra();
+  
+    });
       }
 
 
+function EnviarCorreo() {
+  var correo_consulta = $('#campo1').val();
+        var Nombre_consulta = $('#campo2').val();
+        var numero_consulta = $('#campo3').val();
+        var monto_consulta = $('#Monto').html()
+        var evento_consulta = $('#PROMOCIONESSELECCIONADOS').html();
+        var servicios_consulta = $('#SERVICESELECCIONADO').html();
+  $.ajax({
+        url: '/reservas/cotizacion/no/concretada',
+        data: {
+          'correo': correo_consulta,
+          'nombre':Nombre_consulta,
+          'numero':numero_consulta,
+          'monto':monto_consulta,
+          'evento':evento_consulta,
+          'servicios':servicios_consulta,
+      },
+        dataType: 'json',
+        success: function (data) {
+          
+        }
+      });
+}
 
 function cierra(){
 location.reload();
