@@ -23,29 +23,29 @@ from apps.PanelPrincipal.views import registro
 app_name = 'Demo'
 
 urlpatterns = [
-	url(r'^$', inicio, name='inicio' ),
+	#url(r'^$', inicio, name='inicio' ),
 	url(r'^entrar/$', login, name='login' ),
-	url(r'^salir/$', logout, name='logout' ),
-	url(r'^reservas/filtro$', filtoPorFecha, name='filtoPorFecha' ),
-	url(r'^reservas/finalizacion/turnos$', FinalizacionTurno, name='FinalizacionTurno' ),
+	#url(r'^salir/$', logout, name='logout' ),
+	#url(r'^reservas/filtro$', filtoPorFecha, name='filtoPorFecha' ),
+	#url(r'^reservas/finalizacion/turnos$', FinalizacionTurno, name='FinalizacionTurno' ),
 	
-	url(r'^servicios/reajuste/precio$', reajusteservicio, name='reajusteservicio' ),
-	url(r'^promociones/reajuste/precio$', reajusteproductos, name='reajusteproductos' ),
-	
-	
+	#url(r'^servicios/reajuste/precio$', reajusteservicio, name='reajusteservicio' ),
+	#url(r'^promociones/reajuste/precio$', reajusteproductos, name='reajusteproductos' ),
 	
 	
-	url(r'^calendario/$', calendario, name='calendario' ),
+	
+	
+	#url(r'^calendario/$', calendario, name='calendario' ),
 
 	
 	
-	url(r'^ingresosegresos/$', ingresosegresos, name='ingresoegresos' ),
+	#url(r'^ingresosegresos/$', ingresosegresos, name='ingresoegresos' ),
 
 	
 	
 
 
-	url(r'^bloqueado/$', loockscreen ,  name='bloqueado' ),
-	url(r'^registro/$', registro ),
+	#url(r'^bloqueado/$', loockscreen ,  name='bloqueado' ),
+	#url(r'^registro/$', registro ),
   
 ]

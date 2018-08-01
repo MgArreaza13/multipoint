@@ -217,7 +217,7 @@
       <span class="logo-mini"><b>Mp</b></span>
       <!-- logo for regular state and mobile devices -->
       <span style="height:15px; width:70px;" class="logo-lg">{% if logo != None %}
-              <img src="{{server}}/media/{{logo.logo}}" style="height:100px; width:170px; " alt=""> 
+              <img src="{{server}}/media/{{logo.logo}}" style="height:40px; width:70px; " alt=""> 
             {% endif %}</span>
     </a>
         
@@ -1223,13 +1223,13 @@ function REGRESARPASO3 () {
 
        swal({
   title: 'Felicidades!',
-  html: '<h3> Hemos cargado perfectamente todos los datos de su reserva y tiene un monto total de: $' +monto+' desea concretar si reselva?',
+  html: '<h3> Hemos cargado perfectamente todos los datos de su reserva y tiene un monto total de: $' +monto+' desea concretar su reserva?',
   type: 'warning',
   showCancelButton: true,
   confirmButtonColor: '#3085d6',
   cancelButtonColor: '#d33',
-  confirmButtonText: 'Si, Deseo Concretar Mi reselva!',
-  cancelButtonText: 'No, Solo Estaba consulando precio',
+  confirmButtonText: 'Si, Deseo Concretar Mi reserva!',
+  cancelButtonText: 'No, Solo Estaba consultando precio',
 }).then(function(result) {
   if (result) {
     swal(
@@ -1392,6 +1392,278 @@ $('.clockpicker').clockpicker({
       select: function(start, end) {
 
 
+        if($('#Monto').html() == 0){
+          swal({
+              type: 'error',
+              title: 'IMPOSIBLE COMPLETAR SU RESERVA',
+              html: 'por favor complete todos sus datos para poder concretar su reserva! <br /> 1)Carge Sus Datos <br> 2) Seleccione un evento <br /> 3) Puede Agregar Servicios adicionales si desea <br> 4) Escoja el dia de su evento y concretela',
+              
+            })
+
+        }
+        else{
+                      $('#inflacion').val(0)
+
+                        date = new Date(start);
+                        year = date.getFullYear();
+                        month = date.getMonth()+1;
+                        dt = date.getDate()+1;
+
+
+
+                         
+
+                        
+
+
+                        
+
+
+                        $.ajax({
+                          url: '/inflacion/Registro/consulta/inflacion/',
+                          data: {
+                            'mes': month
+                        },
+                          dataType: 'json',
+                          success: function (data) {
+                            if (data) {
+
+
+                              
+                              var inflacion_mes = parseFloat (data.value / 100);
+                             // console.log(inflacion_mes);
+                              var monto_sin_inflacion = parseFloat($('#sin_inflacion').val());
+                             // console.log(monto_sin_inflacion);
+                              var monto_inflacion = monto_sin_inflacion * inflacion_mes;
+                             /// console.log(monto_inflacion);
+                              var monto_total = monto_inflacion + monto_sin_inflacion;
+                             // console.log(monto_total);
+
+                              $('#Monto').html(String(monto_total));
+                               document.form1.total.value = String(monto_total);
+                               //alert(document.form1.total.value);
+
+                              
+
+                             
+                              
+                              
+                            }
+                          }
+                        });
+
+
+
+
+                        if (dt < 10) {
+                          dt = '0' + dt;
+                        }
+                        if (month < 10) {
+                          month = '0' + month;
+                        }
+
+                        var fecha = year+'-' + month + '-'+dt;
+
+                        $('#FechaSeleccionada').val(fecha);
+                        
+
+
+                        $.ajax({
+                          url: '/reservas/web/consulta/',
+                          data: {
+                            'date': fecha
+                        },
+                        dataType: 'json',
+                        success: function (query) {
+                          $('#INOCOFECHA').removeClass('fa-close');
+                          $('#INOCOFECHA').addClass('fa-check');
+                          $('#FECHATARJETA').html(fecha)
+                            if(query.length != 0)
+                            {
+                              console.log('longitud del arreglo ' + query.length);
+                             var myArrayOfThings = [];
+                             var cont = 0;
+                             var arreglo_dos = [];
+                             var band = 1;
+                             var validacion = 0; // 0 no esta ocupado, 1 ocupado
+                              function cargarOpciones(query) {
+                                //esta  funcion lo que esta hacioendo es validando 
+                                //lo que traigo del query que en este momentos son todos los turnos que estan
+                                //ocupados ese dia, y esta llenando las opciones 
+                                //del select unica y exclusivamente con la informacion 
+                                // de los turnos que se permiten en ese dia
+                                //console.log(query);
+                                {% for Tturno in tipe_turnos %}
+                                   //console.log('##########################################################id  del turno a validar'+ {{Tturno.id}} + '######################################################');
+                                        for(var i = 0; i<query.length; i++){
+                                           //console.log('--------------------------valor de i ' + i + '---------------------------');
+                                          // este for lo que hace es validar si existe alguna coincidencia 
+                                          // dentro del query del turno 
+                                          // si es asi sale 0 que es false 
+                                          // de lo contrario ban es igual a 1 
+                                          //y se cargara el turno
+                                          if({{Tturno.id}} != query[i].fields.turn && {{Tturno.id}} != 8 ){
+                                            //console.log('valor del id es ' + {{Tturno.id}} + ' valor del turno desocupado ' +query[i].fields.turn )
+                                            //console.log('Cargare');
+                                            band = 1;
+                                          }
+                                          else{
+                                            //console.log('No voy a cargar nada me estoy volviendo loco');
+                                            band = 0;
+                                            i = query.length;
+                                          }
+                                          //console.log('la bandera sale ' +band);
+                                        }
+                                        if(band == 1){
+                                          // aqui cargo la opcion para el select
+                                         myArrayOfThings.push( { id: '{{Tturno.id}}', name: '{{Tturno.nameturnsession}} . {{Tturno.HoraTurn}} - {{Tturno.HoraTurnEnd}}' });
+                                          //console.log(' voy a cargarrrrrrrrrrrrrrrrrrrrrrrrrr cargare');
+                                        }
+                                        //console.log(myArrayOfThings);
+                                    
+                                  {% endfor %}
+
+                               //console.log(myArrayOfThings);
+                              }
+
+
+                              for(var i = 0; i<query.length; i++){
+                                if (query[i].fields.turn == 8) {
+                                  validacion = 1;
+                                }
+                              }
+
+                              if (validacion != 1) { 
+                                cargarOpciones(query);
+                                var options = {};
+                                  $.map(myArrayOfThings,
+                                      function(o,query) {
+                                        
+                                          options[o.id] = o.name;
+                                        
+                                          
+                                      });  
+                                swal({
+                                    title: '<h1>Seleccione el turno para cargar su cotizacion </h1> <h3 style="color:#3b60be;" > El horario es flexible, si desea realizar algun horario especial comuniquese telefonicamente </h3>',
+                                    input: 'select',
+                                    inputOptions: options,
+                                    inputPlaceholder: 'Seleccione El Turno dispobible a cotizar,',
+                                    showCancelButton: true,
+                                    inputValidator: function (value ) {
+                                      return new Promise(function (resolve, reject) {
+                                        if(value){
+                                          console.log(query[0].fields.turn);
+                                        for (var i = 0; i < query.length; i++) {
+                                          if (value != query[i].fields.turn) {
+                                            console.log(value);
+                                          resolve('Has Seleccionado El turno Valido')
+                                          
+                                        } 
+                                        }
+                                      }
+                                        else {
+                                          reject('Seleccion Invalida')
+                                        }
+                                        }
+                                      )
+                                    }
+                                  }).then(function (result) {
+                                    $('#TURNOTARJETA').html(result);
+                                    $('#ICONOTARJETA').removeClass('fa-close');
+                                    $('#ICONOTARJETA').addClass('fa-check');
+                                    MensajeDeConfirmacion($('#Monto').html());
+                                    
+                                });
+
+
+                              }
+                              else{
+
+                                swal({
+                                type: 'warning',
+                                title: 'Ups!',
+                                text: '¡El Dia ha Sido reselvado Completamente , intente con otro dia, Gracias',
+                                timer: 8000,
+                                onOpen: function () {
+                                  swal.showLoading()
+                                }
+                              }).then(
+                                function () {},
+                                // handling the promise rejection
+                                function (dismiss) {
+                                  if (dismiss === 'timer') {
+                                    console.log('I was closed by the timer')
+                                  }
+                                }
+                              )
+
+                              }
+                               
+
+
+                                  
+                            }
+                            else{
+                              var myArrayOfThings = [
+                              {% for Tturno in tipe_turnos %}
+
+                              { id: {{Tturno.id}}, name: '{{Tturno.nameturnsession}} . {{Tturno.HoraTurn}} - {{Tturno.HoraTurnEnd}}' },
+
+                              {% endfor %}
+
+                              ];
+
+                                  var options = {};
+                                  $.map(myArrayOfThings,
+                                      function(o,query) {
+                                          options[o.id] = o.name;  
+                                      });
+                                  
+                              
+                             
+                                swal({
+                                    title: '<h1>Seleccione el turno para cargar su cotizacion </h1>  <h3 style="color:#3b60be;"> El horario es flexible, si desea realizar algun horario especial comuniquese telefonicamente </h3>',
+                                    input: 'select',
+                                    inputOptions: options,
+                                    inputPlaceholder: 'Seleccione El turno que desea cotizar',
+                                    showCancelButton: true,
+                                    inputValidator: function (value ) {
+                                      return new Promise(function (resolve, reject) {
+                                            
+                                          if (value) {
+                                            console.log(value);
+                                            $('#TurnSeleccionado').val(value);
+                                          resolve('Has Seleccionado El turno Valido')
+                                                  
+                                        }
+                                        else{
+                                          reject('Seleccion Invalida')
+                                        }
+                                      })
+                                    }
+                                  }).then(function (result) {
+                                    $('#TURNOTARJETA').html(result);
+                                    $('#ICONOTARJETA').removeClass('fa-close');
+                                    $('#ICONOTARJETA').addClass('fa-check');
+                                    MensajeDeConfirmacion($('#Monto').html());
+
+
+                                });
+                            }
+                          },
+                        error : function() {
+                          swal({
+                                      type: 'error',
+                                      html: '<h1>Oops...</h1><h3>Hemos tenido un problema al procesar tu solicitud</h3>'+
+                                            '<p>Te invitamos a seleccionar otro dia.</p>'
+                                    })
+                      },
+
+                     
+                    });
+        }
+
+
 
         
 
@@ -1419,265 +1691,7 @@ $('.clockpicker').clockpicker({
 
 
 
-      $('#inflacion').val(0)
-
-      date = new Date(start);
-      year = date.getFullYear();
-      month = date.getMonth()+1;
-      dt = date.getDate()+1;
-
-
-
-       
-
       
-
-
-      
-
-
-      $.ajax({
-        url: '/inflacion/Registro/consulta/inflacion/',
-        data: {
-          'mes': month
-      },
-        dataType: 'json',
-        success: function (data) {
-          if (data) {
-
-
-            
-            var inflacion_mes = parseFloat (data.value / 100);
-           // console.log(inflacion_mes);
-            var monto_sin_inflacion = parseFloat($('#sin_inflacion').val());
-           // console.log(monto_sin_inflacion);
-            var monto_inflacion = monto_sin_inflacion * inflacion_mes;
-           /// console.log(monto_inflacion);
-            var monto_total = monto_inflacion + monto_sin_inflacion;
-           // console.log(monto_total);
-
-            $('#Monto').html(String(monto_total));
-             document.form1.total.value = String(monto_total);
-             //alert(document.form1.total.value);
-
-            
-
-           
-            
-            
-          }
-        }
-      });
-
-
-
-
-      if (dt < 10) {
-        dt = '0' + dt;
-      }
-      if (month < 10) {
-        month = '0' + month;
-      }
-
-      var fecha = year+'-' + month + '-'+dt;
-
-      $('#FechaSeleccionada').val(fecha);
-      
-
-
-      $.ajax({
-        url: '/reservas/web/consulta/',
-        data: {
-          'date': fecha
-      },
-      dataType: 'json',
-      success: function (query) {
-        $('#INOCOFECHA').removeClass('fa-close');
-        $('#INOCOFECHA').addClass('fa-check');
-        $('#FECHATARJETA').html(fecha)
-          if(query.length != 0)
-          {
-            console.log('longitud del arreglo ' + query.length);
-           var myArrayOfThings = [];
-           var cont = 0;
-           var arreglo_dos = [];
-           var band = 1;
-           var validacion = 0; // 0 no esta ocupado, 1 ocupado
-            function cargarOpciones(query) {
-              //esta  funcion lo que esta hacioendo es validando 
-              //lo que traigo del query que en este momentos son todos los turnos que estan
-              //ocupados ese dia, y esta llenando las opciones 
-              //del select unica y exclusivamente con la informacion 
-              // de los turnos que se permiten en ese dia
-              //console.log(query);
-              {% for Tturno in tipe_turnos %}
-                 //console.log('##########################################################id  del turno a validar'+ {{Tturno.id}} + '######################################################');
-                      for(var i = 0; i<query.length; i++){
-                         //console.log('--------------------------valor de i ' + i + '---------------------------');
-                        // este for lo que hace es validar si existe alguna coincidencia 
-                        // dentro del query del turno 
-                        // si es asi sale 0 que es false 
-                        // de lo contrario ban es igual a 1 
-                        //y se cargara el turno
-                        if({{Tturno.id}} != query[i].fields.turn && {{Tturno.id}} != 8 ){
-                          //console.log('valor del id es ' + {{Tturno.id}} + ' valor del turno desocupado ' +query[i].fields.turn )
-                          //console.log('Cargare');
-                          band = 1;
-                        }
-                        else{
-                          //console.log('No voy a cargar nada me estoy volviendo loco');
-                          band = 0;
-                          i = query.length;
-                        }
-                        //console.log('la bandera sale ' +band);
-                      }
-                      if(band == 1){
-                        // aqui cargo la opcion para el select
-                       myArrayOfThings.push( { id: '{{Tturno.id}}', name: '{{Tturno.nameturnsession}} . {{Tturno.HoraTurn}} - {{Tturno.HoraTurnEnd}}' });
-                        //console.log(' voy a cargarrrrrrrrrrrrrrrrrrrrrrrrrr cargare');
-                      }
-                      //console.log(myArrayOfThings);
-                  
-                {% endfor %}
-
-             //console.log(myArrayOfThings);
-            }
-
-
-            for(var i = 0; i<query.length; i++){
-              if (query[i].fields.turn == 8) {
-                validacion = 1;
-              }
-            }
-
-            if (validacion != 1) { 
-              cargarOpciones(query);
-              var options = {};
-                $.map(myArrayOfThings,
-                    function(o,query) {
-                      
-                        options[o.id] = o.name;
-                      
-                        
-                    });  
-              swal({
-                  title: '<h1>Seleccione el turno para cargar su cotizacion </h1> <h3 style="color:#3b60be;" > El horario es flexible, si desea realizar algun horario especial comuniquese telefonicamente </h3>',
-                  input: 'select',
-                  inputOptions: options,
-                  inputPlaceholder: 'Seleccione El Turno dispobible a cotizar,',
-                  showCancelButton: true,
-                  inputValidator: function (value ) {
-                    return new Promise(function (resolve, reject) {
-                      if(value){
-                        console.log(query[0].fields.turn);
-                      for (var i = 0; i < query.length; i++) {
-                        if (value != query[i].fields.turn) {
-                          console.log(value);
-                        resolve('Has Seleccionado El turno Valido')
-                        
-                      } 
-                      }
-                    }
-                      else {
-                        reject('Seleccion Invalida')
-                      }
-                      }
-                    )
-                  }
-                }).then(function (result) {
-                  $('#TURNOTARJETA').html(result);
-                  $('#ICONOTARJETA').removeClass('fa-close');
-                  $('#ICONOTARJETA').addClass('fa-check');
-                  MensajeDeConfirmacion($('#Monto').html());
-                  
-              });
-
-
-            }
-            else{
-
-              swal({
-              type: 'warning',
-              title: 'Ups!',
-              text: '¡El Dia ha Sido reselvado Completamente , intente con otro dia, Gracias',
-              timer: 8000,
-              onOpen: function () {
-                swal.showLoading()
-              }
-            }).then(
-              function () {},
-              // handling the promise rejection
-              function (dismiss) {
-                if (dismiss === 'timer') {
-                  console.log('I was closed by the timer')
-                }
-              }
-            )
-
-            }
-             
-
-
-                
-          }
-          else{
-            var myArrayOfThings = [
-            {% for Tturno in tipe_turnos %}
-
-            { id: {{Tturno.id}}, name: '{{Tturno.nameturnsession}} . {{Tturno.HoraTurn}} - {{Tturno.HoraTurnEnd}}' },
-
-            {% endfor %}
-
-            ];
-
-                var options = {};
-                $.map(myArrayOfThings,
-                    function(o,query) {
-                        options[o.id] = o.name;  
-                    });
-                
-            
-           
-              swal({
-                  title: '<h1>Seleccione el turno para cargar su cotizacion </h1>  <h3 style="color:#3b60be;"> El horario es flexible, si desea realizar algun horario especial comuniquese telefonicamente </h3>',
-                  input: 'select',
-                  inputOptions: options,
-                  inputPlaceholder: 'Seleccione El turno que desea cotizar',
-                  showCancelButton: true,
-                  inputValidator: function (value ) {
-                    return new Promise(function (resolve, reject) {
-                          
-                        if (value) {
-                          console.log(value);
-                          $('#TurnSeleccionado').val(value);
-                        resolve('Has Seleccionado El turno Valido')
-                                
-                      }
-                      else{
-                        reject('Seleccion Invalida')
-                      }
-                    })
-                  }
-                }).then(function (result) {
-                  $('#TURNOTARJETA').html(result);
-                  $('#ICONOTARJETA').removeClass('fa-close');
-                  $('#ICONOTARJETA').addClass('fa-check');
-                  MensajeDeConfirmacion($('#Monto').html());
-
-
-              });
-          }
-        },
-      error : function() {
-        swal({
-                    type: 'error',
-                    html: '<h1>Oops...</h1><h3>Hemos tenido un problema al procesar tu solicitud</h3>'+
-                          '<p>Te invitamos a seleccionar otro dia.</p>'
-                  })
-    },
-
-   
-});
 
 
 

@@ -53,6 +53,7 @@ def EnviarInformacionDeCotizacion(request):
 	numero = request.GET.get('numero', None)
 	monto = request.GET.get('monto', None)
 	evento = request.GET.get('evento', None)
+	cuerpo = ""
 	servicios = request.GET.get('servicios', None)
 	email_subject_usuario = 'Multipoint - Gracias Por Visitar Nuestra Pagina'
 	email_body_usuario = "Hola %s, estamos muy agredecidos que visitaras nuestro portal y consultaras la cotizacion es muy importante para nosotros saber el motivo por el cual no contretaste tu cotizacion para mas informacion puedes escribir a reservas@boomeventos.com nuestro equipo estara esperando por ti, saludos y gracias" %(nombre)
@@ -60,12 +61,10 @@ def EnviarInformacionDeCotizacion(request):
 	#mensaje para apreciasoft
 	email_subject_Soporte = 'Multipoint - Nueva Cotizacion NO CONCRETADA'
 	email_body_Soporte = "se ha registrado  una  visita de un cliente y no concreto la reserva sus datos son  , nombre:%s . correo:%s, numero:%s habia solicitado un evento de %s y servicios de %s con un monto total de $%s " %(nombre, correo, numero, evento, servicios, monto)
-	message_Soporte = (email_subject_Soporte, email_body_Soporte , 'eventos@b7000615.ferozo.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com", 'reservas@boomeventos.com'])
+	send_mail(email_subject_Soporte, cuerpo , 'eventos@b7000615.ferozo.com', ['soporte@apreciasoft.com', "mg.arreaza.13@gmail.com", 'reservas@boomeventos.com'],fail_silently=True, html_message=email_body_Soporte)
 	#enviamos el correo
-	send_mass_mail((message_usuario, message_Soporte), fail_silently=False)
+	send_mass_mail((message_usuario), fail_silently=False)
 	return HttpResponse(200)
-
-
 
 
 
@@ -419,7 +418,7 @@ def web(request):
 		else:
 				fallido = "Errores en los datos Verifiquelos, y vuelva a intentarlo"
 				Form = ReservasWebForm()
-	return render(request, "ReservasWeb/reservasweb.html" , {'Form':Form, 'tipe_turnos':tipe_turnos ,'servicios':servicios,'productos':productos ,'ReservasWeb':ReservasWeb ,'turnos':turnos ,'fallido':fallido,})
+	return render(request, "PanelPrincipal/FueraDeServicio.html" , {'Form':Form, 'tipe_turnos':tipe_turnos ,'servicios':servicios,'productos':productos ,'ReservasWeb':ReservasWeb ,'turnos':turnos ,'fallido':fallido,})
 
 
 def Factura(request, id_reservas):
